@@ -1,0 +1,20 @@
+Noisy Internal Operations Tool Brief
+
+Need an internal tool for the support and operations team to track recurring issues and escalations.
+We are not building a customer-facing product.
+The operations team is drowning in scattered notes and weekly report work.
+
+Goals:
+- Reduce manual weekly reporting
+- Centralize issue notes from the support team
+- Keep the first workflow local-first
+
+Constraints:
+- Keep data local-first
+- Budget around $10k
+- We have a 1 person team
+
+Notes:
+- Quality matters because bad tracking hurts escalation decisions
+- Browser UI later is fine, but no need for FastAPI yet
+- Ownership after launch is still unclear

@@ -1,0 +1,19 @@
+Contradictory Founder Brief
+
+I need a minimal MVP in 2 weeks for a solo founder budget, but it also needs enterprise SSO, audit logs,
+role-based permissions, analytics, billing, team collaboration, and mobile support from day one.
+Keep it cheap, fast, and comprehensive because I want to pitch bigger clients immediately.
+
+Goals:
+- Launch a minimal MVP fast
+- Serve enterprise teams
+- Replace multiple existing tools at once
+
+Constraints:
+- Budget under $5k
+- Need something usable in 2 weeks
+- Just me
+
+Notes:
+- This is for B2B clients
+- Compliance will matter eventually, but nothing is decided yet

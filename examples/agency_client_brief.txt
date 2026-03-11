@@ -1,0 +1,10 @@
+Under-Specified Client Brief
+
+Client wants "something modern" to help teams stay aligned.
+They mentioned maybe a portal or maybe a dashboard.
+It should be easy, powerful, and useful for everyone involved.
+
+Notes:
+- Might be for clients, internal staff, or both
+- Could be B2B but pricing is not discussed
+- Success criteria are still fuzzy
