@@ -6,6 +6,7 @@ import argparse
 from pathlib import Path
 
 from specforge.domain.models import AnalysisReport
+from specforge.input_validation import load_validated_text_file
 from specforge.pipeline import (
     analyze_brief,
     create_raw_brief,
@@ -54,20 +55,23 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
-    if args.command == "analyze":
-        analyzed, report, _ = run_analysis(Path(args.input))
-        print(render_analysis_console(analyzed.summary, report))
-        return 0
+    try:
+        if args.command == "analyze":
+            analyzed, report, _ = run_analysis(Path(args.input))
+            print(render_analysis_console(analyzed.summary, report))
+            return 0
 
-    if args.command in {"demo", "generate"}:
-        input_path = Path(args.input)
-        output_dir, report = run_generate(
-            input_path,
-            output_root=Path(args.output_root),
-            run_label=args.run_label,
-        )
-        print(render_export_console(output_dir, report))
-        return 0
+        if args.command in {"demo", "generate"}:
+            input_path = Path(args.input)
+            output_dir, report = run_generate(
+                input_path,
+                output_root=Path(args.output_root),
+                run_label=args.run_label,
+            )
+            print(render_export_console(output_dir, report))
+            return 0
+    except ValueError as exc:
+        parser.exit(2, f"Input error: {exc}\n")
 
     parser.error(f"Unknown command: {args.command}")
     return 2
@@ -76,7 +80,7 @@ def main(argv: list[str] | None = None) -> int:
 def run_analysis(input_path: Path):
     """Run intake and analysis without exporting artifacts."""
 
-    source_text = input_path.read_text(encoding="utf-8")
+    source_text = load_validated_text_file(input_path)
     raw_brief = create_raw_brief(
         source_text,
         title=input_path.stem.replace("_", " ").title(),

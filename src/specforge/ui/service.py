@@ -2,51 +2,15 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from specforge.api.schemas import AnalyzeRequest, GenerateRequest
 from specforge.api.service import (
     OUTPUTS_ROOT,
-    REPO_ROOT,
     analyze_request,
     safe_output_label,
 )
 from specforge.domain.models import AnalysisReport, DeliveryArtifact, NormalizedBrief
 from specforge.pipeline import export_delivery_pack, generate_delivery_pack
 from specforge.ui.models import ArtifactPreviewView, FindingView, UiResultView
-
-DEMO_BRIEFS = {
-    "founder-app-idea": Path("examples/founder_app_idea.txt"),
-    "contradictory-founder-brief": Path("examples/contradictory_founder_brief.txt"),
-    "agency-client-brief": Path("examples/agency_client_brief.txt"),
-    "internal-operations-tool": Path("examples/internal_operations_tool_brief.txt"),
-}
-
-
-def default_demo_name() -> str:
-    """Return the default demo key."""
-
-    return "founder-app-idea"
-
-
-def demo_options() -> list[tuple[str, str]]:
-    """Return ordered demo labels for the UI."""
-
-    return [
-        ("founder-app-idea", "Founder app idea"),
-        ("contradictory-founder-brief", "Contradictory founder brief"),
-        ("agency-client-brief", "Agency client brief"),
-        ("internal-operations-tool", "Internal operations tool"),
-    ]
-
-
-def load_demo_brief(demo_name: str) -> tuple[str, str]:
-    """Load one bundled demo brief."""
-
-    path = DEMO_BRIEFS.get(demo_name, DEMO_BRIEFS[default_demo_name()])
-    text = (REPO_ROOT / path).read_text(encoding="utf-8")
-    title = path.stem.replace("_", " ").title()
-    return title, text
 
 
 def analyze_for_ui(
@@ -57,11 +21,7 @@ def analyze_for_ui(
 ) -> UiResultView:
     """Run deterministic analysis and return a UI view model."""
 
-    request = AnalyzeRequest(
-        brief_text=brief_text,
-        title=title,
-        source_type=source_type,
-    )
+    request = AnalyzeRequest(brief_text=brief_text, title=title, source_type=source_type)
     brief, report = analyze_request(request)
     return build_ui_result(brief=brief, report=report, mode="analyze")
 

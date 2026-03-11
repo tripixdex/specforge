@@ -9,7 +9,7 @@ def test_ui_home_route_is_available() -> None:
     response = client.get("/ui")
 
     assert response.status_code == 200
-    assert "SpecForge Stage 4" in response.text
+    assert "SpecForge Stage 5" in response.text
     assert "Run analysis" in response.text
 
 
@@ -51,3 +51,11 @@ def test_ui_generate_renders_artifact_preview() -> None:
     assert "Generated Bundle" in response.text
     assert "analysis_report.md" in response.text
     assert "outputs/ui-smoke-demo" in response.text
+
+
+def test_ui_invalid_demo_selection_is_visible() -> None:
+    response = client.get("/ui?demo=does-not-exist")
+
+    assert response.status_code == 200
+    assert "Unknown demo" in response.text
+    assert "Founder app idea" in response.text

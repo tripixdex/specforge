@@ -1,6 +1,6 @@
 # Demo Scenarios
 
-Stage 4 demos now include the deterministic CLI flow, the local FastAPI layer, and a guided browser UI.
+Stage 5 demos now include the deterministic CLI flow, the local FastAPI layer, the guided browser UI, and a local evaluation run.
 
 ## Scenario 1: Contradictory Founder Brief
 
@@ -54,3 +54,16 @@ Implemented behavior:
 
 Verified command:
 - `python3 -m pytest tests/test_ui.py -q`
+
+## Scenario 5: Local Evaluation Corpus
+
+Input:
+- the Stage 5 eval corpus under `eval/`
+
+Implemented behavior:
+- runs 20 deterministic corpus cases
+- checks structural expectations such as minimum finding counts, required categories, MVP-cut presence, and required artifacts
+- writes inspectable summaries and per-case bundles under `outputs/evals/stage-05/`
+
+Verified command:
+- `python3 -m specforge.eval.runner`

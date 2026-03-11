@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: install test lint demo api ui
+.PHONY: install test lint demo api ui eval
 
 install:
 	$(PYTHON) -m pip install --no-build-isolation -e ".[dev]"
@@ -19,3 +19,6 @@ api:
 
 ui:
 	$(PYTHON) -m uvicorn specforge.api.app:app --reload
+
+eval:
+	$(PYTHON) -m specforge.eval.runner

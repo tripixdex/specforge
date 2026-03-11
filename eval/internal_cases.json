@@ -1,0 +1,67 @@
+[
+  {
+    "case_id": "internal_noisy_ops_request",
+    "segment": "noisy internal-tool brief",
+    "title": "Internal Ops Cleanup",
+    "brief_text": "Ops team is drowning in spreadsheets, slack requests, handoffs, manual updates, and random reporting. Need one place to track blockers, maybe approvals, maybe dashboards, maybe reminders. Keep it local-first.",
+    "expectations": {
+      "min_ambiguities": 4,
+      "min_missing_decisions": 1,
+      "min_assumptions": 2,
+      "required_ambiguity_categories": ["goals", "budget", "timeline"],
+      "required_missing_decision_categories": ["ownership_operations"]
+    }
+  },
+  {
+    "case_id": "internal_clear_local_tool",
+    "segment": "realistic SMB brief",
+    "title": "Internal Reporting Tool",
+    "brief_text": "Internal operations team needs a local-first weekly reporting tool for coordinators. Goals: reduce manual reporting and give one place to review blockers. Budget under $10k.",
+    "expectations": {
+      "min_ambiguities": 1,
+      "min_missing_decisions": 1,
+      "min_assumptions": 2,
+      "required_ambiguity_categories": ["timeline"],
+      "required_missing_decision_categories": ["ownership_operations"]
+    }
+  },
+  {
+    "case_id": "internal_platform_gap",
+    "segment": "missing platform constraint",
+    "title": "Internal Intake Workflow",
+    "brief_text": "Need an internal workflow for support intake and issue triage. The operations team will use it daily and wants fewer manual handoffs. Budget is approved but nobody has picked the first interface yet.",
+    "expectations": {
+      "min_ambiguities": 3,
+      "min_missing_decisions": 2,
+      "min_assumptions": 1,
+      "required_ambiguity_categories": ["platform", "timeline"],
+      "required_missing_decision_categories": ["platform", "ownership_operations"]
+    }
+  },
+  {
+    "case_id": "internal_fast_broad_cheap",
+    "segment": "impossible triangle",
+    "title": "Internal Multi Workflow Suite",
+    "brief_text": "Build an internal full suite for requests, approvals, dashboards, reminders, and reporting. Ship it fast in 2 weeks, keep it cheap, and keep the budget under $5k.",
+    "expectations": {
+      "min_ambiguities": 3,
+      "min_contradictions": 1,
+      "min_missing_decisions": 2,
+      "required_contradiction_categories": ["fast-cheap-feature-rich"],
+      "required_missing_decision_categories": ["target_user", "platform"]
+    }
+  },
+  {
+    "case_id": "internal_owner_missing",
+    "segment": "ownership gap",
+    "title": "Internal Review Console",
+    "brief_text": "An internal review console should help the operations team review exceptions and re-run failed jobs. Keep it local-first and keep the first milestone narrow.",
+    "expectations": {
+      "min_ambiguities": 2,
+      "min_missing_decisions": 1,
+      "min_assumptions": 2,
+      "required_ambiguity_categories": ["budget", "timeline"],
+      "required_missing_decision_categories": ["ownership_operations"]
+    }
+  }
+]

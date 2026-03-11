@@ -1,0 +1,67 @@
+[
+  {
+    "case_id": "client_underspecified_portal",
+    "segment": "underspecified client brief",
+    "title": "Client Portal",
+    "brief_text": "Client needs a portal soon. It should look modern and support several workflows for their team and customers. We still need to figure out budget and platform.",
+    "expectations": {
+      "min_ambiguities": 4,
+      "min_missing_decisions": 2,
+      "min_assumptions": 0,
+      "required_ambiguity_categories": ["audience", "goals", "success_criteria"],
+      "required_missing_decision_categories": ["target_user", "platform"]
+    }
+  },
+  {
+    "case_id": "client_smb_booking_tool",
+    "segment": "realistic SMB brief",
+    "title": "SMB Booking Tool",
+    "brief_text": "A small home services company wants a local-first scheduling tool for dispatch staff. Goals: reduce missed appointments and keep job notes in one place. Budget under $15k.",
+    "expectations": {
+      "min_ambiguities": 2,
+      "min_missing_decisions": 1,
+      "min_assumptions": 1,
+      "required_ambiguity_categories": ["timeline"],
+      "required_missing_decision_categories": ["target_user"]
+    }
+  },
+  {
+    "case_id": "client_b2b_no_pricing",
+    "segment": "missing monetization constraint",
+    "title": "Client B2B Analytics",
+    "brief_text": "A B2B analytics product for account managers should highlight churn risk and renewal blockers. We know the audience and goals, but the commercial model is still open and the first platform is undecided.",
+    "expectations": {
+      "min_ambiguities": 3,
+      "min_missing_decisions": 2,
+      "min_assumptions": 1,
+      "required_ambiguity_categories": ["monetization", "budget"],
+      "required_missing_decision_categories": ["platform", "pricing"]
+    }
+  },
+  {
+    "case_id": "client_near_miss_subtle_ambiguity",
+    "segment": "near-miss ambiguity",
+    "title": "Client Renewal Assistant",
+    "brief_text": "We need a renewal planning assistant for account managers. Primary goal is to reduce renewal prep time. This should work for existing teams and maybe customers later. Budget is approved, but success is still not defined concretely.",
+    "expectations": {
+      "min_ambiguities": 2,
+      "min_missing_decisions": 1,
+      "min_assumptions": 0,
+      "required_ambiguity_categories": ["platform", "audience"],
+      "required_missing_decision_categories": ["platform"]
+    }
+  },
+  {
+    "case_id": "client_sensitive_data_gap",
+    "segment": "security constraint gap",
+    "title": "Client Finance Assistant",
+    "brief_text": "We need a finance workflow assistant for handling customer financial records and approvals. It should be ready quickly for a small team, but the controls for sensitive data are not documented.",
+    "expectations": {
+      "min_ambiguities": 4,
+      "min_missing_decisions": 2,
+      "min_assumptions": 0,
+      "required_ambiguity_categories": ["audience", "platform"],
+      "required_missing_decision_categories": ["target_user", "compliance_security"]
+    }
+  }
+]

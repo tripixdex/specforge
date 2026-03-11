@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "specforge"
-version = "0.5.0"
-description = "Local-first SpecForge demo app with a deterministic brief-analysis pipeline, CLI, and typed FastAPI endpoints."
+version = "0.6.0"
+description = "Local-first SpecForge demo app with a deterministic brief-analysis pipeline, browser UI, and local evaluation harness."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

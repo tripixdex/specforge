@@ -1,0 +1,71 @@
+[
+  {
+    "case_id": "edge_subtle_audience_gap",
+    "segment": "near-miss ambiguity",
+    "title": "Workflow Assistant",
+    "brief_text": "Need a workflow assistant that helps teams stay organized. Goals: reduce follow-up work and improve visibility. Timeline is this quarter and budget is approved.",
+    "expectations": {
+      "min_ambiguities": 2,
+      "min_missing_decisions": 2,
+      "min_assumptions": 0,
+      "required_ambiguity_categories": ["audience", "platform"],
+      "required_missing_decision_categories": ["target_user", "platform"]
+    }
+  },
+  {
+    "case_id": "edge_missing_security_for_enterprise",
+    "segment": "missing security constraint",
+    "title": "Enterprise Data Workspace",
+    "brief_text": "Enterprise customers need a workspace for reviewing customer data and approvals. We know this starts on web and should be in pilot in six weeks, but the controls for sensitive data are still undecided.",
+    "expectations": {
+      "min_ambiguities": 2,
+      "min_missing_decisions": 2,
+      "min_assumptions": 1,
+      "required_ambiguity_categories": ["budget", "monetization"],
+      "required_missing_decision_categories": ["pricing", "compliance_security"]
+    }
+  },
+  {
+    "case_id": "edge_founder_with_goals_but_no_budget",
+    "segment": "missing budget constraint",
+    "title": "Founder Community Tool",
+    "brief_text": "Build a community tool for creators. Goals: help them track members and coordinate content drops. Start with web. Success means fewer manual handoffs, but budget and timeline are still unknown.",
+    "expectations": {
+      "min_ambiguities": 2,
+      "min_missing_decisions": 1,
+      "min_assumptions": 0,
+      "required_ambiguity_categories": ["audience", "budget", "timeline"],
+      "required_missing_decision_categories": ["target_user"]
+    }
+  },
+  {
+    "case_id": "edge_external_product_no_pricing_no_platform",
+    "segment": "missing platform and monetization",
+    "title": "External Support Product",
+    "brief_text": "This is a B2C support product for busy parents who need fast answers. Goal is to reduce support wait time and keep conversations organized. The commercial model and first platform are both unresolved.",
+    "expectations": {
+      "min_ambiguities": 3,
+      "min_missing_decisions": 2,
+      "min_assumptions": 1,
+      "required_ambiguity_categories": ["monetization", "budget"],
+      "required_missing_decision_categories": ["platform", "pricing"]
+    }
+  },
+  {
+    "case_id": "edge_minimal_with_enterprise_and_deadline",
+    "segment": "contradictory founder brief",
+    "title": "Minimal Enterprise Console",
+    "brief_text": "We need a minimal prototype for enterprise admins in two weeks. It also has to include SSO, audit logs, permissions, and compliance reporting. Team is 2 engineers and the budget is tight.",
+    "expectations": {
+      "min_ambiguities": 2,
+      "min_contradictions": 2,
+      "min_missing_decisions": 1,
+      "required_contradiction_categories": [
+        "fast-cheap-feature-rich",
+        "minimal-mvp-vs-enterprise-scope",
+        "fast-cheap-feature-rich"
+      ],
+      "required_missing_decision_categories": ["pricing"]
+    }
+  }
+]

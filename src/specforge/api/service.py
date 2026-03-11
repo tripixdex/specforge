@@ -15,8 +15,9 @@ from specforge.api.schemas import (
     GenerateRequest,
     GenerateResponse,
 )
-from specforge.cli import DEFAULT_DEMO_INPUT
+from specforge.demo_catalog import available_demo_names, default_demo_name, load_demo_brief
 from specforge.domain.models import AnalysisReport, ConstraintSet, NormalizedBrief, RawBrief
+from specforge.input_validation import normalize_brief_text
 from specforge.pipeline import (
     analyze_brief,
     create_raw_brief,
@@ -39,7 +40,7 @@ def build_raw_brief(request: AnalyzeRequest | GenerateRequest) -> RawBrief:
     if request.product_type:
         metadata["product_type"] = request.product_type
     return create_raw_brief(
-        request.brief_text,
+        normalize_brief_text(request.brief_text),
         title=request.title,
         metadata=metadata,
     ).model_copy(
@@ -112,23 +113,18 @@ def generate_response(request: GenerateRequest) -> GenerateResponse:
 def build_demo_response() -> DemoResponse:
     """Return a stable sample analysis based on a bundled brief."""
 
-    input_path = REPO_ROOT / DEFAULT_DEMO_INPUT
-    brief_text = input_path.read_text(encoding="utf-8")
+    demo_name = default_demo_name()
+    title, brief_text, input_path = load_demo_brief(demo_name)
     request = AnalyzeRequest(
         brief_text=brief_text,
-        title=input_path.stem.replace("_", " ").title(),
+        title=title,
         source_type="demo-sample",
     )
     brief, report = analyze_request(request)
     return DemoResponse(
-        demo_name="founder-app-idea",
+        demo_name=demo_name,
         demo_input_path=str(input_path),
-        available_demos=[
-            "founder-app-idea",
-            "contradictory-founder-brief",
-            "agency-client-brief",
-            "internal-operations-tool",
-        ],
+        available_demos=available_demo_names(),
         sample_analysis=build_analyze_response(brief, report),
     )
 

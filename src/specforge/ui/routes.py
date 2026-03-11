@@ -9,12 +9,10 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import ValidationError
 
+from specforge.demo_catalog import default_demo_name, demo_options, load_demo_brief
 from specforge.ui.service import (
     analyze_for_ui,
-    default_demo_name,
-    demo_options,
     generate_for_ui,
-    load_demo_brief,
 )
 
 router = APIRouter(include_in_schema=False)
@@ -27,13 +25,20 @@ def ui_home(request: Request, demo: str | None = None) -> HTMLResponse:
     """Render the local demo UI home page."""
 
     demo_name = demo or default_demo_name()
-    title, brief_text = load_demo_brief(demo_name)
+    error_message = None
+    try:
+        title, brief_text, _ = load_demo_brief(demo_name)
+    except ValueError as exc:
+        error_message = str(exc)
+        demo_name = default_demo_name()
+        title, brief_text, _ = load_demo_brief(demo_name)
     return render_page(
         request=request,
         brief_text=brief_text,
         title=title,
         selected_demo=demo_name,
         output_label="",
+        error_message=error_message,
     )
 
 
@@ -53,7 +58,7 @@ def ui_analyze(
             source_type="ui",
         )
         error_message = None
-    except (ValidationError, HTTPException) as exc:
+    except (ValidationError, HTTPException, ValueError) as exc:
         result = None
         error_message = render_error(exc)
     return render_page(
@@ -84,7 +89,7 @@ def ui_generate(
             output_label=output_label or None,
         )
         error_message = None
-    except (ValidationError, HTTPException) as exc:
+    except (ValidationError, HTTPException, ValueError) as exc:
         result = None
         error_message = render_error(exc)
     return render_page(
@@ -128,11 +133,13 @@ def render_page(
     )
 
 
-def render_error(exc: ValidationError | HTTPException) -> str:
+def render_error(exc: ValidationError | HTTPException | ValueError) -> str:
     """Convert validation and HTTP errors into a short UI message."""
 
     if isinstance(exc, HTTPException):
         return str(exc.detail)
+    if isinstance(exc, ValueError):
+        return str(exc)
     errors = exc.errors()
     if errors:
         return errors[0].get("msg", "Validation failed.")

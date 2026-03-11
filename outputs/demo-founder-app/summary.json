@@ -1,6 +1,6 @@
 {
   "stage_label": "stage-2-deterministic-draft",
-  "generated_at": "2026-03-11T21:59:17.648186+00:00",
+  "generated_at": "2026-03-11T22:23:27.999385+00:00",
   "brief": {
     "title": "Founder App Idea",
     "source_text": "Founder App Idea\n\nI want a tool that helps solo founders turn scattered notes into a cleaner execution plan.\nMaybe start as a web app, but keep the first version local-first and simple.\n\nGoals:\n- Help founders clean up rough product ideas\n- Highlight missing constraints before they hire engineers\n- Produce a minimal delivery pack they can review locally\n\nNon-Goals:\n- No cloud sync\n- Don't build team collaboration yet\n\nConstraints:\n- Budget under $15k\n- Need something usable in 4 weeks\n- Just me plus one contract engineer\n\nNotes:\n- I care more about speed than polish for the first release\n- Reference example: https://example.com/founder-notes",

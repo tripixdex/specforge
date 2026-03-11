@@ -6,8 +6,15 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-MAX_BRIEF_LENGTH = 20_000
-MAX_LABEL_LENGTH = 64
+from specforge.input_validation import (
+    MAX_BRIEF_LENGTH,
+    MAX_LABEL_LENGTH,
+    MAX_TITLE_LENGTH,
+    normalize_brief_text,
+    normalize_metadata,
+    normalize_optional_text,
+)
+
 LABEL_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9 _-]{0,63}$"
 
 
@@ -22,7 +29,7 @@ class BriefRequestBase(BaseModel):
         max_length=MAX_BRIEF_LENGTH,
         description="Raw plain-text product brief.",
     )
-    title: str | None = Field(default=None, max_length=120)
+    title: str | None = Field(default=None, max_length=MAX_TITLE_LENGTH)
     source_type: str | None = Field(default="api", max_length=40)
     product_type: str | None = Field(default=None, max_length=80)
     audience: list[str] = Field(default_factory=list, max_length=10)
@@ -37,19 +44,25 @@ class BriefRequestBase(BaseModel):
     def validate_brief_text(cls, value: str) -> str:
         """Reject empty or whitespace-only briefs."""
 
-        stripped = value.strip()
-        if not stripped:
-            raise ValueError("brief_text must not be empty")
-        return stripped
+        return normalize_brief_text(value)
+
+    @field_validator("title", "source_type", "product_type")
+    @classmethod
+    def validate_optional_text(cls, value: str | None, info) -> str | None:
+        """Trim optional text fields and reject oversized values."""
+
+        field_name = info.field_name or "field"
+        max_length = MAX_TITLE_LENGTH if field_name == "title" else 80
+        if field_name == "source_type":
+            max_length = 40
+        return normalize_optional_text(value, field_name=field_name, max_length=max_length)
 
     @field_validator("metadata")
     @classmethod
     def validate_metadata(cls, value: dict[str, str]) -> dict[str, str]:
         """Keep metadata small and stringly typed."""
 
-        if len(value) > 20:
-            raise ValueError("metadata may include at most 20 entries")
-        return {str(key): str(item) for key, item in value.items()}
+        return normalize_metadata(value)
 
 
 class AnalyzeRequest(BriefRequestBase):
@@ -68,6 +81,17 @@ class GenerateRequest(BriefRequestBase):
         pattern=LABEL_PATTERN,
         description="Optional label used to name the repo-local output folder.",
     )
+
+    @field_validator("output_label", mode="before")
+    @classmethod
+    def validate_output_label(cls, value: str | None) -> str | None:
+        """Strip label whitespace before pattern validation."""
+
+        return normalize_optional_text(
+            value,
+            field_name="output_label",
+            max_length=MAX_LABEL_LENGTH,
+        )
 
 
 class FindingCounts(BaseModel):
@@ -124,7 +148,7 @@ class HealthResponse(BaseModel):
 
     status: Literal["ok"] = "ok"
     app: Literal["specforge"] = "specforge"
-    stage: Literal["stage-4-local-demo-ui"] = "stage-4-local-demo-ui"
+    stage: Literal["stage-5-eval-hardening"] = "stage-5-eval-hardening"
 
 
 class ErrorResponse(BaseModel):

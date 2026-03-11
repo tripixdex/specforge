@@ -17,7 +17,7 @@ def test_health_happy_path() -> None:
     assert response.json() == {
         "status": "ok",
         "app": "specforge",
-        "stage": "stage-4-local-demo-ui",
+        "stage": "stage-5-eval-hardening",
     }
 
 
@@ -96,6 +96,19 @@ def test_generate_rejects_unsafe_output_label() -> None:
     assert response.status_code == 422
     body = response.json()
     assert body["error"] == "validation_error"
+
+
+def test_generate_accepts_trimmed_output_label() -> None:
+    response = client.post(
+        "/generate",
+        json={
+            "brief_text": "Need a simple local API",
+            "output_label": "  API Trimmed Bundle  ",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json()["output_path"].endswith("outputs/api-trimmed-bundle")
 
 
 def test_demo_returns_sample_analysis() -> None:

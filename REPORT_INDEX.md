@@ -10,6 +10,7 @@ SpecForge now uses per-stage reports as the primary history mechanism. New repor
 - Stage 3: typed FastAPI API layer and source-checkout ergonomics cleanup. Legacy report: [codex reports/REPORT_3.md](/Users/vladgurov/Desktop/work/specforge/codex%20reports/REPORT_3.md)
 - Stage 3.1: architecture cleanup and reporting normalization. Primary report: [codex_reports/stage_03_1_architecture_cleanup.md](/Users/vladgurov/Desktop/work/specforge/codex_reports/stage_03_1_architecture_cleanup.md)
 - Stage 4: local browser UI for the deterministic workflow. Primary report: [codex_reports/stage_04_ui.md](/Users/vladgurov/Desktop/work/specforge/codex_reports/stage_04_ui.md)
+- Stage 5: local evaluation corpus, hardening pass, and portfolio-readiness review. Primary report: [codex_reports/stage_05_eval_and_hardening.md](/Users/vladgurov/Desktop/work/specforge/codex_reports/stage_05_eval_and_hardening.md)
 
 ## Notes
 

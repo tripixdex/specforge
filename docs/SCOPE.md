@@ -2,7 +2,7 @@
 
 ## Product Vision
 
-SpecForge helps founders, consultants, and internal product leads turn inconsistent brief text into a reviewable scope package before implementation starts. Stage 4 keeps the deterministic pipeline and local API intact while adding a clean browser UI for demo use.
+SpecForge helps founders, consultants, and internal product leads turn inconsistent brief text into a reviewable scope package before implementation starts. Stage 5 keeps the deterministic pipeline, local API, and browser UI intact while adding a real local evaluation layer and a targeted hardening pass.
 
 ## Target Users
 
@@ -11,7 +11,7 @@ SpecForge helps founders, consultants, and internal product leads turn inconsist
 - recruiters or reviewers evaluating the product demo
 - internal operators tightening scope before build work starts
 
-## Stage 4 In Scope
+## Stage 5 In Scope
 
 - deterministic intake normalization from plain-text briefs
 - deterministic ambiguity, contradiction, missing-decision, and assumption analysis
@@ -19,10 +19,12 @@ SpecForge helps founders, consultants, and internal product leads turn inconsist
 - CLI flows for `analyze`, `generate`, and `demo`
 - typed FastAPI endpoints for `/health`, `/analyze`, `/generate`, and `/demo`
 - server-rendered local browser UI for brief entry, demo selection, analysis, and generation
+- local evaluation corpus under `eval/`
+- deterministic eval harness with structural expectations and output completeness checks
 - repo-local output policy under `outputs/` for API and UI generation
 - request and input validation with honest local-only behavior
 
-## Stage 4 Out of Scope
+## Stage 5 Out of Scope
 
 - cloud deployment
 - hosted storage or collaboration
@@ -31,6 +33,6 @@ SpecForge helps founders, consultants, and internal product leads turn inconsist
 - arbitrary filesystem output paths from the API or UI
 - autonomous product-planning claims
 
-## Stage 4 Limits
+## Stage 5 Limits
 
-The UI runs the same deterministic heuristics as the CLI and API. It is a polished local demo surface, not a production frontend or a rich collaborative application.
+The UI runs the same deterministic heuristics as the CLI and API. The eval harness is a local rubric layer, not a scientific benchmark. SpecForge remains a polished local demo product, not a production service.
