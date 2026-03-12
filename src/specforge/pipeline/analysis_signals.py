@@ -17,6 +17,26 @@ BUDGET_PATTERN = re.compile(
     ),
     re.IGNORECASE,
 )
+LOW_BUDGET_HINT_PATTERNS = (
+    re.compile(
+        r"\b(?:tight|lean|low|small)\s+budget\b|"
+        r"\bbudget\s+(?:is\s+)?(?:very\s+)?(?:limited|tight|lean|small|low)\b|"
+        r"\bbudget cap\b|"
+        r"\bbootstrap\b|"
+        r"\bcheap\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\bбюджет\s+(?:очень\s+)?(?:маленький|ограничен|небольшой)\b|"
+        r"\bограничен\s+бюджет\b|"
+        r"\bденег\s+мало\b|"
+        r"\bхотим\s+недорого\b|"
+        r"\bдешево\b|"
+        r"\bнедорого\b|"
+        r"\bэкономно\b",
+        re.IGNORECASE,
+    ),
+)
 TIMELINE_PATTERN = re.compile(
     (
         r"(\d+\s+(?:days|day|weeks|week|months|month|quarters|quarter)"
@@ -45,6 +65,21 @@ NUMBER_WORDS = {
     "трех": 3,
     "двое": 2,
 }
+POST_MVP_PATTERN = re.compile(r"\bpost[-\s]?mvp\b|\bпосле\s+mvp\b", re.IGNORECASE)
+PHASED_SCOPE_PATTERN = re.compile(
+    r"\bnice[-\s]?to[-\s]?have\b|"
+    r"\bfor later\b|"
+    r"\blater\b|"
+    r"\bphase\s*2\b|"
+    r"\bfuture phase\b|"
+    r"\bpost[-\s]?mvp\b|"
+    r"\bпотом\b|"
+    r"\bпозже\b|"
+    r"\bна потом\b|"
+    r"\bв следующ(?:ей|ем)\s+фаз[еуы]\b|"
+    r"\bпосле\s+mvp\b",
+    re.IGNORECASE,
+)
 
 
 def extract_first_match(pattern: re.Pattern[str], text: str) -> str | None:
@@ -99,6 +134,19 @@ def infer_team_size(text: str) -> str | None:
         if word in value:
             return f"{number} people"
     return value
+
+
+def infer_budget_hint(text: str) -> str | None:
+    """Infer a human-facing budget hint when no numeric range was captured."""
+
+    numeric = extract_first_match(BUDGET_PATTERN, text)
+    if numeric:
+        return numeric
+    for pattern in LOW_BUDGET_HINT_PATTERNS:
+        match = pattern.search(text)
+        if match:
+            return match.group(0).strip(" .,;:")
+    return None
 
 
 def infer_platform_hints(lowered: str) -> list[str]:
@@ -160,19 +208,9 @@ def infer_tradeoffs(lowered: str) -> list[str]:
         for word in ["fast", "quick", "asap", "mvp", "prototype", "быстро", "срочно", "быстрый"]
     ):
         tradeoffs.append("speed prioritized")
-    budget_markers = [
-        "budget",
-        "cheap",
-        "lean",
-        "bootstrap",
-        "under $",
-        "below $",
-        "бюджет",
-        "дешево",
-        "недорого",
-        "экономно",
-    ]
-    if any(word in lowered for word in budget_markers):
+    if any(pattern.search(lowered) for pattern in LOW_BUDGET_HINT_PATTERNS) or any(
+        word in lowered for word in ["under $", "below $", "бюджет до ", "до $"]
+    ):
         tradeoffs.append("budget prioritized")
     if any(
         word in lowered
@@ -269,24 +307,17 @@ def has_broad_scope_signal(brief: NormalizedBrief) -> bool:
             "multiple roles",
             "admin",
             "billing",
-            "analytics",
             "integrations",
             "workflow automation",
             "approval flow",
-            "dashboard",
-            "reporting",
-            "reports",
             "permissions",
             "role",
             "все в одном",
             "несколько ролей",
             "админ",
             "биллинг",
-            "аналитик",
             "интеграц",
             "согласован",
-            "дашборд",
-            "отчет",
             "доступ",
         ]
     )
@@ -335,25 +366,7 @@ def has_low_budget_signal(text: str, budget_text: str | None = None) -> bool:
 
     lowered = text.lower()
     budget_lowered = (budget_text or "").lower()
-    if any(
-        term in budget_lowered or term in lowered
-        for term in [
-            "cheap",
-            "tight budget",
-            "lean budget",
-            "low budget",
-            "bootstrap",
-            "budget very limited",
-            "budget is limited",
-            "small budget",
-            "ограничен бюджет",
-            "бюджет очень ограничен",
-            "маленький бюджет",
-            "дешево",
-            "недорого",
-            "экономно",
-        ]
-    ):
+    if any(pattern.search(budget_lowered or lowered) for pattern in LOW_BUDGET_HINT_PATTERNS):
         return True
     money_source = budget_lowered or lowered
     match = re.search(r"\$([\d,]+)([kKmM]?)", money_source)
@@ -366,6 +379,34 @@ def has_low_budget_signal(text: str, budget_text: str | None = None) -> bool:
     elif suffix == "m":
         amount *= 1_000_000
     return amount <= 20000
+
+
+def has_simple_mvp_signal(lowered: str) -> bool:
+    """Return whether the brief frames the first release as a simple MVP."""
+
+    cleaned = POST_MVP_PATTERN.sub("", lowered)
+    return any(
+        word in cleaned
+        for word in [
+            "mvp",
+            "minimal",
+            "prototype",
+            "simple mvp",
+            "simple prototype",
+            "lean mvp",
+            "basic mvp",
+            "простой mvp",
+            "минимальн",
+            "прототип",
+            "простое приложение",
+        ]
+    )
+
+
+def has_phased_scope_signal(lowered: str) -> bool:
+    """Return whether secondary scope is explicitly deferred to a later phase."""
+
+    return bool(PHASED_SCOPE_PATTERN.search(lowered))
 
 
 def has_short_timeline_signal(text: str, timeline_text: str | None = None) -> bool:

@@ -16,7 +16,7 @@ Implemented now:
 - typed FastAPI endpoints for `/health`, `/analyze`, `/generate`, and `/demo`
 - local browser UI at `/` and `/ui`
 - guided UI workflow for pasted briefs, demo brief selection, analysis, and generation
-- evaluation corpus under `eval/` with 22 local cases
+- evaluation corpus under `eval/` with 26 local cases
 - local eval harness that scores structural expectations and artifact completeness
 - safe repo-local bundle generation under `outputs/`
 - tighter shared validation for empty, oversized, and malformed local inputs

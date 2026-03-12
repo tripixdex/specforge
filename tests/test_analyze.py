@@ -1,3 +1,4 @@
+from specforge.pipeline.analysis_signals import has_low_budget_signal
 from specforge.pipeline.analyze import analyze_brief
 from specforge.pipeline.intake import create_raw_brief, normalize_brief
 
@@ -128,6 +129,43 @@ def test_near_miss_broad_but_resourced_brief_stays_curated() -> None:
     _, report = analyze_brief(normalize_brief(create_raw_brief(text)))
 
     assert len(report.contradictions) <= 1
+
+
+def test_realistic_near_miss_with_deferred_scope_stays_quiet() -> None:
+    text = """
+    Build a simple internal web dashboard for one operations team. Start with web only.
+    The team is 4 people, the budget is reasonable, and the target is a pilot in 10 weeks.
+    Nice-to-have ideas for later include mobile access and deeper analytics, but those are
+    explicitly post-MVP.
+    """
+
+    analyzed, report = analyze_brief(normalize_brief(create_raw_brief(text)))
+
+    assert analyzed.constraints.team_size == "4 people"
+    assert analyzed.constraints.budget is None
+    assert report.contradictions == []
+
+
+def test_russian_plain_language_budget_phrases_are_captured() -> None:
+    phrases = [
+        "бюджет маленький",
+        "бюджет ограничен",
+        "денег мало",
+        "хотим недорого",
+    ]
+
+    for phrase in phrases:
+        text = f"""
+        Нужен внутренний инструмент для операционной команды.
+        {phrase}.
+        Команда 2 человека.
+        Сначала только веб.
+        """
+
+        analyzed, _ = analyze_brief(normalize_brief(create_raw_brief(text)))
+
+        assert analyzed.constraints.budget is not None
+        assert has_low_budget_signal(text, analyzed.constraints.budget)
 
 
 def test_overloaded_contradictions_are_curated_not_duplicated() -> None:

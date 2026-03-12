@@ -9,7 +9,9 @@ from specforge.pipeline.analysis_signals import (
     has_broad_scope_signal,
     has_enterprise_scope_signal,
     has_low_budget_signal,
+    has_phased_scope_signal,
     has_short_timeline_signal,
+    has_simple_mvp_signal,
     infer_team_size_count,
 )
 from specforge.pipeline.intake import dedupe
@@ -30,11 +32,12 @@ def infer_contradictions(
     short_timeline = has_short_timeline_signal(brief.normalized_text, constraints.timeline)
     team_size = infer_team_size_count(constraints.team_size)
     integration_count = count_integration_signals(lowered)
+    phased_scope = has_phased_scope_signal(lowered)
     overloaded_integrations = integration_count >= 3 or (
         integration_count >= 2 and (enterprise_scope or broad_scope)
     )
     tiny_team = team_size <= 2
-    multi_platform = len(constraints.platform_hints) > 1 or any(
+    immediate_multi_platform = any(
         phrase in lowered
         for phrase in [
             "web and mobile",
@@ -50,22 +53,10 @@ def infer_contradictions(
             "веб и мобильное приложение",
         ]
     )
-    simple_mvp = any(
-        word in lowered
-        for word in [
-            "mvp",
-            "minimal",
-            "prototype",
-            "simple mvp",
-            "simple prototype",
-            "lean mvp",
-            "basic mvp",
-            "простой mvp",
-            "минимальн",
-            "прототип",
-            "простое приложение",
-        ]
+    multi_platform = immediate_multi_platform or (
+        len(constraints.platform_hints) > 1 and not phased_scope
     )
+    simple_mvp = has_simple_mvp_signal(lowered)
     overloaded_scope = broad_scope or enterprise_scope or overloaded_integrations or multi_platform
 
     findings: list[ContradictionFinding] = []

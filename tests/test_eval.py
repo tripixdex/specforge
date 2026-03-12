@@ -21,6 +21,7 @@ def test_eval_corpus_has_stage_5_coverage() -> None:
     assert "founder_en_realistic_overloaded_phrase_variant" in case_ids
     assert "founder_ru_realistic_overloaded_phrase_variant" in case_ids
     assert "edge_resourced_enterprise_near_miss" in case_ids
+    assert "edge_deferred_scope_near_miss" in case_ids
 
 
 def test_eval_runner_writes_summary_and_bundle(tmp_path: Path) -> None:

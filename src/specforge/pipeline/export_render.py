@@ -10,6 +10,7 @@ from specforge.pipeline.language import (
     display_audience_mode,
     display_platform_hints,
     display_product_type,
+    display_team_size,
     display_tradeoffs,
 )
 
@@ -138,6 +139,7 @@ def render_constraints_markdown(pack: DeliveryPack) -> str:
         "Не указан" if locale == "ru" else "Unspecified"
     )
     platform_hints = display_platform_hints(pack.constraints.platform_hints, locale)
+    team_size = display_team_size(pack.constraints.team_size, locale) or team_size_fallback(locale)
     tradeoffs = display_tradeoffs(pack.constraints.speed_quality_budget_tradeoffs, locale)
     return "\n".join(
         [
@@ -147,8 +149,7 @@ def render_constraints_markdown(pack: DeliveryPack) -> str:
             f"{pack.constraints.budget or ('Не указан' if locale == 'ru' else 'Unspecified')}",
             f"- {'Сроки' if locale == 'ru' else 'Timeline'}: "
             f"{pack.constraints.timeline or ('Не указаны' if locale == 'ru' else 'Unspecified')}",
-            f"- {'Команда' if locale == 'ru' else 'Team Size'}: "
-            f"{pack.constraints.team_size or ('Не указана' if locale == 'ru' else 'Unspecified')}",
+            f"- {'Команда' if locale == 'ru' else 'Team Size'}: {team_size}",
             f"- {'Сигнал по аудитории' if locale == 'ru' else 'Audience Hint'}: "
             f"{audience_hint}",
             f"- {'Платформенные сигналы' if locale == 'ru' else 'Platform Hints'}: "
@@ -276,6 +277,12 @@ def render_analysis_report_markdown(pack: DeliveryPack) -> str:
             ),
         ]
     )
+
+
+def team_size_fallback(locale: str) -> str:
+    """Return a short localized fallback for missing team size."""
+
+    return "Не указана" if locale == "ru" else "Unspecified"
 
 
 def render_mvp_cut_plan_markdown(pack: DeliveryPack) -> str:

@@ -83,6 +83,27 @@ def test_russian_export_uses_localized_headers(tmp_path: Path) -> None:
     assert "Платформенные сигналы: веб, мобильное приложение" in constraints_markdown
 
 
+def test_russian_export_localizes_team_size_and_budget_phrase(tmp_path: Path) -> None:
+    text = """
+    Нужен внутренний инструмент для операционной команды.
+    Бюджет маленький, команда 2 человека.
+    Сначала только веб.
+    """
+
+    analyzed, _ = analyze_brief(normalize_brief(create_raw_brief(text)))
+    pack = generate_delivery_pack(analyzed)
+    output_dir = export_delivery_pack(
+        pack,
+        output_root=tmp_path,
+        run_label="ru-localized-constraints",
+    )
+
+    constraints_markdown = (output_dir / "constraints.md").read_text(encoding="utf-8")
+
+    assert "Бюджет: Бюджет маленький" in constraints_markdown
+    assert "Команда: 2 человека" in constraints_markdown
+
+
 def test_english_export_keeps_display_values_in_english(tmp_path: Path) -> None:
     text = """
     Need a local-first internal tool for the operations team.

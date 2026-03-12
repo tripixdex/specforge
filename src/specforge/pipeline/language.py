@@ -151,3 +151,23 @@ def display_tradeoffs(values: list[str], locale: Locale) -> list[str]:
         localized = TRADEOFF_LABELS.get(value, {})
         rendered.append(localized.get(locale, value))
     return rendered
+
+
+def display_team_size(value: str | None, locale: Locale) -> str | None:
+    """Return a localized team-size label for human-facing output."""
+
+    if not value or locale == "en":
+        return value
+    match = re.search(r"(\d+)", value)
+    if not match:
+        return value
+    count = int(match.group(1))
+    remainder_10 = count % 10
+    remainder_100 = count % 100
+    if remainder_10 == 1 and remainder_100 != 11:
+        noun = "человек"
+    elif remainder_10 in {2, 3, 4} and remainder_100 not in {12, 13, 14}:
+        noun = "человека"
+    else:
+        noun = "человек"
+    return f"{count} {noun}"

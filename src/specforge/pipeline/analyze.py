@@ -14,10 +14,10 @@ from specforge.pipeline.analysis_outcomes import (
     prioritize_open_questions,
 )
 from specforge.pipeline.analysis_signals import (
-    BUDGET_PATTERN,
     TIMELINE_PATTERN,
     extract_first_match,
     infer_audience_hint,
+    infer_budget_hint,
     infer_platform_hints,
     infer_team_size,
     infer_tradeoffs,
@@ -32,7 +32,7 @@ def analyze_brief(brief: NormalizedBrief) -> tuple[NormalizedBrief, AnalysisRepo
     lowered = text.lower()
     constraints = brief.constraints.model_copy(
         update={
-            "budget": brief.constraints.budget or extract_first_match(BUDGET_PATTERN, text),
+            "budget": brief.constraints.budget or infer_budget_hint(text),
             "timeline": brief.constraints.timeline or extract_first_match(TIMELINE_PATTERN, text),
             "team_size": brief.constraints.team_size or infer_team_size(text),
             "platform_hints": dedupe(

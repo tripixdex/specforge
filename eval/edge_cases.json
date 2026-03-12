@@ -98,5 +98,19 @@
       "required_ambiguity_categories": ["success_criteria"],
       "required_missing_decision_categories": ["pricing"]
     }
+  },
+  {
+    "case_id": "edge_deferred_scope_near_miss",
+    "segment": "near-miss contradiction restraint",
+    "title": "Deferred Scope Pilot",
+    "brief_text": "Build a simple internal web dashboard for one operations team. Start with web only. The team is 4 people, the budget is reasonable, and the target is a pilot in 10 weeks. Nice-to-have ideas for later include mobile access and deeper analytics, but those are explicitly post-MVP.",
+    "expectations": {
+      "min_ambiguities": 1,
+      "min_contradictions": 0,
+      "max_contradictions": 0,
+      "min_missing_decisions": 1,
+      "required_ambiguity_categories": ["success_criteria"],
+      "required_missing_decision_categories": ["ownership_operations"]
+    }
   }
 ]
