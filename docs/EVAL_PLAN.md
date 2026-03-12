@@ -2,7 +2,7 @@
 
 ## Evaluation Philosophy
 
-SpecForge should first be evaluated on traceability and usefulness, not on intelligence theater. Stage 5.7 uses a local deterministic rubric: can the pipeline expose obvious tensions, missing decisions, and output completeness honestly and consistently across a varied brief corpus, including the specific overloaded-brief misses found during audit?
+SpecForge should first be evaluated on traceability and usefulness, not on intelligence theater. Stage 5.9 uses a local deterministic rubric: can the pipeline expose obvious tensions, missing decisions, and output completeness honestly and consistently across a varied brief corpus, including realistic overloaded-brief phrasing variants and the specific misses found during audit?
 
 ## Stage 5 Corpus Coverage
 
@@ -15,7 +15,7 @@ SpecForge should first be evaluated on traceability and usefulness, not on intel
 - subtle near-miss ambiguity cases
 - briefs missing platform, user, monetization, budget, timeline, or security constraints
 
-The Stage 5 corpus lives under [eval/](/Users/vladgurov/Desktop/work/specforge/eval) and currently includes 22 cases split across four files.
+The Stage 5 corpus lives under [eval/](/Users/vladgurov/Desktop/work/specforge/eval) and currently includes 25 cases split across four files.
 
 ## Stage 5 Checks
 
@@ -24,6 +24,7 @@ Each case encodes practical expectations such as:
 - `ambiguities >= N`
 - `contradictions >= N`
 - `contradictions <= N` for curated overload cases where duplicate findings would be noisy
+- required contradiction families for realistic Russian and English overloaded variants
 - `missing_decisions >= N`
 - `assumptions >= N`
 - required ambiguity, contradiction, or missing-decision categories
@@ -45,5 +46,5 @@ Artifacts are written under [outputs/evals/](/Users/vladgurov/Desktop/work/specf
 ## Limits
 
 - this is a local deterministic rubric, not a statistically rigorous benchmark
-- the corpus checks useful structure, not semantic quality in every sentence
+- the corpus checks useful structure and curated contradiction families, not semantic quality in every sentence
 - expert manual review is still needed for real audit-grade claims

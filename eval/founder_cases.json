@@ -84,5 +84,41 @@
       ],
       "required_missing_decision_categories": ["target_user"]
     }
+  },
+  {
+    "case_id": "founder_en_realistic_overloaded_phrase_variant",
+    "segment": "contradictory founder brief",
+    "title": "Realistic Overloaded English MVP",
+    "brief_text": "Need a simple MVP for a service business within 10 days. Budget is under $5k and the team is just two people. From day one it must include web and mobile apps, Salesforce, Slack, Stripe, analytics, admin reporting, permissions, and billing. Please keep it cheap and move fast.",
+    "expectations": {
+      "min_ambiguities": 1,
+      "min_contradictions": 3,
+      "max_contradictions": 3,
+      "min_missing_decisions": 1,
+      "required_contradiction_categories": [
+        "fast-cheap-feature-rich",
+        "small-team-aggressive-deadline-broad-scope",
+        "minimal-mvp-vs-enterprise-scope"
+      ],
+      "required_missing_decision_categories": ["target_user"]
+    }
+  },
+  {
+    "case_id": "founder_ru_realistic_overloaded_phrase_variant",
+    "segment": "contradictory founder brief",
+    "title": "Реалистично перегруженный русский MVP",
+    "brief_text": "Нужен простой MVP для сервисного бизнеса в короткий срок, максимум за 2 недели. Бюджет маленький, до $4k, и команда всего 2 человека. С первого релиза нужны веб и мобильное приложение, CRM, Slack, Stripe, аналитика, роли доступа, админка и отчеты. Нужно сделать быстро и недорого.",
+    "expectations": {
+      "min_ambiguities": 1,
+      "min_contradictions": 3,
+      "max_contradictions": 3,
+      "min_missing_decisions": 1,
+      "required_contradiction_categories": [
+        "fast-cheap-feature-rich",
+        "small-team-aggressive-deadline-broad-scope",
+        "minimal-mvp-vs-enterprise-scope"
+      ],
+      "required_missing_decision_categories": ["target_user"]
+    }
   }
 ]

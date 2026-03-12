@@ -30,7 +30,9 @@ def infer_contradictions(
     short_timeline = has_short_timeline_signal(brief.normalized_text, constraints.timeline)
     team_size = infer_team_size_count(constraints.team_size)
     integration_count = count_integration_signals(lowered)
-    overloaded_integrations = integration_count >= 2
+    overloaded_integrations = integration_count >= 3 or (
+        integration_count >= 2 and (enterprise_scope or broad_scope)
+    )
     tiny_team = team_size <= 2
     multi_platform = len(constraints.platform_hints) > 1 or any(
         phrase in lowered
@@ -39,9 +41,13 @@ def infer_contradictions(
             "mobile and web",
             "ios and android",
             "desktop and mobile",
+            "web + mobile",
+            "mobile apps",
+            "web, ios, and android",
             "веб и мобиль",
             "мобильное и веб",
             "ios и android",
+            "веб и мобильное приложение",
         ]
     )
     simple_mvp = any(
@@ -52,6 +58,8 @@ def infer_contradictions(
             "prototype",
             "simple mvp",
             "simple prototype",
+            "lean mvp",
+            "basic mvp",
             "простой mvp",
             "минимальн",
             "прототип",

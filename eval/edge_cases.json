@@ -84,5 +84,19 @@
       ],
       "required_missing_decision_categories": ["target_user"]
     }
+  },
+  {
+    "case_id": "edge_resourced_enterprise_near_miss",
+    "segment": "near-miss contradiction restraint",
+    "title": "Resourced Enterprise Rollout",
+    "brief_text": "Need a first release for enterprise admins over the next quarter. Team is 8 people with approved budget around $120k. Start on web first, then consider mobile later. Include audit logs, permissions, reporting, and CRM sync in phased milestones.",
+    "expectations": {
+      "min_ambiguities": 1,
+      "min_contradictions": 0,
+      "max_contradictions": 1,
+      "min_missing_decisions": 1,
+      "required_ambiguity_categories": ["success_criteria"],
+      "required_missing_decision_categories": ["pricing"]
+    }
   }
 ]

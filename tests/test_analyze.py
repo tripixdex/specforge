@@ -79,6 +79,57 @@ def test_english_overloaded_brief_with_integrations_triggers_contradictions() ->
     assert len(report.contradictions) == 3
 
 
+def test_realistic_english_overloaded_wording_triggers_all_curated_contradictions() -> None:
+    text = """
+    Need a simple MVP for a service business within 10 days.
+    Budget is under $5k and the team is just two people.
+    From day one it must include web and mobile apps, Salesforce, Slack, Stripe,
+    analytics, admin reporting, permissions, and billing.
+    Please keep it cheap and move fast.
+    """
+
+    _, report = analyze_brief(normalize_brief(create_raw_brief(text)))
+
+    categories = {item.category for item in report.contradictions}
+    assert categories == {
+        "fast-cheap-feature-rich",
+        "small-team-aggressive-deadline-broad-scope",
+        "minimal-mvp-vs-enterprise-scope",
+    }
+
+
+def test_realistic_russian_overloaded_wording_triggers_all_curated_contradictions() -> None:
+    text = """
+    Нужен простой MVP для сервисного бизнеса в короткий срок, максимум за 2 недели.
+    Бюджет маленький, до $4k, и команда всего 2 человека.
+    С первого релиза нужны веб и мобильное приложение, CRM, Slack, Stripe,
+    аналитика, роли доступа, админка и отчеты.
+    Нужно сделать быстро и недорого.
+    """
+
+    _, report = analyze_brief(normalize_brief(create_raw_brief(text)))
+
+    categories = {item.category for item in report.contradictions}
+    assert categories == {
+        "fast-cheap-feature-rich",
+        "small-team-aggressive-deadline-broad-scope",
+        "minimal-mvp-vs-enterprise-scope",
+    }
+
+
+def test_near_miss_broad_but_resourced_brief_stays_curated() -> None:
+    text = """
+    Need a first release for enterprise admins over the next quarter.
+    Team is 8 people with approved budget around $120k.
+    Start on web first, then consider mobile later.
+    Include audit logs, permissions, reporting, and CRM sync in phased milestones.
+    """
+
+    _, report = analyze_brief(normalize_brief(create_raw_brief(text)))
+
+    assert len(report.contradictions) <= 1
+
+
 def test_overloaded_contradictions_are_curated_not_duplicated() -> None:
     text = """
     Need a simple MVP in 2 weeks on a tight budget.

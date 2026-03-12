@@ -17,7 +17,7 @@ def test_health_happy_path() -> None:
     assert response.json() == {
         "status": "ok",
         "app": "specforge",
-        "stage": "stage-5-7-final-fix-pass",
+        "stage": "stage-5-9-freeze-focused-remediation",
     }
 
 

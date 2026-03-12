@@ -230,11 +230,17 @@ def infer_goals(text: str) -> list[str]:
     goals: list[str] = []
     goal_markers = [
         "goal",
+        "need a",
+        "need an",
         "need to",
+        "need ",
         "must",
         "should",
         "want to",
         "success means",
+        "нужен",
+        "нужна",
+        "нужны",
         "нужно",
         "надо",
         "хочу",
@@ -261,7 +267,7 @@ def infer_goals(text: str) -> list[str]:
             continue
         if any(marker in lowered for marker in goal_markers):
             if not any(marker in lowered for marker in excluded_markers):
-                goals.append(clean_lead_in(line))
+                goals.append(compact_goal_candidate(clean_lead_in(line)))
     return dedupe(goals)
 
 
@@ -336,6 +342,50 @@ def clean_lead_in(value: str) -> str:
 
     cleaned = BULLET_PATTERN.sub(r"\g<value>", value).strip()
     return cleaned.rstrip(".")
+
+
+def compact_goal_candidate(value: str) -> str:
+    """Keep inferred goals compact instead of echoing a whole overloaded paragraph."""
+
+    compact = value.strip()
+    sentences = re.split(r"(?<=[.!?])\s+", compact)
+    if len(sentences) > 1:
+        compact = sentences[0].rstrip(".!?").strip()
+    split_markers = [
+        " but ",
+        " also ",
+        " while ",
+        " from day one ",
+        " it must ",
+        " при этом ",
+        " однако ",
+    ]
+    lowered = compact.lower()
+    for marker in split_markers:
+        index = lowered.find(marker)
+        if index > 24:
+            compact = compact[:index].strip(" ,;:-")
+            break
+    lead_ins = [
+        "need to ",
+        "need a ",
+        "need an ",
+        "want to ",
+        "we need ",
+        "we want ",
+        "нужно ",
+        "надо ",
+        "хочу ",
+    ]
+    lowered = compact.lower()
+    for lead_in in lead_ins:
+        if lowered.startswith(lead_in):
+            compact = compact[len(lead_in) :].strip()
+            break
+    words = compact.split()
+    if len(words) > 14:
+        compact = " ".join(words[:14]).strip(" ,;:-")
+    return compact[:120].strip(" ,;:-")
 
 
 def dedupe(values: list[str]) -> list[str]:

@@ -28,7 +28,7 @@ def infer_assumptions(brief: NormalizedBrief, constraints: ConstraintSet) -> lis
                     else "Local execution is treated as a hard planning assumption for the MVP."
                 ),
                 rationale=(
-                    "Бриф явно указывает на local-first режим."
+                    "Бриф явно указывает на локальный режим работы."
                     if locale == "ru"
                     else "The brief explicitly references local-first operation."
                 ),

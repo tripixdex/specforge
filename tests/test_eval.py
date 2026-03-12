@@ -8,7 +8,7 @@ def test_eval_corpus_has_stage_5_coverage() -> None:
     cases, paths = load_eval_cases()
 
     assert len(paths) == 4
-    assert len(cases) >= 22
+    assert len(cases) >= 25
     segments = {case.segment for case in cases}
     assert "vague founder brief" in segments
     assert "contradictory founder brief" in segments
@@ -18,6 +18,9 @@ def test_eval_corpus_has_stage_5_coverage() -> None:
     case_ids = {case.case_id for case in cases}
     assert "founder_ru_overloaded_brief" in case_ids
     assert "edge_english_overloaded_multiplatform_mvp" in case_ids
+    assert "founder_en_realistic_overloaded_phrase_variant" in case_ids
+    assert "founder_ru_realistic_overloaded_phrase_variant" in case_ids
+    assert "edge_resourced_enterprise_near_miss" in case_ids
 
 
 def test_eval_runner_writes_summary_and_bundle(tmp_path: Path) -> None:

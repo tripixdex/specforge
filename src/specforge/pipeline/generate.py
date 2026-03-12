@@ -6,7 +6,13 @@ from datetime import UTC, datetime
 
 from specforge.domain.models import AnalysisReport, DeliveryPack, NormalizedBrief
 from specforge.pipeline.intake import dedupe
-from specforge.pipeline.language import detect_language
+from specforge.pipeline.language import (
+    detect_language,
+    display_audience,
+    display_audience_mode,
+    display_platform_hints,
+    display_product_type,
+)
 
 
 def generate_delivery_pack(brief: NormalizedBrief) -> DeliveryPack:
@@ -44,19 +50,41 @@ def build_brief_summary(brief: NormalizedBrief) -> str:
     """Create a compact deterministic summary sentence."""
 
     locale = detect_language(brief.normalized_text)
-    product = brief.product_type or "product concept"
+    product = display_product_type(brief.product_type, locale) or "product concept"
     if locale == "ru":
-        product = brief.product_type or "продуктовая идея"
-        audience = ", ".join(brief.audience) if brief.audience else "неуказанная аудитория"
+        product = display_product_type(brief.product_type, locale) or "продуктовая идея"
+        audience = (
+            ", ".join(display_audience(brief.audience, locale))
+            if brief.audience
+            else "неуказанная аудитория"
+        )
     else:
-        audience = ", ".join(brief.audience) if brief.audience else "an unspecified audience"
+        audience = (
+            ", ".join(display_audience(brief.audience, locale))
+            if brief.audience
+            else "an unspecified audience"
+        )
     if brief.goals:
         if locale == "ru":
-            return f"{brief.title} — это {product} для {audience}. Главная цель: {brief.goals[0]}."
-        return f"{brief.title} is a {product} aimed at {audience}. Primary goal: {brief.goals[0]}."
+            return (
+                f"{brief.title} — это {product} для аудитории: {audience}. "
+                f"Главная цель: {brief.goals[0]}."
+            )
+        article = "an" if product[:1].lower() in {"a", "e", "i", "o", "u"} else "a"
+        return (
+            f"{brief.title} is {article} {product} aimed at {audience}. "
+            f"Primary goal: {brief.goals[0]}."
+        )
     if locale == "ru":
-        return f"{brief.title} — это {product} для {audience}. Цели все еще нужно уточнить."
-    return f"{brief.title} is a {product} aimed at {audience}. Goals still need clarification."
+        return (
+            f"{brief.title} — это {product} для аудитории: {audience}. "
+            "Цели все еще нужно уточнить."
+        )
+    article = "an" if product[:1].lower() in {"a", "e", "i", "o", "u"} else "a"
+    return (
+        f"{brief.title} is {article} {product} aimed at {audience}. "
+        "Goals still need clarification."
+    )
 
 
 def build_scope_draft(brief: NormalizedBrief) -> list[str]:
@@ -65,16 +93,18 @@ def build_scope_draft(brief: NormalizedBrief) -> list[str]:
     locale = detect_language(brief.normalized_text)
     items = []
     if brief.product_type:
+        display_product = display_product_type(brief.product_type, locale) or brief.product_type
         items.append(
-            f"Соберите первый контур решения вокруг формата {brief.product_type}."
+            f"Соберите первый контур решения вокруг формата {display_product}."
             if locale == "ru"
-            else f"Shape the first scoped draft around a {brief.product_type}."
+            else f"Shape the first scoped draft around a {display_product}."
         )
     if brief.audience:
+        display_audiences = ", ".join(display_audience(brief.audience, locale))
         items.append(
-            f"Ставьте в приоритет потребности аудитории: {', '.join(brief.audience)}."
+            f"Ставьте в приоритет потребности аудитории: {display_audiences}."
             if locale == "ru"
-            else f"Prioritize the needs of {', '.join(brief.audience)}."
+            else f"Prioritize the needs of {display_audiences}."
         )
     if brief.goals:
         if locale == "ru":
@@ -87,16 +117,13 @@ def build_scope_draft(brief: NormalizedBrief) -> list[str]:
         else:
             items.extend(f"Keep out of scope for now: {item}." for item in brief.non_goals[:3])
     if brief.constraints.platform_hints:
+        platform_hints = ", ".join(
+            display_platform_hints(brief.constraints.platform_hints[:4], locale)
+        )
         if locale == "ru":
-            items.append(
-                "Учитывать сигналы по платформе: "
-                + ", ".join(brief.constraints.platform_hints[:4])
-                + "."
-            )
+            items.append("Учитывать сигналы по платформе: " + platform_hints + ".")
         else:
-            items.append(
-                "Respect platform hints: " + ", ".join(brief.constraints.platform_hints[:4]) + "."
-            )
+            items.append("Respect platform hints: " + platform_hints + ".")
     return dedupe(items)
 
 
@@ -116,28 +143,25 @@ def build_inferred_structure(
     locale = detect_language(brief.normalized_text)
     inferred = []
     if brief.product_type:
+        display_product = display_product_type(brief.product_type, locale) or brief.product_type
         inferred.append(
-            f"Предполагаемый тип продукта: {brief.product_type}."
+            f"Предполагаемый тип продукта: {display_product}."
             if locale == "ru"
-            else f"Inferred product type: {brief.product_type}."
+            else f"Inferred product type: {display_product}."
         )
     if brief.constraints.audience_hint:
+        display_mode = display_audience_mode(brief.constraints.audience_hint, locale)
         inferred.append(
-            f"Предполагаемый режим аудитории: {brief.constraints.audience_hint}."
+            f"Предполагаемый режим аудитории: {display_mode}."
             if locale == "ru"
-            else f"Inferred audience mode: {brief.constraints.audience_hint}."
+            else f"Inferred audience mode: {display_mode}."
         )
     if brief.constraints.platform_hints:
+        platform_hints = ", ".join(display_platform_hints(brief.constraints.platform_hints, locale))
         if locale == "ru":
-            inferred.append(
-                "Предполагаемые платформенные сигналы: "
-                + ", ".join(brief.constraints.platform_hints)
-                + "."
-            )
+            inferred.append("Предполагаемые платформенные сигналы: " + platform_hints + ".")
         else:
-            inferred.append(
-                "Inferred platform hints: " + ", ".join(brief.constraints.platform_hints) + "."
-            )
+            inferred.append("Inferred platform hints: " + platform_hints + ".")
     if analysis.contradictions:
         if locale == "ru":
             inferred.append(

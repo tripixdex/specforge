@@ -10,7 +10,7 @@ def ui_strings(locale: Locale) -> dict[str, str]:
 
     if locale == "ru":
         return {
-            "eyebrow": "SpecForge Stage 5.7",
+            "eyebrow": "SpecForge Stage 5.9",
             "page_title": "SpecForge: локальный анализ брифов",
             "hero_title": "Локальный анализ брифов в спокойном пошаговом интерфейсе",
             "hero_copy": (
@@ -86,7 +86,7 @@ def ui_strings(locale: Locale) -> dict[str, str]:
             ),
         }
     return {
-        "eyebrow": "SpecForge Stage 5.7",
+        "eyebrow": "SpecForge Stage 5.9",
         "page_title": "SpecForge: local brief analysis",
         "hero_title": "Local brief analysis in a calm guided workflow",
         "hero_copy": (

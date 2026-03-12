@@ -38,6 +38,55 @@ CATEGORY_LABELS: dict[str, dict[Locale, str]] = {
     "timeline": {"en": "Timeline", "ru": "Сроки"},
 }
 
+PRODUCT_TYPE_LABELS: dict[str, dict[Locale, str]] = {
+    "internal tool": {"en": "internal tool", "ru": "внутренний инструмент"},
+    "dashboard": {"en": "dashboard", "ru": "дашборд"},
+    "marketplace": {"en": "marketplace", "ru": "маркетплейс"},
+    "mobile app": {"en": "mobile app", "ru": "мобильное приложение"},
+    "web app": {"en": "web app", "ru": "веб-приложение"},
+    "portal": {"en": "portal", "ru": "портал"},
+    "api": {"en": "API product", "ru": "API-продукт"},
+    "automation tool": {"en": "automation tool", "ru": "инструмент автоматизации"},
+    "software tool": {"en": "software tool", "ru": "программный инструмент"},
+    "software app": {"en": "software app", "ru": "программное приложение"},
+}
+
+AUDIENCE_LABELS: dict[str, dict[Locale, str]] = {
+    "founders": {"en": "founders", "ru": "фаундеры"},
+    "small businesses": {"en": "small businesses", "ru": "малый бизнес"},
+    "clients": {"en": "clients", "ru": "клиенты"},
+    "agencies": {"en": "agencies", "ru": "агентства"},
+    "consultants": {"en": "consultants", "ru": "консультанты"},
+    "operations team": {"en": "operations team", "ru": "операционная команда"},
+    "internal team": {"en": "internal team", "ru": "внутренняя команда"},
+    "sales team": {"en": "sales team", "ru": "команда продаж"},
+    "support team": {"en": "support team", "ru": "команда поддержки"},
+}
+
+AUDIENCE_MODE_LABELS: dict[str, dict[Locale, str]] = {
+    "internal": {"en": "internal", "ru": "внутренний"},
+    "b2b": {"en": "B2B", "ru": "B2B"},
+    "b2c": {"en": "B2C", "ru": "B2C"},
+}
+
+PLATFORM_HINT_LABELS: dict[str, dict[Locale, str]] = {
+    "local-first": {"en": "local-first", "ru": "локальная работа"},
+    "offline-friendly": {"en": "offline-friendly", "ru": "офлайн-режим"},
+    "browser-ui-planned": {"en": "browser UI", "ru": "браузерный интерфейс"},
+    "web": {"en": "web", "ru": "веб"},
+    "mobile": {"en": "mobile", "ru": "мобильное приложение"},
+    "desktop": {"en": "desktop", "ru": "десктоп"},
+    "cli": {"en": "CLI", "ru": "CLI"},
+    "api": {"en": "API", "ru": "API"},
+    "internal-tool": {"en": "internal tool", "ru": "внутренний инструмент"},
+}
+
+TRADEOFF_LABELS: dict[str, dict[Locale, str]] = {
+    "speed prioritized": {"en": "speed prioritized", "ru": "приоритет скорости"},
+    "budget prioritized": {"en": "budget prioritized", "ru": "приоритет бюджета"},
+    "quality prioritized": {"en": "quality prioritized", "ru": "приоритет качества"},
+}
+
 
 def detect_language(text: str) -> Locale:
     """Infer whether input should render in English or Russian."""
@@ -54,3 +103,51 @@ def category_label(category: str, locale: Locale) -> str:
     if locale == "ru":
         return category.replace("-", " ")
     return category.replace("-", " ").title()
+
+
+def display_product_type(value: str | None, locale: Locale) -> str | None:
+    """Return a localized product-type label for human-facing output."""
+
+    if not value:
+        return None
+    localized = PRODUCT_TYPE_LABELS.get(value, {})
+    return localized.get(locale, value)
+
+
+def display_audience(values: list[str], locale: Locale) -> list[str]:
+    """Return localized audience labels for human-facing output."""
+
+    rendered = []
+    for value in values:
+        localized = AUDIENCE_LABELS.get(value, {})
+        rendered.append(localized.get(locale, value))
+    return rendered
+
+
+def display_audience_mode(value: str | None, locale: Locale) -> str | None:
+    """Return a localized audience-mode label for human-facing output."""
+
+    if not value:
+        return None
+    localized = AUDIENCE_MODE_LABELS.get(value, {})
+    return localized.get(locale, value)
+
+
+def display_platform_hints(values: list[str], locale: Locale) -> list[str]:
+    """Return localized platform-hint labels for human-facing output."""
+
+    rendered = []
+    for value in values:
+        localized = PLATFORM_HINT_LABELS.get(value, {})
+        rendered.append(localized.get(locale, value))
+    return rendered
+
+
+def display_tradeoffs(values: list[str], locale: Locale) -> list[str]:
+    """Return localized tradeoff labels for human-facing output."""
+
+    rendered = []
+    for value in values:
+        localized = TRADEOFF_LABELS.get(value, {})
+        rendered.append(localized.get(locale, value))
+    return rendered

@@ -27,14 +27,24 @@ TIMELINE_PATTERN = re.compile(
 )
 TEAM_PATTERN = re.compile(
     (
-        r"(\bsolo founder\b|\bjust me\b|"
-        r"\b\d+\s+(?:person|people|engineers|engineer|developers|developer)\b|"
-        r"\bтолько я\b|\bя один\b|\bкоманда из \d+\b|"
+        r"(\bsolo founder\b|\bjust me\b|\bjust two of us\b|"
+        r"\bteam of (?:\d+|one|two|three)\b|"
+        r"\b(?:\d+|one|two|three)[-\s]?(?:person|people|engineers|engineer|developers|developer)\b|"
+        r"\bme (?:and|plus) one contractor\b|\bone contractor and me\b|"
+        r"\bтолько я\b|\bя один\b|\bнас двое\b|\bкоманда(?:\s+из)?\s+(?:\d+|двух|трех|двое)\b|"
         r"\b\d+\s+(?:человек|разработчиков|разработчика)\b)"
     ),
     re.IGNORECASE,
 )
 NUMERIC_PATTERN = re.compile(r"\b\d+(?:%|x)?\b")
+NUMBER_WORDS = {
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "двух": 2,
+    "трех": 3,
+    "двое": 2,
+}
 
 
 def extract_first_match(pattern: re.Pattern[str], text: str) -> str | None:
@@ -49,15 +59,45 @@ def infer_team_size(text: str) -> str | None:
 
     match = TEAM_PATTERN.search(text)
     if not match:
+        fallback = re.search(
+            r"команда(?:\s+\w+){0,3}\s+(\d+|двух|трех|двое)\s+(?:человек|разработчиков|разработчика)",
+            text.lower(),
+        )
+        if fallback:
+            value = fallback.group(1)
+            if value.isdigit():
+                return f"{value} people"
+            return f"{NUMBER_WORDS.get(value, 99)} people"
         return None
     value = match.group(1).lower()
     if value in {"solo founder", "just me"}:
         return "1 person"
     if value in {"только я", "я один"}:
         return "1 person"
+    if value in {"just two of us", "нас двое"}:
+        return "2 people"
+    if value in {"me and one contractor", "me plus one contractor", "one contractor and me"}:
+        return "2 people"
     if value.startswith("команда из "):
         digits = re.search(r"(\d+)", value)
         return f"{digits.group(1)} people" if digits else value
+    if value.startswith("команда "):
+        digits = re.search(r"(\d+)", value)
+        if digits:
+            return f"{digits.group(1)} people"
+        for word, number in NUMBER_WORDS.items():
+            if word in value:
+                return f"{number} people"
+    if value.startswith("team of "):
+        digits = re.search(r"(\d+)", value)
+        if digits:
+            return f"{digits.group(1)} people"
+        for word, number in NUMBER_WORDS.items():
+            if word in value:
+                return f"{number} people"
+    for word, number in NUMBER_WORDS.items():
+        if word in value:
+            return f"{number} people"
     return value
 
 
@@ -75,6 +115,8 @@ def infer_platform_hints(lowered: str) -> list[str]:
         r"\bвеб\b": "web",
         r"\bmobile\b": "mobile",
         r"\bмобиль": "mobile",
+        r"\bios\b": "mobile",
+        r"\bandroid\b": "mobile",
         r"\bdesktop\b": "desktop",
         r"\bдесктоп\b": "desktop",
         r"\bcli\b": "cli",
@@ -154,8 +196,10 @@ def contains_vague_goals(goals: list[str]) -> bool:
     vague_terms = [
         "better",
         "easier",
+        "modern",
         "powerful",
         "innovative",
+        "premium",
         "feature-rich",
         "all-in-one",
         "удобн",
@@ -230,6 +274,10 @@ def has_broad_scope_signal(brief: NormalizedBrief) -> bool:
             "workflow automation",
             "approval flow",
             "dashboard",
+            "reporting",
+            "reports",
+            "permissions",
+            "role",
             "все в одном",
             "несколько ролей",
             "админ",
@@ -238,6 +286,8 @@ def has_broad_scope_signal(brief: NormalizedBrief) -> bool:
             "интеграц",
             "согласован",
             "дашборд",
+            "отчет",
+            "доступ",
         ]
     )
 
@@ -267,35 +317,17 @@ def has_enterprise_scope_signal(lowered: str) -> bool:
 def count_integration_signals(lowered: str) -> int:
     """Count integration-like scope markers for overloaded first releases."""
 
-    integration_markers = [
-        "integration",
-        "integrations",
-        "slack",
-        "stripe",
-        "salesforce",
-        "hubspot",
-        "crm",
-        "erp",
-        "calendar",
-        "email",
-        "billing",
-        "analytics",
-        "admin",
-        "audit",
-        "sso",
-        "интеграц",
-        "slack",
-        "stripe",
-        "crm",
-        "erp",
-        "календар",
-        "почт",
-        "биллинг",
-        "аналитик",
-        "админ",
-        "аудит",
-    ]
-    return sum(1 for marker in integration_markers if marker in lowered)
+    families = {
+        "integration": ["integration", "integrations", "интеграц"],
+        "crm": ["salesforce", "hubspot", "crm", "erp"],
+        "messaging": ["slack", "email", "почт"],
+        "calendar": ["calendar", "календар"],
+        "billing": ["stripe", "billing", "биллинг"],
+        "analytics": ["analytics", "аналитик", "reporting", "reports", "отчет"],
+        "admin": ["admin", "permissions", "role", "roles", "админ", "доступ", "роли"],
+        "enterprise_controls": ["audit", "sso", "compliance", "аудит", "комплаенс"],
+    }
+    return sum(1 for markers in families.values() if any(marker in lowered for marker in markers))
 
 
 def has_low_budget_signal(text: str, budget_text: str | None = None) -> bool:
@@ -309,10 +341,14 @@ def has_low_budget_signal(text: str, budget_text: str | None = None) -> bool:
             "cheap",
             "tight budget",
             "lean budget",
+            "low budget",
             "bootstrap",
             "budget very limited",
+            "budget is limited",
+            "small budget",
             "ограничен бюджет",
             "бюджет очень ограничен",
+            "маленький бюджет",
             "дешево",
             "недорого",
             "экономно",
@@ -344,9 +380,14 @@ def has_short_timeline_signal(text: str, timeline_text: str | None = None) -> bo
             "urgent",
             "quickly",
             "launch quickly",
+            "move fast",
+            "rush",
+            "within ",
+            "short timeline",
             "срочно",
             "как можно скорее",
             "быстро",
+            "в короткий срок",
         ]
     ):
         return True
@@ -431,6 +472,9 @@ def infer_team_size_count(team_size: str | None) -> int:
     match = re.search(r"(\d+)", team_size)
     if match:
         return int(match.group(1))
+    for word, number in NUMBER_WORDS.items():
+        if word in team_size:
+            return number
     return 1 if "solo" in team_size or "1 person" in team_size else 99
 
 

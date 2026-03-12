@@ -3,7 +3,15 @@
 from __future__ import annotations
 
 from specforge.domain.models import AssumptionItem, DeliveryPack
-from specforge.pipeline.language import category_label, detect_language
+from specforge.pipeline.language import (
+    category_label,
+    detect_language,
+    display_audience,
+    display_audience_mode,
+    display_platform_hints,
+    display_product_type,
+    display_tradeoffs,
+)
 
 
 def render_brief_markdown(pack: DeliveryPack) -> str:
@@ -11,10 +19,11 @@ def render_brief_markdown(pack: DeliveryPack) -> str:
 
     locale = detect_language(pack.brief.normalized_text)
     audience = (
-        ", ".join(pack.brief.audience)
+        ", ".join(display_audience(pack.brief.audience, locale))
         if pack.brief.audience
         else ("Не указана" if locale == "ru" else "Unspecified")
     )
+    product_type = display_product_type(pack.brief.product_type, locale)
     references = render_bullets(
         pack.brief.references,
         fallback="- Ничего не зафиксировано" if locale == "ru" else "- None captured",
@@ -45,7 +54,7 @@ def render_brief_markdown(pack: DeliveryPack) -> str:
             "",
             f"{'Название' if locale == 'ru' else 'Title'}: {pack.brief.title}",
             f"{'Тип продукта' if locale == 'ru' else 'Product Type'}: "
-            f"{pack.brief.product_type or ('Не указан' if locale == 'ru' else 'Unspecified')}",
+            f"{product_type or ('Не указан' if locale == 'ru' else 'Unspecified')}",
             f"{'Аудитория' if locale == 'ru' else 'Audience'}: {audience}",
             "",
             "## Резюме" if locale == "ru" else "## Summary",
@@ -125,9 +134,11 @@ def render_constraints_markdown(pack: DeliveryPack) -> str:
     """Render structured constraints."""
 
     locale = detect_language(pack.brief.normalized_text)
-    audience_hint = pack.constraints.audience_hint or (
+    audience_hint = display_audience_mode(pack.constraints.audience_hint, locale) or (
         "Не указан" if locale == "ru" else "Unspecified"
     )
+    platform_hints = display_platform_hints(pack.constraints.platform_hints, locale)
+    tradeoffs = display_tradeoffs(pack.constraints.speed_quality_budget_tradeoffs, locale)
     return "\n".join(
         [
             "# SpecForge: Ограничения" if locale == "ru" else "# SpecForge Constraints",
@@ -142,14 +153,14 @@ def render_constraints_markdown(pack: DeliveryPack) -> str:
             f"{audience_hint}",
             f"- {'Платформенные сигналы' if locale == 'ru' else 'Platform Hints'}: "
             + (
-                ", ".join(pack.constraints.platform_hints)
-                if pack.constraints.platform_hints
+                ", ".join(platform_hints)
+                if platform_hints
                 else ("Не выделены" if locale == "ru" else "None extracted")
             ),
             f"- {'Компромиссы' if locale == 'ru' else 'Tradeoffs'}: "
             + (
-                ", ".join(pack.constraints.speed_quality_budget_tradeoffs)
-                if pack.constraints.speed_quality_budget_tradeoffs
+                ", ".join(tradeoffs)
+                if tradeoffs
                 else ("Не выделены" if locale == "ru" else "None extracted")
             ),
             "",

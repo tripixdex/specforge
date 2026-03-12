@@ -12,7 +12,7 @@ from specforge.domain.models import (
 )
 from specforge.pipeline.analysis_signals import infer_team_size_count, sort_by_severity
 from specforge.pipeline.intake import dedupe
-from specforge.pipeline.language import detect_language
+from specforge.pipeline.language import detect_language, display_platform_hints
 
 
 def prioritize_open_questions(
@@ -55,6 +55,12 @@ def infer_mvp_cut(
             if locale == "ru"
             else f"Anchor the first release on this primary goal: {brief.goals[0]}"
         )
+    if not brief.audience:
+        cut.append(
+            "Сначала выберите одного основного пользователя и один главный workflow."
+            if locale == "ru"
+            else "Decide on one primary user and one core workflow before expanding scope."
+        )
     if len(brief.goals) > 1:
         cut.append(
             "Отложите вторичные цели, пока не подтвержден первый workflow."
@@ -62,7 +68,7 @@ def infer_mvp_cut(
             else "Defer secondary goals until the first workflow is validated."
         )
     if len(constraints.platform_hints) > 1:
-        platforms = ", ".join(constraints.platform_hints)
+        platforms = ", ".join(display_platform_hints(constraints.platform_hints, locale))
         cut.append(
             f"Выберите одну основную платформу вместо распыления между: {platforms}."
             if locale == "ru"
@@ -82,6 +88,13 @@ def infer_mvp_cut(
             if locale == "ru"
             else "Remove enterprise-only requirements such as SSO, audit trails, or "
             "compliance-heavy scope from MVP."
+        )
+        cut.append(
+            "Отложите вторичные интеграции, отчетность "
+            "и административные поверхности до следующего этапа."
+            if locale == "ru"
+            else "Defer secondary integrations, reporting surfaces, "
+            "and admin-heavy controls to a later milestone."
         )
     if any(
         item.category == "small-team-aggressive-deadline-broad-scope" for item in contradictions

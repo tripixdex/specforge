@@ -9,7 +9,7 @@ def test_ui_home_route_is_available() -> None:
     response = client.get("/ui")
 
     assert response.status_code == 200
-    assert "SpecForge Stage 5.7" in response.text
+    assert "SpecForge Stage 5.9" in response.text
     assert "Run analysis" in response.text
     assert "New brief" in response.text
 

@@ -74,7 +74,32 @@ def test_russian_export_uses_localized_headers(tmp_path: Path) -> None:
 
     brief_markdown = (output_dir / "brief.md").read_text(encoding="utf-8")
     analysis_report = (output_dir / "analysis_report.md").read_text(encoding="utf-8")
+    constraints_markdown = (output_dir / "constraints.md").read_text(encoding="utf-8")
 
     assert "# SpecForge: Бриф" in brief_markdown
     assert "## Детерминированная интерпретация" in brief_markdown
     assert "## Противоречия" in analysis_report
+    assert "Тип продукта: мобильное приложение" in brief_markdown
+    assert "Платформенные сигналы: веб, мобильное приложение" in constraints_markdown
+
+
+def test_english_export_keeps_display_values_in_english(tmp_path: Path) -> None:
+    text = """
+    Need a local-first internal tool for the operations team.
+    Goals:
+    - Reduce manual weekly reporting
+    Constraints:
+    - Budget under $10k
+    """
+
+    normalized = normalize_brief(create_raw_brief(text))
+    analyzed, _ = analyze_brief(normalized)
+    pack = generate_delivery_pack(analyzed)
+    output_dir = export_delivery_pack(pack, output_root=tmp_path, run_label="en-bundle")
+
+    brief_markdown = (output_dir / "brief.md").read_text(encoding="utf-8")
+    constraints_markdown = (output_dir / "constraints.md").read_text(encoding="utf-8")
+
+    assert "Product Type: internal tool" in brief_markdown
+    assert "Audience: operations team" in brief_markdown
+    assert "Platform Hints: local-first, internal tool" in constraints_markdown

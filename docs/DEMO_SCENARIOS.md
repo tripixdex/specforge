@@ -1,6 +1,6 @@
 # Demo Scenarios
 
-Stage 5.7 demos keep the deterministic CLI flow, the local FastAPI layer, the guided browser UI, and a local evaluation run, with a final narrow pass on overloaded-brief contradiction detection and bilingual output consistency before re-audit.
+Stage 5.9 demos keep the deterministic CLI flow, the local FastAPI layer, the guided browser UI, and a local evaluation run, with a narrow freeze-focused pass on realistic overloaded-brief contradiction detection, bilingual output consistency, and small artifact usefulness improvements before final re-audit.
 
 ## Scenario 1: Contradictory Founder Brief
 
@@ -9,6 +9,7 @@ Input:
 
 Implemented behavior:
 - detects overloaded-brief contradiction patterns for low budget plus urgency plus breadth, tiny team plus short deadline plus multi-platform scope, and simple-MVP framing plus enterprise-ish breadth
+- detects the same contradiction families for more realistic English and Russian wording variants, not only the original curated phrasing
 - keeps contradiction output curated instead of emitting duplicate findings from the same family
 - surfaces missing decisions around pricing and security
 - recommends a narrower MVP cut
@@ -68,7 +69,7 @@ Input:
 
 Implemented behavior:
 - Russian input produces Russian deterministic findings and recommendations
-- Russian exported markdown uses Russian-facing section headers and phrasing
+- Russian exported markdown uses Russian-facing section headers, phrasing, and core display values for product, audience, and platform labels
 - English input produces English deterministic findings and recommendations
 - Cyrillic titles export to readable transliterated folder names under `outputs/`
 
@@ -81,7 +82,7 @@ Input:
 - the Stage 5 eval corpus under `eval/`
 
 Implemented behavior:
-- runs 22 deterministic corpus cases
+- runs 25 deterministic corpus cases
 - includes audited Russian and English overloaded-brief misses as explicit regression fixtures
 - checks structural expectations such as minimum finding counts, contradiction ceilings, required categories, MVP-cut presence, and required artifacts
 - writes inspectable summaries and per-case bundles under `outputs/evals/stage-05/`
