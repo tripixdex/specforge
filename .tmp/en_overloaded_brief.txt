@@ -1,0 +1,1 @@
+We need a simple MVP for a field service operations product. Launch in 4 weeks with a team of 2 and a tight budget, but the first release should include web plus iOS and Android, offline mode, SSO, audit logs, custom analytics, Stripe billing, QuickBooks sync, HubSpot sync, and an admin console for enterprise customers.

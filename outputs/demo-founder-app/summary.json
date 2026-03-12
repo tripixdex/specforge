@@ -1,6 +1,6 @@
 {
   "stage_label": "specforge-deterministic-delivery-pack",
-  "generated_at": "2026-03-12T00:50:23.020677+00:00",
+  "generated_at": "2026-03-12T01:52:21.570463+00:00",
   "brief": {
     "title": "Founder App Idea",
     "source_text": "Founder App Idea\n\nI want a tool that helps solo founders turn scattered notes into a cleaner execution plan.\nMaybe start as a web app, but keep the first version local-first and simple.\n\nGoals:\n- Help founders clean up rough product ideas\n- Highlight missing constraints before they hire engineers\n- Produce a minimal delivery pack they can review locally\n\nNon-Goals:\n- No cloud sync\n- Don't build team collaboration yet\n\nConstraints:\n- Budget under $15k\n- Need something usable in 4 weeks\n- Just me plus one contract engineer\n\nNotes:\n- I care more about speed than polish for the first release\n- Reference example: https://example.com/founder-notes",
@@ -13,7 +13,8 @@
     "goals": [
       "Help founders clean up rough product ideas",
       "Highlight missing constraints before they hire engineers",
-      "Produce a minimal delivery pack they can review locally"
+      "Produce a minimal delivery pack they can review locally",
+      "Need something usable in 4 weeks"
     ],
     "non_goals": [
       "No cloud sync",
@@ -63,12 +64,13 @@
       }
     ],
     "open_questions": [
-      "How will the team know the first release is successful?",
-      "Resolve contradiction: A small team, aggressive deadline, and broad scope are in tension.",
+      "Resolve contradiction: Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.",
+      "Resolve contradiction: A small team, aggressive deadline, and overloaded scope are in tension.",
       "Resolve contradiction: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support."
     ],
     "risks": [
-      "A small team, aggressive deadline, and broad scope are in tension.",
+      "Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.",
+      "A small team, aggressive deadline, and overloaded scope are in tension.",
       "The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support.",
       "A one-person team plus an explicit delivery timeline increases schedule risk."
     ],
@@ -82,31 +84,29 @@
     "analysis": {
       "stage_label": "specforge-deterministic-analysis",
       "analyzer_type": "deterministic",
-      "ambiguities": [
-        {
-          "category": "success_criteria",
-          "severity": "medium",
-          "description": "No explicit success criteria, metric, or concrete completion signal was found.",
-          "evidence": [
-            "Help founders clean up rough product ideas",
-            "Highlight missing constraints before they hire engineers"
-          ],
-          "recommendation": "Add one measurable or binary success check for the first release.",
-          "source_type": "unresolved",
-          "question": "How will the team know the first release is successful?"
-        }
-      ],
+      "ambiguities": [],
       "contradictions": [
+        {
+          "category": "fast-cheap-feature-rich",
+          "severity": "high",
+          "description": "Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.",
+          "evidence": [
+            "Maybe start as a web app, but keep the first version local-first and simple.",
+            "- Budget under $15k",
+            "- Need something usable in 4 weeks"
+          ],
+          "recommendation": "Keep the first release to one core workflow and only the mandatory integrations.",
+          "source_type": "inferred"
+        },
         {
           "category": "small-team-aggressive-deadline-broad-scope",
           "severity": "high",
-          "description": "A small team, aggressive deadline, and broad scope are in tension.",
+          "description": "A small team, aggressive deadline, and overloaded scope are in tension.",
           "evidence": [
-            "Goals:",
-            "Non-Goals:",
+            "Maybe start as a web app, but keep the first version local-first and simple.",
             "- Need something usable in 4 weeks"
           ],
-          "recommendation": "Reduce scope to a narrower MVP cut before committing to the deadline.",
+          "recommendation": "Reduce the first release to one channel and one key workflow before committing to the deadline.",
           "source_type": "inferred"
         },
         {
@@ -114,9 +114,10 @@
           "severity": "high",
           "description": "The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support.",
           "evidence": [
-            "Maybe start as a web app, but keep the first version local-first and simple."
+            "Maybe start as a web app, but keep the first version local-first and simple.",
+            "- Produce a minimal delivery pack they can review locally"
           ],
-          "recommendation": "Keep the MVP to one channel, one role, and the minimum mandatory capability set.",
+          "recommendation": "Keep the MVP to one channel, one user role, and the minimum mandatory capability set.",
           "source_type": "explicit"
         }
       ],
@@ -137,8 +138,8 @@
         }
       ],
       "prioritized_open_questions": [
-        "How will the team know the first release is successful?",
-        "Resolve contradiction: A small team, aggressive deadline, and broad scope are in tension.",
+        "Resolve contradiction: Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.",
+        "Resolve contradiction: A small team, aggressive deadline, and overloaded scope are in tension.",
         "Resolve contradiction: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support."
       ],
       "recommended_mvp_cut": [
@@ -146,6 +147,7 @@
         "Defer secondary goals until the first workflow is validated.",
         "Choose one primary platform instead of splitting across: local-first, web.",
         "Remove enterprise-only requirements such as SSO, audit trails, or compliance-heavy scope from MVP.",
+        "Defer secondary integrations, reporting surfaces, and admin-heavy controls to a later milestone.",
         "Cut the release to one role and one core workflow before keeping the stated deadline."
       ],
       "traceability_links": [
@@ -185,31 +187,29 @@
   "analysis": {
     "stage_label": "specforge-deterministic-analysis",
     "analyzer_type": "deterministic",
-    "ambiguities": [
-      {
-        "category": "success_criteria",
-        "severity": "medium",
-        "description": "No explicit success criteria, metric, or concrete completion signal was found.",
-        "evidence": [
-          "Help founders clean up rough product ideas",
-          "Highlight missing constraints before they hire engineers"
-        ],
-        "recommendation": "Add one measurable or binary success check for the first release.",
-        "source_type": "unresolved",
-        "question": "How will the team know the first release is successful?"
-      }
-    ],
+    "ambiguities": [],
     "contradictions": [
+      {
+        "category": "fast-cheap-feature-rich",
+        "severity": "high",
+        "description": "Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.",
+        "evidence": [
+          "Maybe start as a web app, but keep the first version local-first and simple.",
+          "- Budget under $15k",
+          "- Need something usable in 4 weeks"
+        ],
+        "recommendation": "Keep the first release to one core workflow and only the mandatory integrations.",
+        "source_type": "inferred"
+      },
       {
         "category": "small-team-aggressive-deadline-broad-scope",
         "severity": "high",
-        "description": "A small team, aggressive deadline, and broad scope are in tension.",
+        "description": "A small team, aggressive deadline, and overloaded scope are in tension.",
         "evidence": [
-          "Goals:",
-          "Non-Goals:",
+          "Maybe start as a web app, but keep the first version local-first and simple.",
           "- Need something usable in 4 weeks"
         ],
-        "recommendation": "Reduce scope to a narrower MVP cut before committing to the deadline.",
+        "recommendation": "Reduce the first release to one channel and one key workflow before committing to the deadline.",
         "source_type": "inferred"
       },
       {
@@ -217,9 +217,10 @@
         "severity": "high",
         "description": "The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support.",
         "evidence": [
-          "Maybe start as a web app, but keep the first version local-first and simple."
+          "Maybe start as a web app, but keep the first version local-first and simple.",
+          "- Produce a minimal delivery pack they can review locally"
         ],
-        "recommendation": "Keep the MVP to one channel, one role, and the minimum mandatory capability set.",
+        "recommendation": "Keep the MVP to one channel, one user role, and the minimum mandatory capability set.",
         "source_type": "explicit"
       }
     ],
@@ -240,8 +241,8 @@
       }
     ],
     "prioritized_open_questions": [
-      "How will the team know the first release is successful?",
-      "Resolve contradiction: A small team, aggressive deadline, and broad scope are in tension.",
+      "Resolve contradiction: Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.",
+      "Resolve contradiction: A small team, aggressive deadline, and overloaded scope are in tension.",
       "Resolve contradiction: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support."
     ],
     "recommended_mvp_cut": [
@@ -249,6 +250,7 @@
       "Defer secondary goals until the first workflow is validated.",
       "Choose one primary platform instead of splitting across: local-first, web.",
       "Remove enterprise-only requirements such as SSO, audit trails, or compliance-heavy scope from MVP.",
+      "Defer secondary integrations, reporting surfaces, and admin-heavy controls to a later milestone.",
       "Cut the release to one role and one core workflow before keeping the stated deadline."
     ],
     "traceability_links": [
@@ -288,7 +290,8 @@
   "goals": [
     "Help founders clean up rough product ideas",
     "Highlight missing constraints before they hire engineers",
-    "Produce a minimal delivery pack they can review locally"
+    "Produce a minimal delivery pack they can review locally",
+    "Need something usable in 4 weeks"
   ],
   "non_goals": [
     "No cloud sync",
@@ -318,7 +321,7 @@
   "inferred_structure": [
     "Inferred product type: web app.",
     "Inferred platform hints: local-first, web.",
-    "Detected contradiction pressure across 2 planning area(s)."
+    "Detected requirement overload across 3 planning area(s)."
   ],
   "constraints": {
     "budget": "under $15k",
@@ -349,8 +352,8 @@
     ]
   },
   "open_questions": [
-    "How will the team know the first release is successful?",
-    "Resolve contradiction: A small team, aggressive deadline, and broad scope are in tension.",
+    "Resolve contradiction: Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.",
+    "Resolve contradiction: A small team, aggressive deadline, and overloaded scope are in tension.",
     "Resolve contradiction: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support."
   ],
   "assumptions": [
@@ -369,7 +372,8 @@
     }
   ],
   "risk_register": [
-    "A small team, aggressive deadline, and broad scope are in tension.",
+    "Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.",
+    "A small team, aggressive deadline, and overloaded scope are in tension.",
     "The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support.",
     "A one-person team plus an explicit delivery timeline increases schedule risk."
   ],
@@ -378,17 +382,19 @@
     "Defer secondary goals until the first workflow is validated.",
     "Choose one primary platform instead of splitting across: local-first, web.",
     "Remove enterprise-only requirements such as SSO, audit trails, or compliance-heavy scope from MVP.",
+    "Defer secondary integrations, reporting surfaces, and admin-heavy controls to a later milestone.",
     "Cut the release to one role and one core workflow before keeping the stated deadline."
   ],
   "why_this_is_risky": [
-    "A small team, aggressive deadline, and broad scope are in tension.",
+    "Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.",
+    "A small team, aggressive deadline, and overloaded scope are in tension.",
     "The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support.",
     "A one-person team plus an explicit delivery timeline increases schedule risk."
   ],
-  "first_step_recommendation": "Resolve the top unresolved question before expanding scope: How will the team know the first release is successful?",
+  "first_step_recommendation": "Resolve the top unresolved question before expanding scope: Resolve contradiction: Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.",
   "analysis_counts": {
-    "ambiguities": 1,
-    "contradictions": 2,
+    "ambiguities": 0,
+    "contradictions": 3,
     "missing_decisions": 0,
     "assumptions": 1,
     "open_questions": 3
@@ -398,13 +404,13 @@
       "name": "brief.md",
       "kind": "markdown",
       "relative_path": "brief.md",
-      "content": "# SpecForge Brief\n\nTitle: Founder App Idea\nProduct Type: web app\nAudience: founders\n\n## Summary\nFounder App Idea is a web app aimed at founders. Primary goal: Help founders clean up rough product ideas.\n\n## Explicit User Input\n- Help founders clean up rough product ideas\n- Highlight missing constraints before they hire engineers\n- Produce a minimal delivery pack they can review locally\n- No cloud sync\n- Don't build team collaboration yet\n- Budget under $15k\n- Need something usable in 4 weeks\n- Just me plus one contract engineer\n- Maybe start as a web app, but keep the first version local-first and simple\n\n## Inferred Structure\n- Inferred product type: web app.\n- Inferred platform hints: local-first, web.\n- Detected contradiction pressure across 2 planning area(s).\n\n## Unresolved Questions\n- How will the team know the first release is successful?\n- Resolve contradiction: A small team, aggressive deadline, and broad scope are in tension.\n- Resolve contradiction: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support.\n\n## Notes\n- I care more about speed than polish for the first release\n- Reference example: https://example.com/founder-notes\n\n## References\n- https://example.com/founder-notes\n\n## Source Text\n```text\nFounder App Idea\n\nI want a tool that helps solo founders turn scattered notes into a cleaner execution plan.\nMaybe start as a web app, but keep the first version local-first and simple.\n\nGoals:\n- Help founders clean up rough product ideas\n- Highlight missing constraints before they hire engineers\n- Produce a minimal delivery pack they can review locally\n\nNon-Goals:\n- No cloud sync\n- Don't build team collaboration yet\n\nConstraints:\n- Budget under $15k\n- Need something usable in 4 weeks\n- Just me plus one contract engineer\n\nNotes:\n- I care more about speed than polish for the first release\n- Reference example: https://example.com/founder-notes\n```"
+      "content": "# SpecForge Brief\n\nTitle: Founder App Idea\nProduct Type: web app\nAudience: founders\n\n## Summary\nFounder App Idea is a web app aimed at founders. Primary goal: Help founders clean up rough product ideas.\n\n## Explicit Brief Input\n- Help founders clean up rough product ideas\n- Highlight missing constraints before they hire engineers\n- Produce a minimal delivery pack they can review locally\n- No cloud sync\n- Don't build team collaboration yet\n- Budget under $15k\n- Need something usable in 4 weeks\n- Just me plus one contract engineer\n- Maybe start as a web app, but keep the first version local-first and simple\n\n## Deterministic Interpretation\n- Inferred product type: web app.\n- Inferred platform hints: local-first, web.\n- Detected requirement overload across 3 planning area(s).\n\n## Priority Open Questions\n- Resolve contradiction: Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.\n- Resolve contradiction: A small team, aggressive deadline, and overloaded scope are in tension.\n- Resolve contradiction: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support.\n\n## Notes\n- I care more about speed than polish for the first release\n- Reference example: https://example.com/founder-notes\n\n## References\n- https://example.com/founder-notes\n\n## Source Text\n```text\nFounder App Idea\n\nI want a tool that helps solo founders turn scattered notes into a cleaner execution plan.\nMaybe start as a web app, but keep the first version local-first and simple.\n\nGoals:\n- Help founders clean up rough product ideas\n- Highlight missing constraints before they hire engineers\n- Produce a minimal delivery pack they can review locally\n\nNon-Goals:\n- No cloud sync\n- Don't build team collaboration yet\n\nConstraints:\n- Budget under $15k\n- Need something usable in 4 weeks\n- Just me plus one contract engineer\n\nNotes:\n- I care more about speed than polish for the first release\n- Reference example: https://example.com/founder-notes\n```"
     },
     {
       "name": "scope.md",
       "kind": "markdown",
       "relative_path": "scope.md",
-      "content": "# SpecForge Scope\n\n## Goals\n- Help founders clean up rough product ideas\n- Highlight missing constraints before they hire engineers\n- Produce a minimal delivery pack they can review locally\n\n## Non-Goals\n- No cloud sync\n- Don't build team collaboration yet\n\n## Scope Draft\n- Shape the first scoped draft around a web app.\n- Prioritize the needs of founders.\n- Support goal: Help founders clean up rough product ideas.\n- Support goal: Highlight missing constraints before they hire engineers.\n- Support goal: Produce a minimal delivery pack they can review locally.\n- Keep out of scope for now: No cloud sync.\n- Keep out of scope for now: Don't build team collaboration yet.\n- Respect platform hints: local-first, web.\n\n## First Step Recommendation\nResolve the top unresolved question before expanding scope: How will the team know the first release is successful?"
+      "content": "# SpecForge Scope\n\n## Goals\n- Help founders clean up rough product ideas\n- Highlight missing constraints before they hire engineers\n- Produce a minimal delivery pack they can review locally\n- Need something usable in 4 weeks\n\n## Non-Goals\n- No cloud sync\n- Don't build team collaboration yet\n\n## Scope Draft\n- Shape the first scoped draft around a web app.\n- Prioritize the needs of founders.\n- Support goal: Help founders clean up rough product ideas.\n- Support goal: Highlight missing constraints before they hire engineers.\n- Support goal: Produce a minimal delivery pack they can review locally.\n- Keep out of scope for now: No cloud sync.\n- Keep out of scope for now: Don't build team collaboration yet.\n- Respect platform hints: local-first, web.\n\n## First Step Recommendation\nResolve the top unresolved question before expanding scope: Resolve contradiction: Low budget, short timeline, and an overloaded first release create an obvious delivery conflict."
     },
     {
       "name": "constraints.md",
@@ -416,7 +422,7 @@
       "name": "open_questions.md",
       "kind": "markdown",
       "relative_path": "open_questions.md",
-      "content": "# SpecForge Open Questions\n\n- How will the team know the first release is successful?\n- Resolve contradiction: A small team, aggressive deadline, and broad scope are in tension.\n- Resolve contradiction: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support."
+      "content": "# SpecForge Open Questions\n\n- Resolve contradiction: Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.\n- Resolve contradiction: A small team, aggressive deadline, and overloaded scope are in tension.\n- Resolve contradiction: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support."
     },
     {
       "name": "assumptions.md",
@@ -434,19 +440,19 @@
       "name": "analysis_report.md",
       "kind": "markdown",
       "relative_path": "analysis_report.md",
-      "content": "# SpecForge Analysis Report\n\n## Counts\n- ambiguities: 1\n- contradictions: 2\n- missing_decisions: 0\n- assumptions: 1\n- open_questions: 3\n\n## Ambiguities\n- [medium] Success criteria: No explicit success criteria, metric, or concrete completion signal was found. (source_type: unresolved; recommendation: Add one measurable or binary success check for the first release.)\n  Evidence: Help founders clean up rough product ideas; Highlight missing constraints before they hire engineers\n\n## Contradictions\n- [high] Small team, short deadline, broad scope: A small team, aggressive deadline, and broad scope are in tension. (source_type: inferred; recommendation: Reduce scope to a narrower MVP cut before committing to the deadline.)\n  Evidence: Goals:; Non-Goals:; - Need something usable in 4 weeks\n- [high] Minimal MVP vs enterprise scope: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support. (source_type: explicit; recommendation: Keep the MVP to one channel, one role, and the minimum mandatory capability set.)\n  Evidence: Maybe start as a web app, but keep the first version local-first and simple.\n\n## Missing Decisions\n- No missing decisions\n\n## Prioritized Open Questions\n- How will the team know the first release is successful?\n- Resolve contradiction: A small team, aggressive deadline, and broad scope are in tension.\n- Resolve contradiction: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support."
+      "content": "# SpecForge Analysis Report\n\n## Counts\n- ambiguities: 0\n- contradictions: 3\n- missing_decisions: 0\n- assumptions: 1\n- open_questions: 3\n\n## Ambiguities\n- No ambiguity findings\n\n## Contradictions\n- [high] Fast, cheap, and feature-rich at once: Low budget, short timeline, and an overloaded first release create an obvious delivery conflict. (source_type: inferred; recommendation: Keep the first release to one core workflow and only the mandatory integrations.)\n  Evidence: Maybe start as a web app, but keep the first version local-first and simple.; - Budget under $15k; - Need something usable in 4 weeks\n- [high] Small team, short deadline, broad scope: A small team, aggressive deadline, and overloaded scope are in tension. (source_type: inferred; recommendation: Reduce the first release to one channel and one key workflow before committing to the deadline.)\n  Evidence: Maybe start as a web app, but keep the first version local-first and simple.; - Need something usable in 4 weeks\n- [high] Minimal MVP vs enterprise scope: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support. (source_type: explicit; recommendation: Keep the MVP to one channel, one user role, and the minimum mandatory capability set.)\n  Evidence: Maybe start as a web app, but keep the first version local-first and simple.; - Produce a minimal delivery pack they can review locally\n\n## Missing Decisions\n- No missing decisions\n\n## Prioritized Open Questions\n- Resolve contradiction: Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.\n- Resolve contradiction: A small team, aggressive deadline, and overloaded scope are in tension.\n- Resolve contradiction: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support."
     },
     {
       "name": "mvp_cut_plan.md",
       "kind": "markdown",
       "relative_path": "mvp_cut_plan.md",
-      "content": "# SpecForge MVP Cut Plan\n\n## Recommended MVP Cut\n- Anchor the first release on this primary goal: Help founders clean up rough product ideas\n- Defer secondary goals until the first workflow is validated.\n- Choose one primary platform instead of splitting across: local-first, web.\n- Remove enterprise-only requirements such as SSO, audit trails, or compliance-heavy scope from MVP.\n- Cut the release to one role and one core workflow before keeping the stated deadline.\n\n## Why This Is Risky\n- A small team, aggressive deadline, and broad scope are in tension.\n- The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support.\n- A one-person team plus an explicit delivery timeline increases schedule risk."
+      "content": "# SpecForge MVP Cut Plan\n\n## Recommended MVP Cut\n- Anchor the first release on this primary goal: Help founders clean up rough product ideas\n- Defer secondary goals until the first workflow is validated.\n- Choose one primary platform instead of splitting across: local-first, web.\n- Remove enterprise-only requirements such as SSO, audit trails, or compliance-heavy scope from MVP.\n- Defer secondary integrations, reporting surfaces, and admin-heavy controls to a later milestone.\n- Cut the release to one role and one core workflow before keeping the stated deadline.\n\n## Why This Is Risky\n- Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.\n- A small team, aggressive deadline, and overloaded scope are in tension.\n- The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support.\n- A one-person team plus an explicit delivery timeline increases schedule risk."
     },
     {
       "name": "risk_register.md",
       "kind": "markdown",
       "relative_path": "risk_register.md",
-      "content": "# SpecForge Risk Register\n\n- A small team, aggressive deadline, and broad scope are in tension.\n- The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support.\n- A one-person team plus an explicit delivery timeline increases schedule risk."
+      "content": "# SpecForge Risk Register\n\n- Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.\n- A small team, aggressive deadline, and overloaded scope are in tension.\n- The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support.\n- A one-person team plus an explicit delivery timeline increases schedule risk."
     }
   ],
   "output_dir": "/Users/vladgurov/Desktop/work/specforge/outputs/demo-founder-app"

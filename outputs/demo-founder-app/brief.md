@@ -7,7 +7,7 @@ Audience: founders
 ## Summary
 Founder App Idea is a web app aimed at founders. Primary goal: Help founders clean up rough product ideas.
 
-## Explicit User Input
+## Explicit Brief Input
 - Help founders clean up rough product ideas
 - Highlight missing constraints before they hire engineers
 - Produce a minimal delivery pack they can review locally
@@ -18,14 +18,14 @@ Founder App Idea is a web app aimed at founders. Primary goal: Help founders cle
 - Just me plus one contract engineer
 - Maybe start as a web app, but keep the first version local-first and simple
 
-## Inferred Structure
+## Deterministic Interpretation
 - Inferred product type: web app.
 - Inferred platform hints: local-first, web.
-- Detected contradiction pressure across 2 planning area(s).
+- Detected requirement overload across 3 planning area(s).
 
-## Unresolved Questions
-- How will the team know the first release is successful?
-- Resolve contradiction: A small team, aggressive deadline, and broad scope are in tension.
+## Priority Open Questions
+- Resolve contradiction: Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.
+- Resolve contradiction: A small team, aggressive deadline, and overloaded scope are in tension.
 - Resolve contradiction: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support.
 
 ## Notes

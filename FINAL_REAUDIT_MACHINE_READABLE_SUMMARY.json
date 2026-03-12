@@ -1,0 +1,47 @@
+{
+  "project_name": "SpecForge",
+  "verdict": "MVP BUT NEEDS FIXES",
+  "portfolio_readiness_score_10": 7.6,
+  "verified_capabilities": [
+    "make lint passes",
+    "make test passes with 35 tests",
+    "CLI analyze, generate, and demo flows run locally",
+    "FastAPI app starts locally with uvicorn",
+    "API /health, /analyze, and /generate work on a live server",
+    "Server-rendered UI /ui loads and supports generate and reset flows",
+    "Eval harness runs locally and reports 25/25 passing cases",
+    "RU and EN overloaded briefs both trigger curated contradiction findings",
+    "API and UI generation write repo-local bundles under outputs/",
+    "Generated bundles contain expected markdown and JSON artifacts"
+  ],
+  "inferred_capabilities": [
+    "The project is credible as a serious local demo MVP for deterministic brief analysis",
+    "A hiring manager can understand the product quickly from live behavior",
+    "The codebase is intentionally modular rather than a single-file prototype"
+  ],
+  "not_verified_capabilities": [
+    "Cyrillic-title transliterated folder naming in a live run without explicit output label",
+    "Behavior under very large malformed inputs beyond automated tests",
+    "Cross-browser UI rendering outside the local HTML responses inspected in terminal"
+  ],
+  "top_findings": [
+    "Realistic near-miss contradiction restraint is still not reliable; a restrained near-miss brief produced 2 contradiction findings.",
+    "Russian export artifacts still leak English values such as '2 people'.",
+    "Russian plain-language budget phrasing like 'бюджет маленький' is not consistently extracted and surfaces as 'Бюджет: Не указан'.",
+    "README is not fully truthful to the current repo state; it claims 22 eval cases while the repo currently contains 25.",
+    "UI reset flow can localize visible copy while leaving the root html lang attribute as en."
+  ],
+  "blockers": [
+    "Fix contradiction false positives on realistic near-miss briefs before freeze.",
+    "Remove remaining RU/EN leakage in generated artifacts.",
+    "Improve Russian budget phrase extraction for plain-language low-budget wording.",
+    "Correct README truthfulness mismatch and re-verify."
+  ],
+  "recommendations": [
+    "Add explicit near-miss restraint evals for phrases that defer mobile, analytics, and later-phase scope instead of counting them as first-release overload.",
+    "Localize derived display values such as team size in export rendering.",
+    "Expand low-budget Russian phrase handling beyond 'маленький бюджет' to forms like 'бюджет маленький'.",
+    "Bind UI root language to resolved page locale, not only result.language.",
+    "Re-run freeze audit only after the above fixes are verified through CLI, API, UI, and eval outputs."
+  ]
+}
