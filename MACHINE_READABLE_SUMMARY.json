@@ -1,0 +1,73 @@
+{
+  "project_name": "SpecForge",
+  "verdict": "MVP BUT NEEDS FIXES",
+  "portfolio_readiness_score_10": 7.6,
+  "verified_capabilities": [
+    "deterministic brief normalization",
+    "ambiguity detection",
+    "missing-decision detection",
+    "assumption handling",
+    "delivery-pack generation",
+    "safe repo-local exports for API and UI",
+    "CLI analyze/generate/demo flows",
+    "typed FastAPI API with /health, /analyze, /generate, /demo",
+    "local server-rendered UI at / and /ui",
+    "evaluation harness with 20 local cases",
+    "Russian and English output generation exists",
+    "reset/new-brief UI path exists"
+  ],
+  "inferred_capabilities": [
+    "strong portfolio-demo intent",
+    "local recruiter/demo friendliness is a design goal",
+    "architecture is intended to stay modular as rules grow"
+  ],
+  "not_verified_capabilities": [
+    "production-grade contradiction reliability",
+    "robust mixed-language behavior",
+    "interactive browser behavior beyond HTML response verification",
+    "cloud deployment",
+    "authentication",
+    "persistence",
+    "external integrations",
+    "multi-user usage"
+  ],
+  "top_findings": [
+    {
+      "severity": "high",
+      "title": "Contradiction detection still misses plausible overloaded briefs",
+      "evidence": "Live English and Russian API smoke checks with low budget, short timeline, and web/mobile scope returned 0 contradictions."
+    },
+    {
+      "severity": "medium",
+      "title": "Language-following is partial rather than complete",
+      "evidence": "Russian UI still renders some English labels; /ui/new produced Russian copy with html lang=en."
+    },
+    {
+      "severity": "medium",
+      "title": "Contradiction results can be noisy and duplicative",
+      "evidence": "Stress case output included multiple contradiction entries from the same family instead of one clean diagnosis."
+    },
+    {
+      "severity": "medium",
+      "title": "Artifacts remain useful but still feel prototype-like",
+      "evidence": "Generated markdown is structured and readable, but summary.json is very raw and exported Russian analysis still includes English structural terms."
+    },
+    {
+      "severity": "low",
+      "title": "Several modules are approaching maintainability hotspots",
+      "evidence": "analysis_decisions.py=441 lines, analysis_signals.py=355, export_render.py=366, intake.py=351, ui/templates/index.html=298."
+    }
+  ],
+  "blockers": [
+    "Harden contradiction rules so obvious low-budget + short-timeline + multi-platform overload cases do not pass cleanly.",
+    "Finish language consistency in UI and exported artifacts.",
+    "Reduce duplicate contradiction findings so outputs feel more trustworthy and curated."
+  ],
+  "recommendations": [
+    "Add explicit contradiction rules for low budget + short timeline + multi-platform even when broad-scope heuristics do not trigger.",
+    "Add audit-focused eval cases that mirror the live misses found in this review.",
+    "Localize the remaining hard-coded template strings and fix html lang handling on reset and other no-result pages.",
+    "Do a small editorial pass on artifact wording to reduce prototype smell before freezing the repo.",
+    "Split analysis_decisions.py before the next feature pass to avoid rule accretion in one file."
+  ]
+}
