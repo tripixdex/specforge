@@ -148,7 +148,7 @@ class HealthResponse(BaseModel):
 
     status: Literal["ok"] = "ok"
     app: Literal["specforge"] = "specforge"
-    stage: Literal["stage-5-eval-hardening"] = "stage-5-eval-hardening"
+    stage: Literal["stage-5-6-pre-audit-polish"] = "stage-5-6-pre-audit-polish"
 
 
 class ErrorResponse(BaseModel):

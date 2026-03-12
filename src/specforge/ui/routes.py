@@ -10,6 +10,8 @@ from fastapi.templating import Jinja2Templates
 from pydantic import ValidationError
 
 from specforge.demo_catalog import default_demo_name, demo_options, load_demo_brief
+from specforge.pipeline.language import detect_language
+from specforge.ui.copy import ui_strings
 from specforge.ui.service import (
     analyze_for_ui,
     generate_for_ui,
@@ -104,6 +106,24 @@ def ui_generate(
     )
 
 
+@router.post("/ui/new", response_class=HTMLResponse, status_code=status.HTTP_200_OK)
+def ui_new_brief(
+    request: Request,
+    demo_name: str = Form(default_demo_name()),
+    previous_brief_text: str = Form(""),
+) -> HTMLResponse:
+    """Reset the intake flow for a new brief without keeping stale results."""
+
+    return render_page(
+        request=request,
+        brief_text="",
+        title="",
+        selected_demo=demo_name,
+        active_step="intake",
+        locale=detect_language(previous_brief_text),
+    )
+
+
 def render_page(
     *,
     request: Request,
@@ -114,9 +134,15 @@ def render_page(
     result: object | None = None,
     active_step: str = "intake",
     error_message: str | None = None,
+    locale: str | None = None,
 ) -> HTMLResponse:
     """Render the main SpecForge UI template."""
 
+    resolved_locale = (
+        locale
+        or (getattr(result, "language", None) if result else None)
+        or detect_language(brief_text)
+    )
     return TEMPLATES.TemplateResponse(
         request=request,
         name="index.html",
@@ -129,6 +155,7 @@ def render_page(
             "result": result,
             "active_step": active_step,
             "error_message": error_message,
+            "strings": ui_strings(resolved_locale),
         },
     )
 

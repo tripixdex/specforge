@@ -118,6 +118,10 @@ body {
   margin-top: 18px;
 }
 
+.reset-form {
+  margin-top: 14px;
+}
+
 label {
   display: block;
   margin-bottom: 8px;
@@ -201,6 +205,11 @@ textarea {
   border-color: rgba(143, 45, 45, 0.22);
 }
 
+.soft-banner {
+  background: rgba(255, 250, 239, 0.96);
+  border-color: rgba(199, 104, 56, 0.22);
+}
+
 .error-banner p,
 .error-banner strong {
   margin: 0;
@@ -209,6 +218,14 @@ textarea {
 .error-banner p {
   margin-top: 6px;
   color: var(--danger);
+}
+
+.soft-banner p {
+  color: var(--ink);
+}
+
+.banner-copy {
+  color: var(--muted);
 }
 
 .summary-card {

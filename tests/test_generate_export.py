@@ -41,3 +41,20 @@ def test_generation_and_export_create_analysis_artifacts(tmp_path: Path) -> None
     summary = json.loads((output_dir / "summary.json").read_text(encoding="utf-8"))
     assert summary["analysis_counts"]["ambiguities"] >= 0
     assert "recommended_mvp_cut" in summary
+    assert "Stage 2 Deterministic Draft" not in (output_dir / "analysis_report.md").read_text(
+        encoding="utf-8"
+    )
+
+
+def test_export_slugifies_cyrillic_titles_readably(tmp_path: Path) -> None:
+    text = """
+    Платформа для агентства
+    Нужен локальный инструмент для клиентских брифов.
+    """
+
+    normalized = normalize_brief(create_raw_brief(text))
+    analyzed, _ = analyze_brief(normalized)
+    pack = generate_delivery_pack(analyzed)
+    output_dir = export_delivery_pack(pack, output_root=tmp_path)
+
+    assert "platforma-dlya-agentstva" in output_dir.name

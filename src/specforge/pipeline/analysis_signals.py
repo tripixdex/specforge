@@ -8,20 +8,28 @@ from specforge.domain.models import NormalizedBrief
 from specforge.pipeline.intake import dedupe
 
 BUDGET_PATTERN = re.compile(
-    r"(\$[\d,]+(?:\s*-\s*\$[\d,]+)?[kKmM]?|under \$[\d,]+[kKmM]?|below \$[\d,]+[kKmM]?)",
+    (
+        r"(\$[\d,]+(?:\s*-\s*\$[\d,]+)?[kKmM]?|"
+        r"under \$[\d,]+[kKmM]?|below \$[\d,]+[kKmM]?|"
+        r"бюджет\s+до\s+\d+[\s\xa0]?(?:тыс|к|млн)?(?:\s*руб|\s*₽)?|"
+        r"до\s+\d+[\s\xa0]?(?:тыс|к|млн)?(?:\s*руб|\s*₽))"
+    ),
     re.IGNORECASE,
 )
 TIMELINE_PATTERN = re.compile(
     (
         r"(\d+\s+(?:days|day|weeks|week|months|month|quarters|quarter)"
-        r"|this quarter|next quarter|asap|next month)"
+        r"|\d+\s+(?:дней|дня|день|недель|недели|неделю|месяцев|месяца|месяц)"
+        r"|this quarter|next quarter|asap|next month|срочно|как можно скорее|за \d+\s+\w+)"
     ),
     re.IGNORECASE,
 )
 TEAM_PATTERN = re.compile(
     (
         r"(\bsolo founder\b|\bjust me\b|"
-        r"\b\d+\s+(?:person|people|engineers|engineer|developers|developer)\b)"
+        r"\b\d+\s+(?:person|people|engineers|engineer|developers|developer)\b|"
+        r"\bтолько я\b|\bя один\b|\bкоманда из \d+\b|"
+        r"\b\d+\s+(?:человек|разработчиков|разработчика)\b)"
     ),
     re.IGNORECASE,
 )
@@ -44,6 +52,11 @@ def infer_team_size(text: str) -> str | None:
     value = match.group(1).lower()
     if value in {"solo founder", "just me"}:
         return "1 person"
+    if value in {"только я", "я один"}:
+        return "1 person"
+    if value.startswith("команда из "):
+        digits = re.search(r"(\d+)", value)
+        return f"{digits.group(1)} people" if digits else value
     return value
 
 
@@ -54,13 +67,19 @@ def infer_platform_hints(lowered: str) -> list[str]:
     keyword_map = {
         r"\blocal-first\b": "local-first",
         r"\boffline\b": "offline-friendly",
+        r"\bофлайн\b": "offline-friendly",
+        r"\bлокальн": "local-first",
         r"\bbrowser\b": "browser-ui-planned",
         r"\bweb\b": "web",
+        r"\bвеб\b": "web",
         r"\bmobile\b": "mobile",
+        r"\bмобиль": "mobile",
         r"\bdesktop\b": "desktop",
+        r"\bдесктоп\b": "desktop",
         r"\bcli\b": "cli",
         r"\bapi\b": "api",
         r"\binternal tool\b": "internal-tool",
+        r"\bвнутренн(?:ий|его)\s+инструмент": "internal-tool",
     }
     for pattern, label in keyword_map.items():
         if re.search(pattern, lowered):
@@ -71,11 +90,20 @@ def infer_platform_hints(lowered: str) -> list[str]:
 def infer_audience_hint(lowered: str) -> str | None:
     """Infer whether the brief leans B2B, B2C, or internal."""
 
-    if "internal" in lowered or "ops team" in lowered or "operations team" in lowered:
+    if (
+        "internal" in lowered
+        or "ops team" in lowered
+        or "operations team" in lowered
+        or "внутрен" in lowered
+        or "операцион" in lowered
+    ):
         return "internal"
-    if any(word in lowered for word in ["b2b", "clients", "agency", "enterprise"]):
+    if any(
+        word in lowered
+        for word in ["b2b", "clients", "agency", "enterprise", "клиент", "агентств", "b2b"]
+    ):
         return "b2b"
-    if any(word in lowered for word in ["b2c", "consumers"]):
+    if any(word in lowered for word in ["b2c", "consumers", "пользовател", "потребител"]):
         return "b2c"
     return None
 
@@ -84,12 +112,37 @@ def infer_tradeoffs(lowered: str) -> list[str]:
     """Infer coarse delivery tradeoff hints from wording."""
 
     tradeoffs = []
-    if any(word in lowered for word in ["fast", "quick", "asap", "mvp", "prototype"]):
+    if any(
+        word in lowered
+        for word in ["fast", "quick", "asap", "mvp", "prototype", "быстро", "срочно", "быстрый"]
+    ):
         tradeoffs.append("speed prioritized")
-    budget_markers = ["budget", "cheap", "lean", "bootstrap", "under $", "below $"]
+    budget_markers = [
+        "budget",
+        "cheap",
+        "lean",
+        "bootstrap",
+        "under $",
+        "below $",
+        "бюджет",
+        "дешево",
+        "недорого",
+        "экономно",
+    ]
     if any(word in lowered for word in budget_markers):
         tradeoffs.append("budget prioritized")
-    if any(word in lowered for word in ["quality", "reliable", "accurate", "polished"]):
+    if any(
+        word in lowered
+        for word in [
+            "quality",
+            "reliable",
+            "accurate",
+            "polished",
+            "качеств",
+            "надежн",
+            "полирован",
+        ]
+    ):
         tradeoffs.append("quality prioritized")
     return tradeoffs
 
@@ -97,7 +150,18 @@ def infer_tradeoffs(lowered: str) -> list[str]:
 def contains_vague_goals(goals: list[str]) -> bool:
     """Return whether the current goals are still too vague."""
 
-    vague_terms = ["better", "easier", "powerful", "innovative", "feature-rich", "all-in-one"]
+    vague_terms = [
+        "better",
+        "easier",
+        "powerful",
+        "innovative",
+        "feature-rich",
+        "all-in-one",
+        "удобн",
+        "мощн",
+        "современн",
+        "все в одном",
+    ]
     return any(any(term in goal.lower() for term in vague_terms) for goal in goals)
 
 
@@ -107,7 +171,21 @@ def has_success_signal(brief: NormalizedBrief) -> bool:
     if any(NUMERIC_PATTERN.search(goal) for goal in brief.goals):
         return True
     lowered = brief.normalized_text.lower()
-    return any(word in lowered for word in ["success means", "metric", "kpi", "reduce", "increase"])
+    return any(
+        word in lowered
+        for word in [
+            "success means",
+            "metric",
+            "kpi",
+            "reduce",
+            "increase",
+            "критер",
+            "метрик",
+            "успех",
+            "сниз",
+            "увелич",
+        ]
+    )
 
 
 def has_monetization_signal(brief: NormalizedBrief) -> bool:
@@ -121,6 +199,11 @@ def has_monetization_signal(brief: NormalizedBrief) -> bool:
         "paid",
         "free tier",
         "monetization",
+        "подписк",
+        "выручк",
+        "платн",
+        "монетиза",
+        "тариф",
     ]
     return any(word in lowered for word in monetization_terms)
 
@@ -142,6 +225,12 @@ def has_broad_scope_signal(brief: NormalizedBrief) -> bool:
             "billing",
             "analytics",
             "integrations",
+            "все в одном",
+            "несколько ролей",
+            "админ",
+            "биллинг",
+            "аналитик",
+            "интеграц",
         ]
     )
 
@@ -160,6 +249,10 @@ def has_enterprise_scope_signal(lowered: str) -> bool:
             "permissions",
             "soc 2",
             "gdpr",
+            "энтерпрайз",
+            "аудит",
+            "роли",
+            "комплаенс",
         ]
     )
 
@@ -177,6 +270,10 @@ def requires_security_decision(lowered: str) -> bool:
             "pii",
             "compliance",
             "audit",
+            "персональные данные",
+            "финансов",
+            "комплаенс",
+            "аудит",
         ]
     )
 
@@ -194,6 +291,9 @@ def has_security_signal(lowered: str) -> bool:
             "encryption",
             "audit",
             "sso",
+            "безопас",
+            "шифрован",
+            "аудит",
         ]
     )
 
@@ -203,7 +303,17 @@ def has_owner_signal(lowered: str) -> bool:
 
     return any(
         word in lowered
-        for word in ["owner", "admin", "operations lead", "support lead", "maintain"]
+        for word in [
+            "owner",
+            "admin",
+            "operations lead",
+            "support lead",
+            "maintain",
+            "владел",
+            "админ",
+            "поддержива",
+            "отвечает",
+        ]
     )
 
 

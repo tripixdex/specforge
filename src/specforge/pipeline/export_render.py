@@ -3,47 +3,70 @@
 from __future__ import annotations
 
 from specforge.domain.models import AssumptionItem, DeliveryPack
+from specforge.pipeline.language import category_label, detect_language
 
 
 def render_brief_markdown(pack: DeliveryPack) -> str:
     """Render the normalized brief as markdown."""
 
-    audience = ", ".join(pack.brief.audience) if pack.brief.audience else "Unspecified"
-    references = render_bullets(pack.brief.references, fallback="- None captured")
-    notes = render_bullets(pack.brief.notes, fallback="- None captured")
-    explicit_inputs = render_bullets(pack.explicit_user_input, fallback="- None captured")
-    inferred = render_bullets(pack.inferred_structure, fallback="- None inferred")
+    locale = detect_language(pack.brief.normalized_text)
+    audience = (
+        ", ".join(pack.brief.audience)
+        if pack.brief.audience
+        else ("Не указана" if locale == "ru" else "Unspecified")
+    )
+    references = render_bullets(
+        pack.brief.references,
+        fallback="- Ничего не зафиксировано" if locale == "ru" else "- None captured",
+    )
+    notes = render_bullets(
+        pack.brief.notes,
+        fallback="- Ничего не зафиксировано" if locale == "ru" else "- None captured",
+    )
+    explicit_inputs = render_bullets(
+        pack.explicit_user_input,
+        fallback="- Ничего не зафиксировано" if locale == "ru" else "- None captured",
+    )
+    inferred = render_bullets(
+        pack.inferred_structure,
+        fallback="- Ничего не выведено" if locale == "ru" else "- None inferred",
+    )
     unresolved = render_bullets(
         pack.open_questions[:5],
-        fallback="- No unresolved questions were generated",
+        fallback=(
+            "- Открытые вопросы не были сгенерированы"
+            if locale == "ru"
+            else "- No unresolved questions were generated"
+        ),
     )
     return "\n".join(
         [
-            "# Stage 2 Deterministic Draft: Brief",
+            "# SpecForge: Бриф" if locale == "ru" else "# SpecForge Brief",
             "",
-            f"Title: {pack.brief.title}",
-            f"Product Type: {pack.brief.product_type or 'Unspecified'}",
-            f"Audience: {audience}",
+            f"{'Название' if locale == 'ru' else 'Title'}: {pack.brief.title}",
+            f"{'Тип продукта' if locale == 'ru' else 'Product Type'}: "
+            f"{pack.brief.product_type or ('Не указан' if locale == 'ru' else 'Unspecified')}",
+            f"{'Аудитория' if locale == 'ru' else 'Audience'}: {audience}",
             "",
-            "## Summary",
+            "## Резюме" if locale == "ru" else "## Summary",
             pack.brief_summary,
             "",
-            "## Explicit User Input",
+            "## Явно указано пользователем" if locale == "ru" else "## Explicit User Input",
             explicit_inputs,
             "",
-            "## Inferred Structure",
+            "## Что система вывела" if locale == "ru" else "## Inferred Structure",
             inferred,
             "",
-            "## Unresolved Questions",
+            "## Открытые вопросы" if locale == "ru" else "## Unresolved Questions",
             unresolved,
             "",
-            "## Notes",
+            "## Заметки" if locale == "ru" else "## Notes",
             notes,
             "",
-            "## References",
+            "## Ссылки" if locale == "ru" else "## References",
             references,
             "",
-            "## Source Text",
+            "## Исходный текст" if locale == "ru" else "## Source Text",
             "```text",
             pack.brief.normalized_text,
             "```",
@@ -54,23 +77,41 @@ def render_brief_markdown(pack: DeliveryPack) -> str:
 def render_scope_markdown(pack: DeliveryPack) -> str:
     """Render the scope draft."""
 
-    goals = render_bullets(pack.goals, fallback="- No explicit goals were extracted")
-    non_goals = render_bullets(pack.non_goals, fallback="- No explicit non-goals were extracted")
-    scope = render_bullets(pack.scope_draft, fallback="- Scope draft is still minimal")
+    locale = detect_language(pack.brief.normalized_text)
+    goals = render_bullets(
+        pack.goals,
+        fallback="- Явные цели не выделены"
+        if locale == "ru"
+        else "- No explicit goals were extracted",
+    )
+    non_goals = render_bullets(
+        pack.non_goals,
+        fallback=(
+            "- Явные не-цели не выделены"
+            if locale == "ru"
+            else "- No explicit non-goals were extracted"
+        ),
+    )
+    scope = render_bullets(
+        pack.scope_draft,
+        fallback="- Черновик объема пока слишком узкий"
+        if locale == "ru"
+        else "- Scope draft is still minimal",
+    )
     return "\n".join(
         [
-            "# Stage 2 Deterministic Draft: Scope",
+            "# SpecForge: Объем" if locale == "ru" else "# SpecForge Scope",
             "",
-            "## Goals",
+            "## Цели" if locale == "ru" else "## Goals",
             goals,
             "",
-            "## Non-Goals",
+            "## Не-цели" if locale == "ru" else "## Non-Goals",
             non_goals,
             "",
-            "## Scope Draft",
+            "## Черновик объема" if locale == "ru" else "## Scope Draft",
             scope,
             "",
-            "## First Step Recommendation",
+            "## Первая рекомендация" if locale == "ru" else "## First Step Recommendation",
             pack.first_step_recommendation,
         ]
     )
@@ -79,29 +120,40 @@ def render_scope_markdown(pack: DeliveryPack) -> str:
 def render_constraints_markdown(pack: DeliveryPack) -> str:
     """Render structured constraints."""
 
+    locale = detect_language(pack.brief.normalized_text)
+    audience_hint = pack.constraints.audience_hint or (
+        "Не указан" if locale == "ru" else "Unspecified"
+    )
     return "\n".join(
         [
-            "# Stage 2 Deterministic Draft: Constraints",
+            "# SpecForge: Ограничения" if locale == "ru" else "# SpecForge Constraints",
             "",
-            f"- Budget: {pack.constraints.budget or 'Unspecified'}",
-            f"- Timeline: {pack.constraints.timeline or 'Unspecified'}",
-            f"- Team Size: {pack.constraints.team_size or 'Unspecified'}",
-            f"- Audience Hint: {pack.constraints.audience_hint or 'Unspecified'}",
-            "- Platform Hints: "
+            f"- {'Бюджет' if locale == 'ru' else 'Budget'}: "
+            f"{pack.constraints.budget or ('Не указан' if locale == 'ru' else 'Unspecified')}",
+            f"- {'Сроки' if locale == 'ru' else 'Timeline'}: "
+            f"{pack.constraints.timeline or ('Не указаны' if locale == 'ru' else 'Unspecified')}",
+            f"- {'Команда' if locale == 'ru' else 'Team Size'}: "
+            f"{pack.constraints.team_size or ('Не указана' if locale == 'ru' else 'Unspecified')}",
+            f"- {'Сигнал по аудитории' if locale == 'ru' else 'Audience Hint'}: "
+            f"{audience_hint}",
+            f"- {'Платформенные сигналы' if locale == 'ru' else 'Platform Hints'}: "
             + (
                 ", ".join(pack.constraints.platform_hints)
                 if pack.constraints.platform_hints
-                else "None extracted"
+                else ("Не выделены" if locale == "ru" else "None extracted")
             ),
-            "- Tradeoffs: "
+            f"- {'Компромиссы' if locale == 'ru' else 'Tradeoffs'}: "
             + (
                 ", ".join(pack.constraints.speed_quality_budget_tradeoffs)
                 if pack.constraints.speed_quality_budget_tradeoffs
-                else "None extracted"
+                else ("Не выделены" if locale == "ru" else "None extracted")
             ),
             "",
-            "## Explicit Constraints",
-            render_bullets(pack.constraints.explicit_constraints, fallback="- None extracted"),
+            "## Явные ограничения" if locale == "ru" else "## Explicit Constraints",
+            render_bullets(
+                pack.constraints.explicit_constraints,
+                fallback="- Ничего не выделено" if locale == "ru" else "- None extracted",
+            ),
         ]
     )
 
@@ -109,11 +161,17 @@ def render_constraints_markdown(pack: DeliveryPack) -> str:
 def render_open_questions_markdown(pack: DeliveryPack) -> str:
     """Render prioritized open questions."""
 
+    locale = detect_language(pack.brief.normalized_text)
     return "\n".join(
         [
-            "# Stage 2 Deterministic Draft: Open Questions",
+            "# SpecForge: Открытые вопросы" if locale == "ru" else "# SpecForge Open Questions",
             "",
-            render_bullets(pack.open_questions, fallback="- No open questions were generated"),
+            render_bullets(
+                pack.open_questions,
+                fallback="- Открытые вопросы не были сгенерированы"
+                if locale == "ru"
+                else "- No open questions were generated",
+            ),
         ]
     )
 
@@ -121,12 +179,17 @@ def render_open_questions_markdown(pack: DeliveryPack) -> str:
 def render_assumptions_markdown(pack: DeliveryPack) -> str:
     """Render a short assumptions summary for compatibility with Stage 1 outputs."""
 
+    locale = detect_language(pack.brief.normalized_text)
     return "\n".join(
         [
-            "# Stage 2 Deterministic Draft: Assumptions",
+            "# SpecForge: Допущения" if locale == "ru" else "# SpecForge Assumptions",
             "",
             render_assumption_lines(pack.assumptions)
-            or "- No deterministic assumptions were added",
+            or (
+                "- Детерминированные допущения не были добавлены"
+                if locale == "ru"
+                else "- No deterministic assumptions were added"
+            ),
         ]
     )
 
@@ -134,38 +197,68 @@ def render_assumptions_markdown(pack: DeliveryPack) -> str:
 def render_assumption_ledger_markdown(pack: DeliveryPack) -> str:
     """Render the richer assumption ledger."""
 
+    locale = detect_language(pack.brief.normalized_text)
     if not pack.assumptions:
-        body = "- No deterministic assumptions were added"
+        body = (
+            "- Детерминированные допущения не были добавлены"
+            if locale == "ru"
+            else "- No deterministic assumptions were added"
+        )
     else:
         sections = []
         for item in pack.assumptions:
             sections.extend(render_assumption_block(item))
         body = "\n".join(sections)
-    return "\n".join(["# Stage 2 Deterministic Draft: Assumption Ledger", "", body])
+    header = "# SpecForge: Реестр допущений" if locale == "ru" else "# SpecForge Assumption Ledger"
+    return "\n".join([header, "", body])
 
 
 def render_analysis_report_markdown(pack: DeliveryPack) -> str:
     """Render the structured analysis report."""
 
     report = pack.analysis
+    locale = detect_language(pack.brief.normalized_text)
     return "\n".join(
         [
-            "# Stage 2 Deterministic Draft: Analysis Report",
+            "# SpecForge: Аналитический отчет" if locale == "ru" else "# SpecForge Analysis Report",
             "",
-            "## Counts",
+            "## Счетчики" if locale == "ru" else "## Counts",
             *(f"- {key}: {value}" for key, value in pack.analysis_counts.items()),
             "",
-            "## Ambiguities",
-            render_analysis_lines(report.ambiguities, fallback="- No ambiguity findings"),
+            "## Неясности" if locale == "ru" else "## Ambiguities",
+            render_analysis_lines(
+                report.ambiguities,
+                locale=locale,
+                fallback="- Неясности не обнаружены"
+                if locale == "ru"
+                else "- No ambiguity findings",
+            ),
             "",
-            "## Contradictions",
-            render_analysis_lines(report.contradictions, fallback="- No contradiction findings"),
+            "## Противоречия" if locale == "ru" else "## Contradictions",
+            render_analysis_lines(
+                report.contradictions,
+                locale=locale,
+                fallback="- Противоречия не обнаружены"
+                if locale == "ru"
+                else "- No contradiction findings",
+            ),
             "",
-            "## Missing Decisions",
-            render_analysis_lines(report.missing_decisions, fallback="- No missing decisions"),
+            "## Недостающие решения" if locale == "ru" else "## Missing Decisions",
+            render_analysis_lines(
+                report.missing_decisions,
+                locale=locale,
+                fallback="- Недостающие решения не обнаружены"
+                if locale == "ru"
+                else "- No missing decisions",
+            ),
             "",
-            "## Prioritized Open Questions",
-            render_bullets(report.prioritized_open_questions, fallback="- No open questions"),
+            "## Приоритетные открытые вопросы"
+            if locale == "ru"
+            else "## Prioritized Open Questions",
+            render_bullets(
+                report.prioritized_open_questions,
+                fallback="- Открытых вопросов нет" if locale == "ru" else "- No open questions",
+            ),
         ]
     )
 
@@ -173,22 +266,27 @@ def render_analysis_report_markdown(pack: DeliveryPack) -> str:
 def render_mvp_cut_plan_markdown(pack: DeliveryPack) -> str:
     """Render the recommended MVP cut plan."""
 
+    locale = detect_language(pack.brief.normalized_text)
     cut = render_bullets(
         pack.recommended_mvp_cut,
-        fallback="- No MVP cut recommendation was generated",
+        fallback="- Рекомендация по MVP не была сгенерирована"
+        if locale == "ru"
+        else "- No MVP cut recommendation was generated",
     )
     risky = render_bullets(
         pack.why_this_is_risky,
-        fallback="- No major risks were generated",
+        fallback="- Существенные риски не были сгенерированы"
+        if locale == "ru"
+        else "- No major risks were generated",
     )
     return "\n".join(
         [
-            "# Stage 2 Deterministic Draft: MVP Cut Plan",
+            "# SpecForge: План MVP" if locale == "ru" else "# SpecForge MVP Cut Plan",
             "",
-            "## Recommended MVP Cut",
+            "## Рекомендуемый MVP" if locale == "ru" else "## Recommended MVP Cut",
             cut,
             "",
-            "## Why This Is Risky",
+            "## Почему это рискованно" if locale == "ru" else "## Why This Is Risky",
             risky,
         ]
     )
@@ -197,16 +295,22 @@ def render_mvp_cut_plan_markdown(pack: DeliveryPack) -> str:
 def render_risk_register_markdown(pack: DeliveryPack) -> str:
     """Render the seeded risk register."""
 
+    locale = detect_language(pack.brief.normalized_text)
     return "\n".join(
         [
-            "# Stage 2 Deterministic Draft: Risk Register",
+            "# SpecForge: Реестр рисков" if locale == "ru" else "# SpecForge Risk Register",
             "",
-            render_bullets(pack.risk_register, fallback="- No deterministic risks were seeded"),
+            render_bullets(
+                pack.risk_register,
+                fallback="- Детерминированные риски не были добавлены"
+                if locale == "ru"
+                else "- No deterministic risks were seeded",
+            ),
         ]
     )
 
 
-def render_analysis_lines(items: list[object], *, fallback: str) -> str:
+def render_analysis_lines(items: list[object], *, locale: str, fallback: str) -> str:
     """Render finding objects with evidence and recommendations."""
 
     if not items:
@@ -214,20 +318,23 @@ def render_analysis_lines(items: list[object], *, fallback: str) -> str:
     lines: list[str] = []
     for item in items:
         lines.append(
-            f"- [{item.severity}] {item.category}: {item.description} "
-            f"(source_type: {item.source_type}; recommendation: {item.recommendation})"
+            f"- [{item.severity}] {category_label(item.category, locale)}: {item.description} "
+            f"({'источник' if locale == 'ru' else 'source_type'}: {item.source_type}; "
+            f"{'рекомендация' if locale == 'ru' else 'recommendation'}: {item.recommendation})"
         )
         if getattr(item, "evidence", None):
             evidence = "; ".join(getattr(item, "evidence")[:3])
-            lines.append(f"  Evidence: {evidence}")
+            lines.append(f"  {'Доказательства' if locale == 'ru' else 'Evidence'}: {evidence}")
     return "\n".join(lines)
 
 
 def render_assumption_lines(items: list[AssumptionItem]) -> str:
     """Render assumption items as one-line bullets."""
 
+    locale = detect_language(items[0].statement) if items else "en"
     return "\n".join(
-        f"- {item.statement} ({item.confidence}; rationale: {item.rationale})"
+        f"- {item.statement} ({item.confidence}; "
+        f"{'обоснование' if locale == 'ru' else 'rationale'}: {item.rationale})"
         for item in items
     )
 
@@ -235,15 +342,19 @@ def render_assumption_lines(items: list[AssumptionItem]) -> str:
 def render_assumption_block(item: AssumptionItem) -> list[str]:
     """Render one assumption as a short block."""
 
+    locale = detect_language(item.statement)
     lines = [
-        f"- [{item.confidence}] {item.category}: {item.statement}",
-        f"  Description: {item.description}",
-        f"  Rationale: {item.rationale}",
-        f"  Recommendation: {item.recommendation}",
-        f"  Source Type: {item.source_type}",
+        f"- [{item.confidence}] {category_label(item.category, locale)}: {item.statement}",
+        f"  {'Описание' if locale == 'ru' else 'Description'}: {item.description}",
+        f"  {'Обоснование' if locale == 'ru' else 'Rationale'}: {item.rationale}",
+        f"  {'Рекомендация' if locale == 'ru' else 'Recommendation'}: {item.recommendation}",
+        f"  {'Тип источника' if locale == 'ru' else 'Source Type'}: {item.source_type}",
     ]
     if item.evidence:
-        lines.append(f"  Evidence: {'; '.join(item.evidence[:3])}")
+        lines.append(
+            f"  {'Доказательства' if locale == 'ru' else 'Evidence'}: "
+            f"{'; '.join(item.evidence[:3])}"
+        )
     return lines
 
 

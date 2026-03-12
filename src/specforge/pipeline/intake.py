@@ -5,25 +5,38 @@ from __future__ import annotations
 import re
 
 from specforge.domain.models import NormalizedBrief, RawBrief
+from specforge.pipeline.naming import derive_title
 
 SECTION_NAMES = {
     "goal": "goals",
     "goals": "goals",
+    "цель": "goals",
+    "цели": "goals",
     "non-goal": "non_goals",
     "non-goals": "non_goals",
+    "не цель": "non_goals",
+    "не-цель": "non_goals",
     "constraints": "constraints",
     "constraint": "constraints",
+    "ограничения": "constraints",
+    "ограничение": "constraints",
     "audience": "audience",
     "users": "audience",
     "user": "audience",
+    "аудитория": "audience",
+    "пользователи": "audience",
+    "пользователь": "audience",
     "notes": "notes",
+    "заметки": "notes",
     "references": "references",
     "refs": "references",
+    "ссылки": "references",
     "risks": "risks",
+    "риски": "risks",
 }
 
 BULLET_PATTERN = re.compile(r"^(?:[-*•]|\d+\.)\s+(?P<value>.+)$")
-SECTION_PATTERN = re.compile(r"^(?P<name>[A-Za-z -]+):\s*(?P<value>.*)$")
+SECTION_PATTERN = re.compile(r"^(?P<name>[^:]{1,40}):\s*(?P<value>.*)$")
 URL_PATTERN = re.compile(r"https?://\S+")
 
 
@@ -36,7 +49,7 @@ def create_raw_brief(
     """Build a `RawBrief` from text and optional metadata."""
 
     cleaned_text = normalize_text(source_text)
-    raw_title = title or infer_title(cleaned_text)
+    raw_title = derive_title(cleaned_text, provided_title=title)
     raw_metadata = metadata or {}
     return RawBrief(
         title=raw_title,
@@ -99,10 +112,7 @@ def normalize_brief(raw_brief: RawBrief) -> NormalizedBrief:
 def normalize_text(text: str) -> str:
     """Normalize whitespace while preserving line-based structure."""
 
-    lines = [
-        re.sub(r"\s+", " ", line).strip()
-        for line in text.replace("\r\n", "\n").split("\n")
-    ]
+    lines = [re.sub(r"\s+", " ", line).strip() for line in text.replace("\r\n", "\n").split("\n")]
     compact_lines: list[str] = []
     previous_blank = False
     for line in lines:
@@ -147,10 +157,7 @@ def collect_sections(text: str) -> dict[str, list[str]]:
 def infer_title(text: str) -> str:
     """Use the first non-empty line as the fallback title."""
 
-    for line in text.splitlines():
-        if line:
-            return line[:80]
-    return "Untitled brief"
+    return derive_title(text)
 
 
 def infer_product_type(text: str) -> str | None:
@@ -159,15 +166,24 @@ def infer_product_type(text: str) -> str | None:
     lowered = text.lower()
     keyword_map = [
         ("internal tool", "internal tool"),
+        ("внутренний инструмент", "internal tool"),
         ("dashboard", "dashboard"),
+        ("дашборд", "dashboard"),
         ("marketplace", "marketplace"),
+        ("маркетплейс", "marketplace"),
         ("mobile app", "mobile app"),
+        ("мобильное приложение", "mobile app"),
         ("web app", "web app"),
+        ("веб-приложение", "web app"),
         ("portal", "portal"),
+        ("портал", "portal"),
         ("api", "api"),
         ("automation", "automation tool"),
+        ("автоматиза", "automation tool"),
         ("tool", "software tool"),
+        ("инструмент", "software tool"),
         ("app", "software app"),
+        ("приложение", "software app"),
     ]
     for keyword, product_type in keyword_map:
         if keyword in lowered:
@@ -182,15 +198,25 @@ def infer_audience(text: str) -> list[str]:
     audience = []
     keyword_map = {
         "founders": "founders",
+        "фаундер": "founders",
+        "основател": "founders",
         "small businesses": "small businesses",
+        "малый бизнес": "small businesses",
         "clients": "clients",
+        "клиенты": "clients",
         "agencies": "agencies",
+        "агентств": "agencies",
         "consultants": "consultants",
+        "консультант": "consultants",
         "operations team": "operations team",
         "ops team": "operations team",
+        "операционн": "operations team",
         "internal team": "internal team",
+        "внутренняя команда": "internal team",
         "sales team": "sales team",
+        "отдел продаж": "sales team",
         "support team": "support team",
+        "поддержк": "support team",
     }
     for keyword, label in keyword_map.items():
         if keyword in lowered:
@@ -202,7 +228,20 @@ def infer_goals(text: str) -> list[str]:
     """Infer goal statements from obvious directive language."""
 
     goals: list[str] = []
-    goal_markers = ["goal", "need to", "must", "should", "want to", "success means"]
+    goal_markers = [
+        "goal",
+        "need to",
+        "must",
+        "should",
+        "want to",
+        "success means",
+        "нужно",
+        "надо",
+        "хочу",
+        "должно",
+        "цель",
+        "успех",
+    ]
     excluded_markers = [
         "budget",
         "timeline",
@@ -211,6 +250,7 @@ def infer_goals(text: str) -> list[str]:
         "reference",
         "local-first",
         "non-goal",
+        "не цель",
         "no ",
         "don't",
         "avoid",
@@ -229,7 +269,18 @@ def infer_non_goals(text: str) -> list[str]:
     """Infer explicit non-goals from negative language."""
 
     non_goals: list[str] = []
-    markers = ["non-goal", "non goal", "do not", "don't", "avoid", "no "]
+    markers = [
+        "non-goal",
+        "non goal",
+        "do not",
+        "don't",
+        "avoid",
+        "no ",
+        "не цель",
+        "избегать",
+        "не нужно",
+        "не надо",
+    ]
     for line in text.splitlines():
         lowered = line.lower()
         if line.endswith(":"):
@@ -245,14 +296,22 @@ def infer_constraint_lines(text: str) -> list[str]:
     constraint_lines: list[str] = []
     markers = [
         "budget",
+        "бюджет",
         "timeline",
+        "срок",
         "deadline",
+        "дедлайн",
         "team",
+        "команда",
         "local-first",
+        "локально",
         "offline",
+        "офлайн",
         "must",
+        "должно",
         "cannot",
         "can't",
+        "нельзя",
     ]
     for line in text.splitlines():
         lowered = line.lower()

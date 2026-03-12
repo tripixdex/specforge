@@ -12,6 +12,7 @@ from specforge.domain.models import (
 )
 from specforge.pipeline.analysis_signals import infer_team_size_count, sort_by_severity
 from specforge.pipeline.intake import dedupe
+from specforge.pipeline.language import detect_language
 
 
 def prioritize_open_questions(
@@ -21,11 +22,20 @@ def prioritize_open_questions(
 ) -> list[str]:
     """Create a prioritized open-question list from findings."""
 
+    locale = "en"
+    if ambiguities:
+        locale = detect_language(ambiguities[0].description)
+    elif missing_decisions:
+        locale = detect_language(missing_decisions[0].description)
+    elif contradictions:
+        locale = detect_language(contradictions[0].description)
     questions = [item.question for item in sort_by_severity(ambiguities)]
     for decision in sort_by_severity(missing_decisions):
-        questions.append(f"Decision needed: {decision.description}")
+        prefix = "Нужно решение" if locale == "ru" else "Decision needed"
+        questions.append(f"{prefix}: {decision.description}")
     for contradiction in sort_by_severity(contradictions):
-        questions.append(f"Resolve contradiction: {contradiction.description}")
+        prefix = "Разрешить противоречие" if locale == "ru" else "Resolve contradiction"
+        questions.append(f"{prefix}: {contradiction.description}")
     return dedupe(questions)
 
 
@@ -37,38 +47,58 @@ def infer_mvp_cut(
 ) -> list[str]:
     """Recommend a narrower MVP cut from deterministic signals."""
 
+    locale = detect_language(brief.normalized_text)
     cut = []
     if brief.goals:
-        cut.append(f"Anchor the first release on this primary goal: {brief.goals[0]}")
+        cut.append(
+            f"Зафиксируйте первую версию вокруг этой главной цели: {brief.goals[0]}"
+            if locale == "ru"
+            else f"Anchor the first release on this primary goal: {brief.goals[0]}"
+        )
     if len(brief.goals) > 1:
-        cut.append("Defer secondary goals until the first workflow is validated.")
+        cut.append(
+            "Отложите вторичные цели, пока не подтвержден первый workflow."
+            if locale == "ru"
+            else "Defer secondary goals until the first workflow is validated."
+        )
     if len(constraints.platform_hints) > 1:
         platforms = ", ".join(constraints.platform_hints)
         cut.append(
-            "Choose one primary platform instead of splitting across: "
-            f"{platforms}."
+            f"Выберите одну основную платформу вместо распыления между: {platforms}."
+            if locale == "ru"
+            else f"Choose one primary platform instead of splitting across: {platforms}."
         )
     if any(item.category == "pricing" for item in missing_decisions):
         cut.append(
-            "Treat pricing as a follow-up decision unless monetization is core "
+            "Оставьте цену отдельным следующим решением, "
+            "если монетизация не является ядром первого workflow."
+            if locale == "ru"
+            else "Treat pricing as a follow-up decision unless monetization is core "
             "to the first workflow."
         )
     if any(item.category == "minimal-mvp-vs-enterprise-scope" for item in contradictions):
         cut.append(
-            "Remove enterprise-only requirements such as SSO, audit trails, or "
+            "Уберите из MVP enterprise-требования вроде SSO, аудита и тяжелого комплаенса."
+            if locale == "ru"
+            else "Remove enterprise-only requirements such as SSO, audit trails, or "
             "compliance-heavy scope from MVP."
         )
     if any(
-        item.category == "small-team-aggressive-deadline-broad-scope"
-        for item in contradictions
+        item.category == "small-team-aggressive-deadline-broad-scope" for item in contradictions
     ):
         cut.append(
-            "Cut the release to one role and one core workflow before keeping "
+            "Сведите релиз к одной роли и одному ключевому workflow "
+            "до сохранения заявленного срока."
+            if locale == "ru"
+            else "Cut the release to one role and one core workflow before keeping "
             "the stated deadline."
         )
     if not cut:
         cut.append(
-            "Keep the first release focused on one user, one workflow, and one "
+            "Сфокусируйте первую версию на одном пользователе, "
+            "одном workflow и одном локальном цикле проверки."
+            if locale == "ru"
+            else "Keep the first release focused on one user, one workflow, and one "
             "local review loop."
         )
     return dedupe(cut)
@@ -96,17 +126,21 @@ def infer_risks(
 ) -> list[str]:
     """Seed the risk register from analytical findings."""
 
+    locale = detect_language(brief.normalized_text)
     risks = [item.description for item in contradictions]
     risks.extend(
-        item.description
-        for item in missing_decisions
-        if item.severity in {"medium", "high"}
+        item.description for item in missing_decisions if item.severity in {"medium", "high"}
     )
     if constraints.timeline and infer_team_size_count(constraints.team_size) <= 1:
         risks.append(
-            "A one-person team plus an explicit delivery timeline increases "
-            "schedule risk."
+            "Команда из одного человека вместе с явным сроком повышает риск срыва графика."
+            if locale == "ru"
+            else "A one-person team plus an explicit delivery timeline increases schedule risk."
         )
     if not brief.audience:
-        risks.append("Unclear audience definition weakens prioritization and acceptance criteria.")
+        risks.append(
+            "Неясная аудитория ослабляет приоритизацию и критерии приемки."
+            if locale == "ru"
+            else "Unclear audience definition weakens prioritization and acceptance criteria."
+        )
     return dedupe(risks)

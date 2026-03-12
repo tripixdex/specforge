@@ -1,4 +1,4 @@
-# Stage 2 Deterministic Draft: Brief
+# SpecForge Brief
 
 Title: Founder App Idea
 Product Type: web app
@@ -21,9 +21,12 @@ Founder App Idea is a web app aimed at founders. Primary goal: Help founders cle
 ## Inferred Structure
 - Inferred product type: web app.
 - Inferred platform hints: local-first, web.
+- Detected contradiction pressure across 2 planning area(s).
 
 ## Unresolved Questions
 - How will the team know the first release is successful?
+- Resolve contradiction: A small team, aggressive deadline, and broad scope are in tension.
+- Resolve contradiction: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support.
 
 ## Notes
 - I care more about speed than polish for the first release

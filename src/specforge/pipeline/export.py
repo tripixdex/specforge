@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 import json
-import re
-from datetime import UTC, datetime
 from pathlib import Path
 
 from specforge.domain.models import DeliveryArtifact, DeliveryPack
@@ -19,6 +17,7 @@ from specforge.pipeline.export_render import (
     render_risk_register_markdown,
     render_scope_markdown,
 )
+from specforge.pipeline.naming import default_bundle_name, slugify
 
 
 def export_delivery_pack(
@@ -81,17 +80,3 @@ def export_delivery_pack(
         )
     )
     return output_dir
-
-
-def default_bundle_name(title: str) -> str:
-    """Create a timestamped default bundle name."""
-
-    timestamp = datetime.now(UTC).strftime("%Y%m%d-%H%M%S")
-    return f"{title}-{timestamp}"
-
-
-def slugify(value: str) -> str:
-    """Create a filesystem-safe directory name."""
-
-    slug = re.sub(r"[^a-zA-Z0-9]+", "-", value.strip().lower()).strip("-")
-    return slug or "specforge-output"

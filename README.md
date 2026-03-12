@@ -1,12 +1,12 @@
 # SpecForge
 
-SpecForge is a local-first demo application that turns messy product briefs into a deterministic analysis and a repo-local delivery bundle. Stage 5 keeps the existing CLI, API, and browser UI intact while adding a real evaluation corpus and a small hardening pass.
+SpecForge is a local-first demo application that turns messy product briefs into a deterministic analysis and a repo-local delivery bundle. Stage 5.6 keeps the existing CLI, API, browser UI, and evaluation harness intact while polishing language behavior, contradiction detection, output naming, and the human demo flow ahead of expert review.
 
 This is still local demo software. It is not a hosted service, not a SaaS product, and not a fake autonomous product manager.
 
 The repository follows stage-based development and prefers small, responsibility-focused modules over oversized files where practical.
 
-## Stage 5 Capabilities
+## Stage 5.6 Capabilities
 
 Implemented now:
 
@@ -20,6 +20,11 @@ Implemented now:
 - local eval harness that scores structural expectations and artifact completeness
 - safe repo-local bundle generation under `outputs/`
 - tighter shared validation for empty, oversized, and malformed local inputs
+- Russian and English output that follows the input language in deterministic findings and exported artifacts
+- stronger deterministic contradiction rules for overloaded briefs
+- a clear `New brief` reset flow in the browser UI
+- readable transliterated folder names for Cyrillic titles
+- explicit empty states and calmer output-path presentation in the browser UI
 
 Still out of scope:
 
@@ -47,12 +52,10 @@ python3 -m specforge.cli generate --input examples/internal_operations_tool_brie
 python3 -m specforge.cli demo
 ```
 
-API and UI:
+Official browser and API run path:
 
 ```bash
-make api
-make ui
-python3 -m uvicorn specforge.api.app:app --reload
+python -m uvicorn specforge.api.app:app --host 127.0.0.1 --port 8000 --reload
 ```
 
 Evaluation:
@@ -68,6 +71,13 @@ Then open:
 ```text
 http://127.0.0.1:8000/
 http://127.0.0.1:8000/ui
+```
+
+Convenience wrappers:
+
+```bash
+make api
+make ui
 ```
 
 Example API requests:
@@ -92,6 +102,9 @@ The browser UI is a guided local workflow:
 - run deterministic analysis
 - inspect ambiguities, contradictions, missing decisions, assumptions, open questions, and the recommended MVP cut
 - generate a repo-local bundle and preview the exported artifacts
+- start over with `New brief`, which clears the current text, title, output label, and results while leaving demo selection available
+- see explicit empty states instead of blank-looking boxes
+- see a short repo-local bundle path first, with the full absolute path available on demand
 
 ## Eval Workflow
 
@@ -104,7 +117,7 @@ Stage 5 adds a local evaluation layer:
 
 ## Verification
 
-Verified commands for Stage 5:
+Verified commands for Stage 5.6:
 
 ```bash
 make lint
@@ -113,6 +126,7 @@ python3 -m specforge.cli demo
 python3 -m pytest tests/test_api.py -q
 python3 -m pytest tests/test_ui.py -q
 python3 -m specforge.eval.runner
+python -m uvicorn specforge.api.app:app --host 127.0.0.1 --port 8000
 ```
 
 ## Limits
@@ -137,4 +151,4 @@ SpecForge cannot:
 
 Sample briefs live in [examples/contradictory_founder_brief.txt](/Users/vladgurov/Desktop/work/specforge/examples/contradictory_founder_brief.txt), [examples/agency_client_brief.txt](/Users/vladgurov/Desktop/work/specforge/examples/agency_client_brief.txt), [examples/internal_operations_tool_brief.txt](/Users/vladgurov/Desktop/work/specforge/examples/internal_operations_tool_brief.txt), and [examples/founder_app_idea.txt](/Users/vladgurov/Desktop/work/specforge/examples/founder_app_idea.txt). The Stage 5 evaluation corpus lives under [eval/](/Users/vladgurov/Desktop/work/specforge/eval).
 
-See [docs/SCOPE.md](/Users/vladgurov/Desktop/work/specforge/docs/SCOPE.md), [docs/ARCHITECTURE.md](/Users/vladgurov/Desktop/work/specforge/docs/ARCHITECTURE.md), [docs/ACCEPTANCE_CRITERIA.md](/Users/vladgurov/Desktop/work/specforge/docs/ACCEPTANCE_CRITERIA.md), [docs/DEMO_SCENARIOS.md](/Users/vladgurov/Desktop/work/specforge/docs/DEMO_SCENARIOS.md), [docs/EVAL_PLAN.md](/Users/vladgurov/Desktop/work/specforge/docs/EVAL_PLAN.md), and [REPORT_INDEX.md](/Users/vladgurov/Desktop/work/specforge/REPORT_INDEX.md) for the exact Stage 5 boundary.
+See [docs/SCOPE.md](/Users/vladgurov/Desktop/work/specforge/docs/SCOPE.md), [docs/ARCHITECTURE.md](/Users/vladgurov/Desktop/work/specforge/docs/ARCHITECTURE.md), [docs/ACCEPTANCE_CRITERIA.md](/Users/vladgurov/Desktop/work/specforge/docs/ACCEPTANCE_CRITERIA.md), [docs/DEMO_SCENARIOS.md](/Users/vladgurov/Desktop/work/specforge/docs/DEMO_SCENARIOS.md), [docs/EVAL_PLAN.md](/Users/vladgurov/Desktop/work/specforge/docs/EVAL_PLAN.md), and [REPORT_INDEX.md](/Users/vladgurov/Desktop/work/specforge/REPORT_INDEX.md) for the exact Stage 5.6 boundary.

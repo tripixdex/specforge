@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ result.language if result else 'en' }}">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,87 +10,108 @@
   <body>
     <main class="page-shell">
       <section class="hero">
-        <p class="eyebrow">SpecForge Stage 5</p>
-        <h1>Local brief analysis with a guided browser workflow</h1>
-        <p class="hero-copy">
-          Paste a messy brief, try a bundled demo, inspect the planning risks, and
-          generate a repo-local delivery pack. This stays local, deterministic, and
-          backed by a small evaluation corpus.
-        </p>
+        <p class="eyebrow">{{ strings["eyebrow"] }}</p>
+        <h1>{{ strings["hero_title"] }}</h1>
+        <p class="hero-copy">{{ strings["hero_copy"] }}</p>
       </section>
 
       <section class="workflow-strip">
-        <div class="workflow-step {{ 'is-active' if active_step == 'intake' else '' }}">1. Intake</div>
-        <div class="workflow-step {{ 'is-active' if active_step == 'analysis' else '' }}">2. Analysis</div>
-        <div class="workflow-step {{ 'is-active' if active_step == 'generation' else '' }}">3. Generation</div>
+        <div class="workflow-step {{ 'is-active' if active_step == 'intake' else '' }}">{{ strings["step_intake"] }}</div>
+        <div class="workflow-step {{ 'is-active' if active_step == 'analysis' else '' }}">{{ strings["step_analysis"] }}</div>
+        <div class="workflow-step {{ 'is-active' if active_step == 'generation' else '' }}">{{ strings["step_generation"] }}</div>
       </section>
 
       <section class="workspace-grid">
         <article class="panel intake-panel">
           <div class="panel-head">
-            <h2>Brief Input</h2>
-            <p>Load a demo or paste your own local brief.</p>
+            <h2>{{ strings["brief_input"] }}</h2>
+            <p>{{ strings["brief_input_copy"] }}</p>
           </div>
 
           <form method="get" action="/ui" class="demo-picker">
-            <label for="demo">Bundled demo</label>
+            <label for="demo">{{ strings["bundled_demo"] }}</label>
             <div class="demo-picker-row">
               <select id="demo" name="demo">
                 {% for value, label in demo_options %}
                 <option value="{{ value }}" {% if value == selected_demo %}selected{% endif %}>{{ label }}</option>
                 {% endfor %}
               </select>
-              <button type="submit" class="secondary-button">Load demo</button>
+              <button type="submit" class="secondary-button">{{ strings["load_demo"] }}</button>
             </div>
           </form>
 
           <form method="post" action="/ui/analyze" class="brief-form">
             <input type="hidden" name="demo_name" value="{{ selected_demo }}" />
-            <label for="title">Title</label>
-            <input id="title" name="title" value="{{ title }}" placeholder="Optional brief title" />
+            <label for="title">{{ strings["title"] }}</label>
+            <input id="title" name="title" value="{{ title }}" placeholder="{{ strings['title_placeholder'] }}" />
 
-            <label for="brief_text">Messy brief</label>
+            <label for="brief_text">{{ strings["brief_text"] }}</label>
             <textarea
               id="brief_text"
               name="brief_text"
               rows="18"
-              placeholder="Paste the raw brief text here"
+              placeholder="{{ strings['brief_placeholder'] }}"
             >{{ brief_text }}</textarea>
 
-            <label for="output_label">Output label</label>
+            <label for="output_label">{{ strings["output_label"] }}</label>
             <div class="inline-row">
               <input
                 id="output_label"
                 name="output_label"
                 value="{{ output_label }}"
-                placeholder="Optional repo-local output label"
+                placeholder="{{ strings['output_placeholder'] }}"
               />
-              <button type="submit" formaction="/ui/generate" class="accent-button">Generate bundle</button>
+              <button type="submit" formaction="/ui/generate" class="accent-button">{{ strings["generate_bundle"] }}</button>
             </div>
             <div class="form-actions">
-              <button type="submit" class="primary-button">Run analysis</button>
+              <button type="submit" class="primary-button">{{ strings["run_analysis"] }}</button>
             </div>
-            <p class="form-note">Bundles from the UI always stay under <code>outputs/</code>.</p>
+            <p class="form-note">{{ strings["form_note"] }}</p>
+          </form>
+
+          <form method="post" action="/ui/new" class="reset-form">
+            <input type="hidden" name="demo_name" value="{{ selected_demo }}" />
+            <input type="hidden" name="previous_brief_text" value="{{ brief_text }}" />
+            <button type="submit" class="secondary-button">{{ strings["start_over"] }}</button>
+            <p class="form-note">{{ strings["reset_note"] }}</p>
           </form>
         </article>
 
         <article class="panel results-panel">
           <div class="panel-head">
-            <h2>Guided Results</h2>
-            <p>Summary, risks, open questions, and generated artifacts.</p>
+            <h2>{{ strings["results"] }}</h2>
+            <p>{{ strings["results_copy"] }}</p>
           </div>
 
           {% if error_message %}
           <section class="error-banner">
-            <strong>Input issue</strong>
+            <strong>{{ strings["input_issue"] }}</strong>
             <p>{{ error_message }}</p>
           </section>
           {% endif %}
 
           {% if result %}
+          {% if result.underspecified_banner %}
+          <section class="error-banner soft-banner">
+            <strong>{{ strings["needs_more_detail"] }}</strong>
+            <p>{{ result.underspecified_banner }}</p>
+            <p class="banner-copy">{{ strings["needs_more_detail_copy"] }}</p>
+            {% if result.underspecified_essentials %}
+            <div class="section-header compact-header">
+              <h3>{{ strings["clarify_first"] }}</h3>
+            </div>
+            <ul class="plain-list">
+              {% for item in result.underspecified_essentials %}
+              <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </section>
+          {% endif %}
+
           <section class="summary-card">
             <div>
-              <p class="summary-label">Brief summary</p>
+              <p class="summary-label">{{ strings["brief_summary"] }}</p>
               <h3>{{ result.title }}</h3>
             </div>
             <p>{{ result.normalized_summary }}</p>
@@ -117,37 +138,46 @@
 
           <section class="result-section">
             <div class="section-header">
-              <h3>Open Questions</h3>
-              <span class="pill">Unresolved</span>
+              <h3>{{ strings["open_questions"] }}</h3>
+              <span class="pill">{{ strings["unresolved"] }}</span>
             </div>
+            {% if result.open_questions %}
             <ul class="plain-list question-list">
               {% for item in result.open_questions %}
               <li>{{ item }}</li>
               {% endfor %}
             </ul>
+            {% else %}
+            <p class="empty-copy">{{ strings["no_open_questions"] }}</p>
+            {% endif %}
           </section>
 
           <section class="result-section">
             <div class="section-header">
-              <h3>Recommended MVP Cut</h3>
+              <h3>{{ strings["recommended_mvp_cut"] }}</h3>
             </div>
+            {% if result.recommended_mvp_cut %}
             <ul class="plain-list">
               {% for item in result.recommended_mvp_cut %}
               <li>{{ item }}</li>
               {% endfor %}
             </ul>
+            {% else %}
+            <p class="empty-copy">{{ strings["no_mvp_cut"] }}</p>
+            {% endif %}
           </section>
 
           <section class="finding-grid">
             <div class="finding-column">
               <div class="section-header">
-                <h3>Ambiguity Findings</h3>
+                <h3>{{ strings["ambiguity_findings"] }}</h3>
               </div>
+              {% if result.ambiguity_findings %}
               {% for item in result.ambiguity_findings %}
               <article class="finding-card severity-{{ item.severity }}">
                 <header>
                   <span class="severity-chip">{{ item.severity }}</span>
-                  <strong>{{ item.category }}</strong>
+                  <strong>{{ item.display_category }}</strong>
                 </header>
                 <p>{{ item.description }}</p>
                 <p class="recommendation">{{ item.recommendation }}</p>
@@ -156,18 +186,22 @@
                 {% endif %}
               </article>
               {% endfor %}
+              {% else %}
+              <article class="finding-card empty-card"><p class="empty-copy">{{ strings["no_ambiguities"] }}</p></article>
+              {% endif %}
             </div>
 
             <div class="finding-column">
               <div class="section-header">
-                <h3>Contradictions</h3>
-                <span class="pill danger">High risk</span>
+                <h3>{{ strings["contradictions"] }}</h3>
+                <span class="pill danger">{{ strings["high_risk"] }}</span>
               </div>
+              {% if result.contradiction_findings %}
               {% for item in result.contradiction_findings %}
               <article class="finding-card severity-{{ item.severity }} danger-card">
                 <header>
                   <span class="severity-chip">{{ item.severity }}</span>
-                  <strong>{{ item.category }}</strong>
+                  <strong>{{ item.display_category }}</strong>
                 </header>
                 <p>{{ item.description }}</p>
                 <p class="recommendation">{{ item.recommendation }}</p>
@@ -176,45 +210,67 @@
                 {% endif %}
               </article>
               {% endfor %}
+              {% else %}
+              <article class="finding-card empty-card"><p class="empty-copy">{{ strings["no_contradictions"] }}</p></article>
+              {% endif %}
             </div>
           </section>
 
           <section class="result-section">
             <div class="section-header">
-              <h3>Missing Decisions</h3>
+              <h3>{{ strings["missing_decisions"] }}</h3>
             </div>
+            {% if result.missing_decisions %}
             <div class="stack-list">
               {% for item in result.missing_decisions %}
               <article class="finding-card severity-{{ item.severity }}">
                 <header>
                   <span class="severity-chip">{{ item.severity }}</span>
-                  <strong>{{ item.category }}</strong>
+                  <strong>{{ item.display_category }}</strong>
                 </header>
                 <p>{{ item.description }}</p>
                 <p class="recommendation">{{ item.recommendation }}</p>
               </article>
               {% endfor %}
             </div>
+            {% else %}
+            <p class="empty-copy">{{ strings["no_missing_decisions"] }}</p>
+            {% endif %}
           </section>
 
           <section class="result-section">
             <div class="section-header">
-              <h3>Assumptions</h3>
+              <h3>{{ strings["assumptions"] }}</h3>
             </div>
+            {% if result.assumptions %}
             <ul class="plain-list">
               {% for item in result.assumptions %}
               <li>{{ item }}</li>
               {% endfor %}
             </ul>
+            {% else %}
+            <p class="empty-copy">{{ strings["no_assumptions"] }}</p>
+            {% endif %}
           </section>
 
           {% if result.output_path %}
           <section class="result-section output-section">
             <div class="section-header">
-              <h3>Generated Bundle</h3>
-              <span class="pill success">Repo-local</span>
+              <h3>{{ strings["generated_bundle"] }}</h3>
+              <span class="pill success">{{ strings["repo_local"] }}</span>
             </div>
-            <p class="output-path"><code>{{ result.output_path }}</code></p>
+            <div class="path-shell">
+              <p class="summary-label">{{ strings["bundle_path"] }}</p>
+              <p class="output-path"><code>{{ result.output_path_display }}</code></p>
+              <details class="path-details">
+                <summary>{{ strings["show_full_path"] }}</summary>
+                <code>{{ result.output_path }}</code>
+              </details>
+            </div>
+            <div class="section-header compact-header">
+              <h3>{{ strings["artifacts"] }}</h3>
+            </div>
+            {% if result.artifact_previews %}
             <div class="artifact-grid">
               {% for item in result.artifact_previews %}
               <details class="artifact-card">
@@ -224,15 +280,15 @@
               </details>
               {% endfor %}
             </div>
+            {% else %}
+            <p class="empty-copy">{{ strings["no_artifacts"] }}</p>
+            {% endif %}
           </section>
           {% endif %}
           {% else %}
           <section class="empty-state">
-            <h3>Start with analysis</h3>
-            <p>
-              Load a bundled demo or paste your own brief, then run analysis to see
-              the summary, open questions, and risk signals.
-            </p>
+            <h3>{{ strings["start_with_analysis"] }}</h3>
+            <p>{{ strings["start_with_analysis_copy"] }}</p>
           </section>
           {% endif %}
         </article>

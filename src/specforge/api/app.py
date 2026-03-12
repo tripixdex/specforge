@@ -20,10 +20,10 @@ def create_app() -> FastAPI:
 
     app = FastAPI(
         title="SpecForge Local Demo",
-        version="0.6.0",
+        version="0.6.1",
         summary=(
-            "Typed local API, browser UI, and evaluation harness for the deterministic "
-            "SpecForge pipeline."
+            "Typed local API, browser UI, evaluation harness, and pre-audit polish for "
+            "the deterministic SpecForge pipeline."
         ),
     )
     app.include_router(router)

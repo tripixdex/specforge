@@ -25,7 +25,7 @@ from specforge.pipeline import (
     generate_delivery_pack,
     normalize_brief,
 )
-from specforge.pipeline.export import slugify
+from specforge.pipeline.naming import slugify
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 OUTPUTS_ROOT = REPO_ROOT / "outputs"

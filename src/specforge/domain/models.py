@@ -83,7 +83,7 @@ class TraceabilityLink(BaseModel):
 class AnalysisReport(BaseModel):
     """Deterministic analytical findings produced from a normalized brief."""
 
-    stage_label: str = "stage-2-deterministic-analysis"
+    stage_label: str = "specforge-deterministic-analysis"
     analyzer_type: str = "deterministic"
     ambiguities: list[AmbiguityFinding] = Field(default_factory=list)
     contradictions: list[ContradictionFinding] = Field(default_factory=list)
@@ -142,7 +142,7 @@ class DeliveryArtifact(BaseModel):
 class DeliveryPack(BaseModel):
     """Deterministic delivery pack generated in Stage 2."""
 
-    stage_label: str = "stage-2-deterministic-draft"
+    stage_label: str = "specforge-deterministic-delivery-pack"
     generated_at: str
     brief: NormalizedBrief
     analysis: AnalysisReport = Field(default_factory=AnalysisReport)

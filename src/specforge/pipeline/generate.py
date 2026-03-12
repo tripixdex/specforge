@@ -6,6 +6,7 @@ from datetime import UTC, datetime
 
 from specforge.domain.models import AnalysisReport, DeliveryPack, NormalizedBrief
 from specforge.pipeline.intake import dedupe
+from specforge.pipeline.language import detect_language
 
 
 def generate_delivery_pack(brief: NormalizedBrief) -> DeliveryPack:
@@ -42,29 +43,60 @@ def generate_delivery_pack(brief: NormalizedBrief) -> DeliveryPack:
 def build_brief_summary(brief: NormalizedBrief) -> str:
     """Create a compact deterministic summary sentence."""
 
+    locale = detect_language(brief.normalized_text)
     product = brief.product_type or "product concept"
-    audience = ", ".join(brief.audience) if brief.audience else "an unspecified audience"
+    if locale == "ru":
+        product = brief.product_type or "продуктовая идея"
+        audience = ", ".join(brief.audience) if brief.audience else "неуказанная аудитория"
+    else:
+        audience = ", ".join(brief.audience) if brief.audience else "an unspecified audience"
     if brief.goals:
+        if locale == "ru":
+            return f"{brief.title} — это {product} для {audience}. Главная цель: {brief.goals[0]}."
         return f"{brief.title} is a {product} aimed at {audience}. Primary goal: {brief.goals[0]}."
+    if locale == "ru":
+        return f"{brief.title} — это {product} для {audience}. Цели все еще нужно уточнить."
     return f"{brief.title} is a {product} aimed at {audience}. Goals still need clarification."
 
 
 def build_scope_draft(brief: NormalizedBrief) -> list[str]:
     """Assemble a small deterministic scope draft."""
 
+    locale = detect_language(brief.normalized_text)
     items = []
     if brief.product_type:
-        items.append(f"Shape the first scoped draft around a {brief.product_type}.")
-    if brief.audience:
-        items.append(f"Prioritize the needs of {', '.join(brief.audience)}.")
-    if brief.goals:
-        items.extend(f"Support goal: {goal}." for goal in brief.goals[:3])
-    if brief.non_goals:
-        items.extend(f"Keep out of scope for now: {item}." for item in brief.non_goals[:3])
-    if brief.constraints.platform_hints:
         items.append(
-            "Respect platform hints: " + ", ".join(brief.constraints.platform_hints[:4]) + "."
+            f"Соберите первый контур решения вокруг формата {brief.product_type}."
+            if locale == "ru"
+            else f"Shape the first scoped draft around a {brief.product_type}."
         )
+    if brief.audience:
+        items.append(
+            f"Ставьте в приоритет потребности аудитории: {', '.join(brief.audience)}."
+            if locale == "ru"
+            else f"Prioritize the needs of {', '.join(brief.audience)}."
+        )
+    if brief.goals:
+        if locale == "ru":
+            items.extend(f"Поддержать цель: {goal}." for goal in brief.goals[:3])
+        else:
+            items.extend(f"Support goal: {goal}." for goal in brief.goals[:3])
+    if brief.non_goals:
+        if locale == "ru":
+            items.extend(f"Пока оставить вне объема: {item}." for item in brief.non_goals[:3])
+        else:
+            items.extend(f"Keep out of scope for now: {item}." for item in brief.non_goals[:3])
+    if brief.constraints.platform_hints:
+        if locale == "ru":
+            items.append(
+                "Учитывать сигналы по платформе: "
+                + ", ".join(brief.constraints.platform_hints[:4])
+                + "."
+            )
+        else:
+            items.append(
+                "Respect platform hints: " + ", ".join(brief.constraints.platform_hints[:4]) + "."
+            )
     return dedupe(items)
 
 
@@ -81,20 +113,42 @@ def build_inferred_structure(
 ) -> list[str]:
     """Collect deterministic inferences for display in the pack."""
 
+    locale = detect_language(brief.normalized_text)
     inferred = []
     if brief.product_type:
-        inferred.append(f"Inferred product type: {brief.product_type}.")
+        inferred.append(
+            f"Предполагаемый тип продукта: {brief.product_type}."
+            if locale == "ru"
+            else f"Inferred product type: {brief.product_type}."
+        )
     if brief.constraints.audience_hint:
-        inferred.append(f"Inferred audience mode: {brief.constraints.audience_hint}.")
+        inferred.append(
+            f"Предполагаемый режим аудитории: {brief.constraints.audience_hint}."
+            if locale == "ru"
+            else f"Inferred audience mode: {brief.constraints.audience_hint}."
+        )
     if brief.constraints.platform_hints:
-        inferred.append(
-            "Inferred platform hints: " + ", ".join(brief.constraints.platform_hints) + "."
-        )
+        if locale == "ru":
+            inferred.append(
+                "Предполагаемые платформенные сигналы: "
+                + ", ".join(brief.constraints.platform_hints)
+                + "."
+            )
+        else:
+            inferred.append(
+                "Inferred platform hints: " + ", ".join(brief.constraints.platform_hints) + "."
+            )
     if analysis.contradictions:
-        inferred.append(
-            "Detected contradiction pressure across "
-            f"{len(analysis.contradictions)} planning area(s)."
-        )
+        if locale == "ru":
+            inferred.append(
+                "Обнаружено противоречивое давление в "
+                f"{len(analysis.contradictions)} зоне(ах) планирования."
+            )
+        else:
+            inferred.append(
+                "Detected contradiction pressure across "
+                f"{len(analysis.contradictions)} planning area(s)."
+            )
     return dedupe(inferred)
 
 
@@ -113,7 +167,13 @@ def build_first_step_recommendation(
 ) -> str:
     """Recommend the next delivery action based on analysis."""
 
+    locale = detect_language(brief.normalized_text)
     if analysis.prioritized_open_questions:
+        if locale == "ru":
+            return (
+                "Сначала ответьте на главный открытый вопрос, а потом расширяйте объем: "
+                f"{analysis.prioritized_open_questions[0]}"
+            )
         return (
             "Resolve the top unresolved question before expanding scope: "
             f"{analysis.prioritized_open_questions[0]}"
@@ -121,9 +181,19 @@ def build_first_step_recommendation(
     if analysis.recommended_mvp_cut:
         return analysis.recommended_mvp_cut[0]
     if brief.goals:
+        if locale == "ru":
+            return (
+                "Превратите нормализованные цели в чеклист первого этапа "
+                "и вручную подтвердите первые критерии приемки."
+            )
         return (
             "Turn the normalized goals into a milestone-1 checklist and confirm "
             "the first acceptance criteria manually."
+        )
+    if locale == "ru":
+        return (
+            "Сначала уточните целевого пользователя и желаемый результат, "
+            "а потом переходите к детальному планированию."
         )
     return "Clarify the target user and desired outcome before attempting detailed planning."
 

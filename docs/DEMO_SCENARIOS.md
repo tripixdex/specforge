@@ -1,6 +1,6 @@
 # Demo Scenarios
 
-Stage 5 demos now include the deterministic CLI flow, the local FastAPI layer, the guided browser UI, and a local evaluation run.
+Stage 5.6 demos now include the deterministic CLI flow, the local FastAPI layer, the guided browser UI, and a local evaluation run, with extra emphasis on trust and human usability before expert review.
 
 ## Scenario 1: Contradictory Founder Brief
 
@@ -8,9 +8,10 @@ Input:
 - a founder brief that asks for a minimal MVP while also demanding enterprise scope, low budget, and aggressive timing
 
 Implemented behavior:
-- detects contradiction patterns
+- detects stronger contradiction patterns for overloaded scope
 - surfaces missing decisions around pricing and security
 - recommends a narrower MVP cut
+- follows the input language in deterministic recommendations
 
 Verified command:
 - `python3 -m specforge.cli analyze --input examples/contradictory_founder_brief.txt`
@@ -51,11 +52,27 @@ Implemented behavior:
 - highlights contradictions and unresolved questions visually
 - allows analysis and generation from one local UI surface
 - previews exported artifacts and shows the repo-local output directory
+- provides a visible `New brief` reset path
+- renders explicit empty states and a humane short-brief clarification state
+- shows a short repo-local path first, with the full path still available
 
 Verified command:
 - `python3 -m pytest tests/test_ui.py -q`
 
-## Scenario 5: Local Evaluation Corpus
+## Scenario 5: Bilingual Smoke Check
+
+Input:
+- one Russian founder/client-like brief and one English founder/client-like brief
+
+Implemented behavior:
+- Russian input produces Russian deterministic findings and recommendations
+- English input produces English deterministic findings and recommendations
+- Cyrillic titles export to readable transliterated folder names under `outputs/`
+
+Verified command:
+- `python3 -m pytest tests/test_analyze.py -q`
+
+## Scenario 6: Local Evaluation Corpus
 
 Input:
 - the Stage 5 eval corpus under `eval/`

@@ -1,6 +1,6 @@
-# Stage 2 Deterministic Draft: Assumption Ledger
+# SpecForge Assumption Ledger
 
-- [high] deployment: The first release should keep inputs and outputs on the local machine.
+- [high] Deployment: The first release should keep inputs and outputs on the local machine.
   Description: Local execution is treated as a hard planning assumption for the MVP.
   Rationale: The brief explicitly references local-first operation.
   Recommendation: Keep hosted collaboration and remote storage out of the first scoped cut.

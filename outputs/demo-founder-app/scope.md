@@ -1,4 +1,4 @@
-# Stage 2 Deterministic Draft: Scope
+# SpecForge Scope
 
 ## Goals
 - Help founders clean up rough product ideas

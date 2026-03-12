@@ -1,4 +1,4 @@
-# Stage 2 Deterministic Draft: Constraints
+# SpecForge Constraints
 
 - Budget: under $15k
 - Timeline: 4 weeks

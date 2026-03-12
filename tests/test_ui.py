@@ -9,8 +9,9 @@ def test_ui_home_route_is_available() -> None:
     response = client.get("/ui")
 
     assert response.status_code == 200
-    assert "SpecForge Stage 5" in response.text
+    assert "SpecForge Stage 5.6" in response.text
     assert "Run analysis" in response.text
+    assert "New brief" in response.text
 
 
 def test_ui_analyze_renders_guided_results() -> None:
@@ -28,9 +29,9 @@ def test_ui_analyze_renders_guided_results() -> None:
     )
 
     assert response.status_code == 200
-    assert "Guided Results" in response.text
-    assert "Ambiguity Findings" in response.text
-    assert "Recommended MVP Cut" in response.text
+    assert "Guided results" in response.text
+    assert "Ambiguity findings" in response.text
+    assert "Recommended MVP cut" in response.text
 
 
 def test_ui_generate_renders_artifact_preview() -> None:
@@ -48,7 +49,7 @@ def test_ui_generate_renders_artifact_preview() -> None:
     )
 
     assert response.status_code == 200
-    assert "Generated Bundle" in response.text
+    assert "Generated bundle" in response.text
     assert "analysis_report.md" in response.text
     assert "outputs/ui-smoke-demo" in response.text
 
@@ -59,3 +60,33 @@ def test_ui_invalid_demo_selection_is_visible() -> None:
     assert response.status_code == 200
     assert "Unknown demo" in response.text
     assert "Founder app idea" in response.text
+
+
+def test_ui_short_brief_shows_humane_clarification_state() -> None:
+    response = client.post(
+        "/ui/analyze",
+        data={
+            "title": "",
+            "brief_text": "хочу приложение",
+            "demo_name": "founder-app-idea",
+        },
+    )
+
+    assert response.status_code == 200
+    assert "Нужно чуть больше контекста" in response.text
+    assert "Кто основной пользователь?" in response.text
+
+
+def test_ui_new_brief_clears_previous_results() -> None:
+    response = client.post(
+        "/ui/new",
+        data={
+            "demo_name": "founder-app-idea",
+            "previous_brief_text": "хочу приложение",
+        },
+    )
+
+    assert response.status_code == 200
+    assert "Start with analysis" not in response.text
+    assert "Начните с анализа" in response.text
+    assert "Guided Results" not in response.text
