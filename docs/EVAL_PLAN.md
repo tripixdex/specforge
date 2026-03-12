@@ -2,7 +2,7 @@
 
 ## Evaluation Philosophy
 
-SpecForge should first be evaluated on traceability and usefulness, not on intelligence theater. Stage 5 uses a local deterministic rubric: can the pipeline expose obvious tensions, missing decisions, and output completeness honestly and consistently across a varied brief corpus?
+SpecForge should first be evaluated on traceability and usefulness, not on intelligence theater. Stage 5.7 uses a local deterministic rubric: can the pipeline expose obvious tensions, missing decisions, and output completeness honestly and consistently across a varied brief corpus, including the specific overloaded-brief misses found during audit?
 
 ## Stage 5 Corpus Coverage
 
@@ -15,7 +15,7 @@ SpecForge should first be evaluated on traceability and usefulness, not on intel
 - subtle near-miss ambiguity cases
 - briefs missing platform, user, monetization, budget, timeline, or security constraints
 
-The Stage 5 corpus lives under [eval/](/Users/vladgurov/Desktop/work/specforge/eval) and currently includes 20 cases split across four files.
+The Stage 5 corpus lives under [eval/](/Users/vladgurov/Desktop/work/specforge/eval) and currently includes 22 cases split across four files.
 
 ## Stage 5 Checks
 
@@ -23,13 +23,14 @@ Each case encodes practical expectations such as:
 
 - `ambiguities >= N`
 - `contradictions >= N`
+- `contradictions <= N` for curated overload cases where duplicate findings would be noisy
 - `missing_decisions >= N`
 - `assumptions >= N`
 - required ambiguity, contradiction, or missing-decision categories
 - non-empty recommended MVP cut
 - required generated artifacts including `analysis_report.md`, `assumption_ledger.md`, and `summary.json`
 
-The runner does not require exact wording matches.
+The runner does not require exact wording matches. It uses counts, categories, artifact presence, and optional contradiction ceilings instead.
 
 ## Run Evals
 

@@ -14,6 +14,7 @@ from specforge.pipeline import (
     generate_delivery_pack,
     normalize_brief,
 )
+from specforge.pipeline.language import detect_language
 
 DEFAULT_DEMO_INPUT = Path("examples/founder_app_idea.txt")
 
@@ -107,47 +108,68 @@ def run_generate(
 def render_analysis_console(summary: str, report: AnalysisReport) -> str:
     """Render a concise analysis summary for terminal output."""
 
+    locale = detect_language(summary)
     top_questions = report.prioritized_open_questions[:3]
     recommended_cut = report.recommended_mvp_cut[:3]
     lines = [
-        f"Summary: {summary}",
-        f"Analyzer: {report.analyzer_type}",
-        f"Ambiguities: {len(report.ambiguities)}",
-        f"Contradictions: {len(report.contradictions)}",
-        f"Missing decisions: {len(report.missing_decisions)}",
-        "Top unresolved questions:",
+        f"{'Резюме' if locale == 'ru' else 'Summary'}: {summary}",
+        f"{'Анализатор' if locale == 'ru' else 'Analyzer'}: {report.analyzer_type}",
+        f"{'Неясности' if locale == 'ru' else 'Ambiguities'}: {len(report.ambiguities)}",
+        f"{'Противоречия' if locale == 'ru' else 'Contradictions'}: {len(report.contradictions)}",
+        (
+            f"{'Недостающие решения' if locale == 'ru' else 'Missing decisions'}: "
+            f"{len(report.missing_decisions)}"
+        ),
+        "Главные открытые вопросы:" if locale == "ru" else "Top unresolved questions:",
     ]
     if top_questions:
         lines.extend(f"- {question}" for question in top_questions)
     else:
-        lines.append("- None")
-    lines.append("Recommended MVP cut:")
+        lines.append("- Нет" if locale == "ru" else "- None")
+    lines.append("Рекомендуемый MVP:" if locale == "ru" else "Recommended MVP cut:")
     if recommended_cut:
         lines.extend(f"- {item}" for item in recommended_cut)
     else:
-        lines.append("- None")
+        lines.append("- Нет" if locale == "ru" else "- None")
     return "\n".join(lines)
 
 
 def render_export_console(output_dir: Path, report: AnalysisReport) -> str:
     """Render a concise export summary for terminal output."""
 
+    locale = detect_language(
+        " ".join(report.prioritized_open_questions[:1] + report.recommended_mvp_cut[:1])
+    )
     top_question = (
         report.prioritized_open_questions[0]
         if report.prioritized_open_questions
-        else "None"
+        else ("Нет" if locale == "ru" else "None")
     )
     return "\n".join(
         [
-            f"Output: {output_dir}",
-            f"Ambiguities: {len(report.ambiguities)}",
-            f"Contradictions: {len(report.contradictions)}",
-            f"Missing decisions: {len(report.missing_decisions)}",
-            f"Top unresolved question: {top_question}",
+            f"{'Путь к пакету' if locale == 'ru' else 'Output'}: {output_dir}",
+            f"{'Неясности' if locale == 'ru' else 'Ambiguities'}: {len(report.ambiguities)}",
             (
-                f"Recommended MVP cut: {report.recommended_mvp_cut[0]}"
+                f"{'Противоречия' if locale == 'ru' else 'Contradictions'}: "
+                f"{len(report.contradictions)}"
+            ),
+            (
+                f"{'Недостающие решения' if locale == 'ru' else 'Missing decisions'}: "
+                f"{len(report.missing_decisions)}"
+            ),
+            (
+                f"{'Главный открытый вопрос' if locale == 'ru' else 'Top unresolved question'}: "
+                f"{top_question}"
+            ),
+            (
+                f"{'Рекомендуемый MVP' if locale == 'ru' else 'Recommended MVP cut'}: "
+                f"{report.recommended_mvp_cut[0]}"
                 if report.recommended_mvp_cut
-                else "Recommended MVP cut: None"
+                else (
+                    "Рекомендуемый MVP: Нет"
+                    if locale == "ru"
+                    else "Recommended MVP cut: None"
+                )
             ),
         ]
     )

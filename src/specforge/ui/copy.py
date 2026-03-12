@@ -10,7 +10,8 @@ def ui_strings(locale: Locale) -> dict[str, str]:
 
     if locale == "ru":
         return {
-            "eyebrow": "SpecForge Stage 5.6",
+            "eyebrow": "SpecForge Stage 5.7",
+            "page_title": "SpecForge: локальный анализ брифов",
             "hero_title": "Локальный анализ брифов в спокойном пошаговом интерфейсе",
             "hero_copy": (
                 "Вставьте сырой бриф, загрузите демо-пример, посмотрите риски планирования "
@@ -36,6 +37,10 @@ def ui_strings(locale: Locale) -> dict[str, str]:
             "form_note": "Пакеты из UI всегда остаются внутри outputs/.",
             "results": "Результаты",
             "results_copy": "Сначала главное, затем детали и артефакты.",
+            "count_ambiguities": "Неясности",
+            "count_contradictions": "Противоречия",
+            "count_missing_decisions": "Недостающие решения",
+            "count_assumptions": "Допущения",
             "input_issue": "Проблема со вводом",
             "brief_summary": "Краткое резюме",
             "open_questions": "Открытые вопросы",
@@ -51,6 +56,9 @@ def ui_strings(locale: Locale) -> dict[str, str]:
             "bundle_path": "Путь к пакету",
             "show_full_path": "Показать полный путь",
             "artifacts": "Артефакты",
+            "artifact_kind_markdown": "markdown",
+            "artifact_kind_json": "json",
+            "evidence_label": "Основания",
             "start_with_analysis": "Начните с анализа",
             "start_with_analysis_copy": (
                 "Загрузите демо или вставьте свой бриф, затем запустите анализ, чтобы увидеть "
@@ -69,13 +77,17 @@ def ui_strings(locale: Locale) -> dict[str, str]:
                 "Сначала уточните самые важные опоры."
             ),
             "clarify_first": "Сначала уточните",
+            "severity_high": "высокий",
+            "severity_medium": "средний",
+            "severity_low": "низкий",
             "reset_note": (
                 "Новый бриф очищает текст, название и результаты, "
                 "но оставляет демо-выбор доступным."
             ),
         }
     return {
-        "eyebrow": "SpecForge Stage 5.6",
+        "eyebrow": "SpecForge Stage 5.7",
+        "page_title": "SpecForge: local brief analysis",
         "hero_title": "Local brief analysis in a calm guided workflow",
         "hero_copy": (
             "Paste a messy brief, load a demo brief, inspect planning risks, and "
@@ -101,6 +113,10 @@ def ui_strings(locale: Locale) -> dict[str, str]:
         "form_note": "Bundles from the UI always stay under outputs/.",
         "results": "Guided results",
         "results_copy": "Core meaning first, details and artifacts second.",
+        "count_ambiguities": "Ambiguities",
+        "count_contradictions": "Contradictions",
+        "count_missing_decisions": "Missing decisions",
+        "count_assumptions": "Assumptions",
         "input_issue": "Input issue",
         "brief_summary": "Brief summary",
         "open_questions": "Open questions",
@@ -116,6 +132,9 @@ def ui_strings(locale: Locale) -> dict[str, str]:
         "bundle_path": "Bundle path",
         "show_full_path": "Show full path",
         "artifacts": "Artifacts",
+        "artifact_kind_markdown": "markdown",
+        "artifact_kind_json": "json",
+        "evidence_label": "Evidence",
         "start_with_analysis": "Start with analysis",
         "start_with_analysis_copy": (
             "Load a demo or paste your own brief, then run analysis to see the summary, "
@@ -134,6 +153,9 @@ def ui_strings(locale: Locale) -> dict[str, str]:
             "Start with the missing essentials first."
         ),
         "clarify_first": "Clarify first",
+        "severity_high": "high",
+        "severity_medium": "medium",
+        "severity_low": "low",
         "reset_note": (
             "New brief clears the current text, title, output label, and results, "
             "while keeping demo selection available."

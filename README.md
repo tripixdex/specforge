@@ -1,12 +1,12 @@
 # SpecForge
 
-SpecForge is a local-first demo application that turns messy product briefs into a deterministic analysis and a repo-local delivery bundle. Stage 5.6 keeps the existing CLI, API, browser UI, and evaluation harness intact while polishing language behavior, contradiction detection, output naming, and the human demo flow ahead of expert review.
+SpecForge is a local-first demo application that turns messy product briefs into a deterministic analysis and a repo-local delivery bundle. Stage 5.7 keeps the existing CLI, API, browser UI, and evaluation harness intact while applying a final narrow fix pass for overloaded-brief contradiction detection, bilingual output consistency, and small artifact readability polish ahead of re-audit.
 
 This is still local demo software. It is not a hosted service, not a SaaS product, and not a fake autonomous product manager.
 
 The repository follows stage-based development and prefers small, responsibility-focused modules over oversized files where practical.
 
-## Stage 5.6 Capabilities
+## Stage 5.7 Capabilities
 
 Implemented now:
 
@@ -16,12 +16,12 @@ Implemented now:
 - typed FastAPI endpoints for `/health`, `/analyze`, `/generate`, and `/demo`
 - local browser UI at `/` and `/ui`
 - guided UI workflow for pasted briefs, demo brief selection, analysis, and generation
-- evaluation corpus under `eval/` with 20 local cases
+- evaluation corpus under `eval/` with 22 local cases
 - local eval harness that scores structural expectations and artifact completeness
 - safe repo-local bundle generation under `outputs/`
 - tighter shared validation for empty, oversized, and malformed local inputs
-- Russian and English output that follows the input language in deterministic findings and exported artifacts
-- stronger deterministic contradiction rules for overloaded briefs
+- Russian and English output that follows the input language more consistently across CLI, UI, and exported artifact wording
+- stronger deterministic contradiction rules for overloaded briefs, with curated contradiction families instead of noisy duplicates
 - a clear `New brief` reset flow in the browser UI
 - readable transliterated folder names for Cyrillic titles
 - explicit empty states and calmer output-path presentation in the browser UI
@@ -117,7 +117,7 @@ Stage 5 adds a local evaluation layer:
 
 ## Verification
 
-Verified commands for Stage 5.6:
+Verified commands for Stage 5.7:
 
 ```bash
 make lint
@@ -151,4 +151,4 @@ SpecForge cannot:
 
 Sample briefs live in [examples/contradictory_founder_brief.txt](/Users/vladgurov/Desktop/work/specforge/examples/contradictory_founder_brief.txt), [examples/agency_client_brief.txt](/Users/vladgurov/Desktop/work/specforge/examples/agency_client_brief.txt), [examples/internal_operations_tool_brief.txt](/Users/vladgurov/Desktop/work/specforge/examples/internal_operations_tool_brief.txt), and [examples/founder_app_idea.txt](/Users/vladgurov/Desktop/work/specforge/examples/founder_app_idea.txt). The Stage 5 evaluation corpus lives under [eval/](/Users/vladgurov/Desktop/work/specforge/eval).
 
-See [docs/SCOPE.md](/Users/vladgurov/Desktop/work/specforge/docs/SCOPE.md), [docs/ARCHITECTURE.md](/Users/vladgurov/Desktop/work/specforge/docs/ARCHITECTURE.md), [docs/ACCEPTANCE_CRITERIA.md](/Users/vladgurov/Desktop/work/specforge/docs/ACCEPTANCE_CRITERIA.md), [docs/DEMO_SCENARIOS.md](/Users/vladgurov/Desktop/work/specforge/docs/DEMO_SCENARIOS.md), [docs/EVAL_PLAN.md](/Users/vladgurov/Desktop/work/specforge/docs/EVAL_PLAN.md), and [REPORT_INDEX.md](/Users/vladgurov/Desktop/work/specforge/REPORT_INDEX.md) for the exact Stage 5.6 boundary.
+See [docs/SCOPE.md](/Users/vladgurov/Desktop/work/specforge/docs/SCOPE.md), [docs/ARCHITECTURE.md](/Users/vladgurov/Desktop/work/specforge/docs/ARCHITECTURE.md), [docs/ACCEPTANCE_CRITERIA.md](/Users/vladgurov/Desktop/work/specforge/docs/ACCEPTANCE_CRITERIA.md), [docs/DEMO_SCENARIOS.md](/Users/vladgurov/Desktop/work/specforge/docs/DEMO_SCENARIOS.md), [docs/EVAL_PLAN.md](/Users/vladgurov/Desktop/work/specforge/docs/EVAL_PLAN.md), and [REPORT_INDEX.md](/Users/vladgurov/Desktop/work/specforge/REPORT_INDEX.md) for the exact Stage 5.7 boundary.

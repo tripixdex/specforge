@@ -17,6 +17,7 @@ class EvalExpectations(BaseModel):
     required_contradiction_categories: list[str] = Field(default_factory=list)
     required_missing_decision_categories: list[str] = Field(default_factory=list)
     required_artifacts: list[str] = Field(default_factory=list)
+    max_contradictions: int | None = None
 
 
 class EvalCase(BaseModel):

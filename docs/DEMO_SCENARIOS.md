@@ -1,6 +1,6 @@
 # Demo Scenarios
 
-Stage 5.6 demos now include the deterministic CLI flow, the local FastAPI layer, the guided browser UI, and a local evaluation run, with extra emphasis on trust and human usability before expert review.
+Stage 5.7 demos keep the deterministic CLI flow, the local FastAPI layer, the guided browser UI, and a local evaluation run, with a final narrow pass on overloaded-brief contradiction detection and bilingual output consistency before re-audit.
 
 ## Scenario 1: Contradictory Founder Brief
 
@@ -8,7 +8,8 @@ Input:
 - a founder brief that asks for a minimal MVP while also demanding enterprise scope, low budget, and aggressive timing
 
 Implemented behavior:
-- detects stronger contradiction patterns for overloaded scope
+- detects overloaded-brief contradiction patterns for low budget plus urgency plus breadth, tiny team plus short deadline plus multi-platform scope, and simple-MVP framing plus enterprise-ish breadth
+- keeps contradiction output curated instead of emitting duplicate findings from the same family
 - surfaces missing decisions around pricing and security
 - recommends a narrower MVP cut
 - follows the input language in deterministic recommendations
@@ -55,6 +56,7 @@ Implemented behavior:
 - provides a visible `New brief` reset path
 - renders explicit empty states and a humane short-brief clarification state
 - shows a short repo-local path first, with the full path still available
+- follows the input language in count labels, severity chips, evidence labels, and page metadata
 
 Verified command:
 - `python3 -m pytest tests/test_ui.py -q`
@@ -66,6 +68,7 @@ Input:
 
 Implemented behavior:
 - Russian input produces Russian deterministic findings and recommendations
+- Russian exported markdown uses Russian-facing section headers and phrasing
 - English input produces English deterministic findings and recommendations
 - Cyrillic titles export to readable transliterated folder names under `outputs/`
 
@@ -78,8 +81,9 @@ Input:
 - the Stage 5 eval corpus under `eval/`
 
 Implemented behavior:
-- runs 20 deterministic corpus cases
-- checks structural expectations such as minimum finding counts, required categories, MVP-cut presence, and required artifacts
+- runs 22 deterministic corpus cases
+- includes audited Russian and English overloaded-brief misses as explicit regression fixtures
+- checks structural expectations such as minimum finding counts, contradiction ceilings, required categories, MVP-cut presence, and required artifacts
 - writes inspectable summaries and per-case bundles under `outputs/evals/stage-05/`
 
 Verified command:

@@ -1,0 +1,50 @@
+{
+  "project_name": "SpecForge",
+  "verdict": "MVP BUT NEEDS FIXES",
+  "portfolio_readiness_score_10": 7.2,
+  "verified_capabilities": [
+    "make lint passes",
+    "make test passes",
+    "CLI analyze works on bundled and custom briefs",
+    "CLI generate exports repo-local artifact bundles",
+    "FastAPI server starts locally",
+    "API health endpoint works",
+    "API analyze endpoint returns structured deterministic analysis",
+    "API generate endpoint writes repo-local bundles",
+    "UI home, analyze, generate, and reset flows work locally",
+    "Eval runner executes 22 local cases and writes eval outputs",
+    "English and Russian UI output localization exists",
+    "Short or underspecified briefs trigger clarification behavior"
+  ],
+  "inferred_capabilities": [
+    "The project is suitable as a deterministic local demo for brief triage",
+    "The repo can be demoed credibly in an interview if positioned as an MVP",
+    "The evaluation harness is useful for regression checking within the current rule-based system"
+  ],
+  "not_verified_capabilities": [
+    "Robust contradiction detection across broad real-world wording variation",
+    "Consistently high-value delivery artifact quality across many brief styles",
+    "Fully consistent bilingual exported artifacts",
+    "Public portfolio freeze readiness"
+  ],
+  "top_findings": [
+    "Contradiction detection still misses one contradiction family on realistic overloaded English and Russian phrasings outside the curated corpus.",
+    "Russian exports still leak English product labels and inferred values, reducing trust in bilingual consistency.",
+    "Generated artifacts are complete but often too shallow, repetitive, or echo-like to feel like strong delivery documents.",
+    "Eval results provide real regression signal but overstate semantic robustness because the corpus is still curated around the rule set.",
+    "The repository still contains avoidable presentation noise such as a tracked .DS_Store."
+  ],
+  "blockers": [
+    "Harden overloaded-brief contradiction detection for wording variants involving tiny teams, urgency, multi-platform scope, and integrations.",
+    "Localize inferred product and audience labels inside Russian exports instead of mixing Russian wrappers with English values.",
+    "Improve artifact depth so MVP guidance decomposes scope rather than repeating the brief.",
+    "Tighten repo presentation and README claims to match verified behavior exactly."
+  ],
+  "recommendations": [
+    "Expand contradiction tests with phrasing-variant adversarial cases beyond the current eval corpus.",
+    "Normalize or localize inferred taxonomy labels before rendering exports.",
+    "Refactor goal extraction so overloaded paragraphs are not treated as one monolithic goal.",
+    "Upgrade generated artifacts with more concrete scoping structure, dependency framing, and explicit tradeoff summaries.",
+    "Remove tracked junk files and reduce stage-label noise before using this repo as a flagship portfolio piece."
+  ]
+}

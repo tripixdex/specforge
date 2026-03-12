@@ -116,6 +116,11 @@ def build_case_checks(
             actual=len(report.contradictions),
             minimum=expectations.min_contradictions,
         ),
+        max_threshold_check(
+            "contradiction_count_ceiling",
+            actual=len(report.contradictions),
+            maximum=expectations.max_contradictions,
+        ),
         threshold_check(
             "missing_decision_count",
             actual=len(report.missing_decisions),
@@ -162,6 +167,22 @@ def threshold_check(name: str, *, actual: int, minimum: int) -> EvalCheckResult:
         name=name,
         passed=actual >= minimum,
         detail=f"actual={actual}, expected>={minimum}",
+    )
+
+
+def max_threshold_check(name: str, *, actual: int, maximum: int | None) -> EvalCheckResult:
+    """Optionally enforce a ceiling to keep outputs curated rather than noisy."""
+
+    if maximum is None:
+        return EvalCheckResult(
+            name=name,
+            passed=True,
+            detail=f"actual={actual}, expected=unbounded",
+        )
+    return EvalCheckResult(
+        name=name,
+        passed=actual <= maximum,
+        detail=f"actual={actual}, expected<={maximum}",
     )
 
 

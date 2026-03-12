@@ -9,7 +9,7 @@ def test_ui_home_route_is_available() -> None:
     response = client.get("/ui")
 
     assert response.status_code == 200
-    assert "SpecForge Stage 5.6" in response.text
+    assert "SpecForge Stage 5.7" in response.text
     assert "Run analysis" in response.text
     assert "New brief" in response.text
 
@@ -90,3 +90,25 @@ def test_ui_new_brief_clears_previous_results() -> None:
     assert "Start with analysis" not in response.text
     assert "Начните с анализа" in response.text
     assert "Guided Results" not in response.text
+
+
+def test_ui_russian_results_localize_count_labels_and_lang() -> None:
+    response = client.post(
+        "/ui/analyze",
+        data={
+            "title": "Русский бриф",
+            "brief_text": (
+                "Нужен простой MVP за 2 недели.\n"
+                "Бюджет до $8k.\n"
+                "Нужны веб и мобильное приложение, CRM и Slack.\n"
+            ),
+            "demo_name": "founder-app-idea",
+            "output_label": "",
+        },
+    )
+
+    assert response.status_code == 200
+    assert '<html lang="ru">' in response.text
+    assert "Противоречия" in response.text
+    assert "Основания:" in response.text
+    assert "Missing decisions" not in response.text

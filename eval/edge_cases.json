@@ -62,10 +62,27 @@
       "min_missing_decisions": 1,
       "required_contradiction_categories": [
         "fast-cheap-feature-rich",
-        "minimal-mvp-vs-enterprise-scope",
-        "fast-cheap-feature-rich"
+        "minimal-mvp-vs-enterprise-scope"
       ],
       "required_missing_decision_categories": ["pricing"]
+    }
+  },
+  {
+    "case_id": "edge_english_overloaded_multiplatform_mvp",
+    "segment": "contradictory founder brief",
+    "title": "Multiplatform Rush MVP",
+    "brief_text": "Need a simple MVP in 10 days on a lean budget. Team is just me plus one contractor. It has to ship on web and mobile with Salesforce, Stripe, Slack, analytics, admin, and billing from day one.",
+    "expectations": {
+      "min_ambiguities": 1,
+      "min_contradictions": 3,
+      "max_contradictions": 3,
+      "min_missing_decisions": 1,
+      "required_contradiction_categories": [
+        "fast-cheap-feature-rich",
+        "small-team-aggressive-deadline-broad-scope",
+        "minimal-mvp-vs-enterprise-scope"
+      ],
+      "required_missing_decision_categories": ["target_user"]
     }
   }
 ]

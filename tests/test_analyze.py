@@ -75,6 +75,27 @@ def test_english_overloaded_brief_with_integrations_triggers_contradictions() ->
     categories = {item.category for item in report.contradictions}
     assert "fast-cheap-feature-rich" in categories
     assert "minimal-mvp-vs-enterprise-scope" in categories
+    assert "small-team-aggressive-deadline-broad-scope" in categories
+    assert len(report.contradictions) == 3
+
+
+def test_overloaded_contradictions_are_curated_not_duplicated() -> None:
+    text = """
+    Need a simple MVP in 2 weeks on a tight budget.
+    Team is just me and one contractor.
+    It must launch on web and mobile with Slack, Salesforce, Stripe, analytics,
+    billing, admin, SSO, audit logs, and permissions.
+    Keep it cheap and move fast.
+    """
+
+    _, report = analyze_brief(normalize_brief(create_raw_brief(text)))
+
+    categories = [item.category for item in report.contradictions]
+    assert categories == [
+        "fast-cheap-feature-rich",
+        "small-team-aggressive-deadline-broad-scope",
+        "minimal-mvp-vs-enterprise-scope",
+    ]
 
 
 def test_assumptions_and_mvp_cut_are_created() -> None:

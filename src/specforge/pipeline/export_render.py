@@ -51,13 +51,17 @@ def render_brief_markdown(pack: DeliveryPack) -> str:
             "## Резюме" if locale == "ru" else "## Summary",
             pack.brief_summary,
             "",
-            "## Явно указано пользователем" if locale == "ru" else "## Explicit User Input",
+            "## Явно указано в брифе" if locale == "ru" else "## Explicit Brief Input",
             explicit_inputs,
             "",
-            "## Что система вывела" if locale == "ru" else "## Inferred Structure",
+            "## Детерминированная интерпретация"
+            if locale == "ru"
+            else "## Deterministic Interpretation",
             inferred,
             "",
-            "## Открытые вопросы" if locale == "ru" else "## Unresolved Questions",
+            "## Приоритетные открытые вопросы"
+            if locale == "ru"
+            else "## Priority Open Questions",
             unresolved,
             "",
             "## Заметки" if locale == "ru" else "## Notes",

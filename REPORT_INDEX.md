@@ -12,6 +12,7 @@ SpecForge now uses per-stage reports as the primary history mechanism. New repor
 - Stage 4: local browser UI for the deterministic workflow. Primary report: [codex_reports/stage_04_ui.md](/Users/vladgurov/Desktop/work/specforge/codex_reports/stage_04_ui.md)
 - Stage 5: local evaluation corpus, hardening pass, and portfolio-readiness review. Primary report: [codex_reports/stage_05_eval_and_hardening.md](/Users/vladgurov/Desktop/work/specforge/codex_reports/stage_05_eval_and_hardening.md)
 - Stage 5.6: pre-audit polish for language-following output, contradiction hardening, reset UX, naming, and output presentation. Primary report: [codex_reports/stage_05_6_pre_audit_polish.md](/Users/vladgurov/Desktop/work/specforge/codex_reports/stage_05_6_pre_audit_polish.md)
+- Stage 5.7: final narrow fix pass for audit blockers in contradiction detection and language-following. Primary report: [codex_reports/stage_05_7_final_fix_pass.md](/Users/vladgurov/Desktop/work/specforge/codex_reports/stage_05_7_final_fix_pass.md)
 
 ## Notes
 

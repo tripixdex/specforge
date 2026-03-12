@@ -58,3 +58,23 @@ def test_export_slugifies_cyrillic_titles_readably(tmp_path: Path) -> None:
     output_dir = export_delivery_pack(pack, output_root=tmp_path)
 
     assert "platforma-dlya-agentstva" in output_dir.name
+
+
+def test_russian_export_uses_localized_headers(tmp_path: Path) -> None:
+    text = """
+    Нужен простой MVP за 2 недели.
+    Бюджет до $8k, команда из 2 человек.
+    Нужны веб и мобильное приложение, CRM и Slack.
+    """
+
+    normalized = normalize_brief(create_raw_brief(text))
+    analyzed, _ = analyze_brief(normalized)
+    pack = generate_delivery_pack(analyzed)
+    output_dir = export_delivery_pack(pack, output_root=tmp_path, run_label="ru-bundle")
+
+    brief_markdown = (output_dir / "brief.md").read_text(encoding="utf-8")
+    analysis_report = (output_dir / "analysis_report.md").read_text(encoding="utf-8")
+
+    assert "# SpecForge: Бриф" in brief_markdown
+    assert "## Детерминированная интерпретация" in brief_markdown
+    assert "## Противоречия" in analysis_report

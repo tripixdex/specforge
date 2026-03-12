@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from decimal import Decimal
 
 from specforge.domain.models import NormalizedBrief
 from specforge.pipeline.intake import dedupe
@@ -221,16 +222,22 @@ def has_broad_scope_signal(brief: NormalizedBrief) -> bool:
             "everything",
             "full suite",
             "multiple teams",
+            "multiple roles",
             "admin",
             "billing",
             "analytics",
             "integrations",
+            "workflow automation",
+            "approval flow",
+            "dashboard",
             "все в одном",
             "несколько ролей",
             "админ",
             "биллинг",
             "аналитик",
             "интеграц",
+            "согласован",
+            "дашборд",
         ]
     )
 
@@ -255,6 +262,105 @@ def has_enterprise_scope_signal(lowered: str) -> bool:
             "комплаенс",
         ]
     )
+
+
+def count_integration_signals(lowered: str) -> int:
+    """Count integration-like scope markers for overloaded first releases."""
+
+    integration_markers = [
+        "integration",
+        "integrations",
+        "slack",
+        "stripe",
+        "salesforce",
+        "hubspot",
+        "crm",
+        "erp",
+        "calendar",
+        "email",
+        "billing",
+        "analytics",
+        "admin",
+        "audit",
+        "sso",
+        "интеграц",
+        "slack",
+        "stripe",
+        "crm",
+        "erp",
+        "календар",
+        "почт",
+        "биллинг",
+        "аналитик",
+        "админ",
+        "аудит",
+    ]
+    return sum(1 for marker in integration_markers if marker in lowered)
+
+
+def has_low_budget_signal(text: str, budget_text: str | None = None) -> bool:
+    """Return whether the brief points to a materially tight budget."""
+
+    lowered = text.lower()
+    budget_lowered = (budget_text or "").lower()
+    if any(
+        term in budget_lowered or term in lowered
+        for term in [
+            "cheap",
+            "tight budget",
+            "lean budget",
+            "bootstrap",
+            "budget very limited",
+            "ограничен бюджет",
+            "бюджет очень ограничен",
+            "дешево",
+            "недорого",
+            "экономно",
+        ]
+    ):
+        return True
+    money_source = budget_lowered or lowered
+    match = re.search(r"\$([\d,]+)([kKmM]?)", money_source)
+    if not match:
+        return False
+    amount = Decimal(match.group(1).replace(",", ""))
+    suffix = match.group(2).lower()
+    if suffix == "k":
+        amount *= 1000
+    elif suffix == "m":
+        amount *= 1_000_000
+    return amount <= 20000
+
+
+def has_short_timeline_signal(text: str, timeline_text: str | None = None) -> bool:
+    """Return whether the brief asks for a notably compressed timeline."""
+
+    lowered = text.lower()
+    timeline_lowered = (timeline_text or "").lower()
+    if any(
+        term in timeline_lowered or term in lowered
+        for term in [
+            "asap",
+            "urgent",
+            "quickly",
+            "launch quickly",
+            "срочно",
+            "как можно скорее",
+            "быстро",
+        ]
+    ):
+        return True
+    match = re.search(
+        r"(\d+)\s*(day|days|week|weeks|день|дня|дней|недел[яьию]?)",
+        timeline_lowered or lowered,
+    )
+    if not match:
+        return False
+    amount = int(match.group(1))
+    unit = match.group(2)
+    if "day" in unit or "д" in unit:
+        return amount <= 21
+    return amount <= 6
 
 
 def requires_security_decision(lowered: str) -> bool:

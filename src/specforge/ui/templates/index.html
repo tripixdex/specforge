@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SpecForge Local Demo UI</title>
+    <title>{{ strings["page_title"] }}</title>
     <link rel="stylesheet" href="/ui-static/specforge.css" />
     <link rel="stylesheet" href="/ui-static/specforge_components.css" />
   </head>
@@ -119,19 +119,19 @@
 
           <section class="count-grid">
             <div class="count-card">
-              <span>Ambiguities</span>
+              <span>{{ strings["count_ambiguities"] }}</span>
               <strong>{{ result.counts["ambiguities"] }}</strong>
             </div>
             <div class="count-card risk-card">
-              <span>Contradictions</span>
+              <span>{{ strings["count_contradictions"] }}</span>
               <strong>{{ result.counts["contradictions"] }}</strong>
             </div>
             <div class="count-card">
-              <span>Missing decisions</span>
+              <span>{{ strings["count_missing_decisions"] }}</span>
               <strong>{{ result.counts["missing_decisions"] }}</strong>
             </div>
             <div class="count-card">
-              <span>Assumptions</span>
+              <span>{{ strings["count_assumptions"] }}</span>
               <strong>{{ result.counts["assumptions"] }}</strong>
             </div>
           </section>
@@ -176,13 +176,13 @@
               {% for item in result.ambiguity_findings %}
               <article class="finding-card severity-{{ item.severity }}">
                 <header>
-                  <span class="severity-chip">{{ item.severity }}</span>
+                  <span class="severity-chip">{{ strings["severity_" + item.severity] }}</span>
                   <strong>{{ item.display_category }}</strong>
                 </header>
                 <p>{{ item.description }}</p>
                 <p class="recommendation">{{ item.recommendation }}</p>
                 {% if item.evidence %}
-                <p class="evidence">Evidence: {{ item.evidence | join("; ") }}</p>
+                <p class="evidence">{{ strings["evidence_label"] }}: {{ item.evidence | join("; ") }}</p>
                 {% endif %}
               </article>
               {% endfor %}
@@ -200,13 +200,13 @@
               {% for item in result.contradiction_findings %}
               <article class="finding-card severity-{{ item.severity }} danger-card">
                 <header>
-                  <span class="severity-chip">{{ item.severity }}</span>
+                  <span class="severity-chip">{{ strings["severity_" + item.severity] }}</span>
                   <strong>{{ item.display_category }}</strong>
                 </header>
                 <p>{{ item.description }}</p>
                 <p class="recommendation">{{ item.recommendation }}</p>
                 {% if item.evidence %}
-                <p class="evidence">Evidence: {{ item.evidence | join("; ") }}</p>
+                <p class="evidence">{{ strings["evidence_label"] }}: {{ item.evidence | join("; ") }}</p>
                 {% endif %}
               </article>
               {% endfor %}
@@ -225,7 +225,7 @@
               {% for item in result.missing_decisions %}
               <article class="finding-card severity-{{ item.severity }}">
                 <header>
-                  <span class="severity-chip">{{ item.severity }}</span>
+                  <span class="severity-chip">{{ strings["severity_" + item.severity] }}</span>
                   <strong>{{ item.display_category }}</strong>
                 </header>
                 <p>{{ item.description }}</p>
@@ -275,7 +275,7 @@
               {% for item in result.artifact_previews %}
               <details class="artifact-card">
                 <summary>{{ item.name }}</summary>
-                <p class="artifact-meta">{{ item.kind }} · {{ item.relative_path }}</p>
+                <p class="artifact-meta">{{ strings["artifact_kind_" + item.kind] }} · {{ item.relative_path }}</p>
                 <pre>{{ item.preview }}</pre>
               </details>
               {% endfor %}

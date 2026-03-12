@@ -66,5 +66,23 @@
       "required_contradiction_categories": ["fast-cheap-feature-rich"],
       "required_missing_decision_categories": ["target_user", "platform"]
     }
+  },
+  {
+    "case_id": "founder_ru_overloaded_brief",
+    "segment": "contradictory founder brief",
+    "title": "Перегруженный русский MVP",
+    "brief_text": "Нужен простой MVP за 2 недели. Бюджет до $8k, команда из 2 человек. При этом нужен веб и мобильное приложение, Slack, CRM, биллинг, аналитика и роли доступа. Нужно сделать быстро и недорого.",
+    "expectations": {
+      "min_ambiguities": 1,
+      "min_contradictions": 3,
+      "max_contradictions": 3,
+      "min_missing_decisions": 1,
+      "required_contradiction_categories": [
+        "fast-cheap-feature-rich",
+        "small-team-aggressive-deadline-broad-scope",
+        "minimal-mvp-vs-enterprise-scope"
+      ],
+      "required_missing_decision_categories": ["target_user"]
+    }
   }
 ]

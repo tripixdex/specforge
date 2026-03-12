@@ -141,12 +141,12 @@ def build_inferred_structure(
     if analysis.contradictions:
         if locale == "ru":
             inferred.append(
-                "Обнаружено противоречивое давление в "
+                "Обнаружена перегрузка требований в "
                 f"{len(analysis.contradictions)} зоне(ах) планирования."
             )
         else:
             inferred.append(
-                "Detected contradiction pressure across "
+                "Detected requirement overload across "
                 f"{len(analysis.contradictions)} planning area(s)."
             )
     return dedupe(inferred)

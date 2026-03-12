@@ -5,7 +5,8 @@ from __future__ import annotations
 from specforge.domain.models import AnalysisReport, NormalizedBrief
 from specforge.pipeline.analysis_ambiguities import infer_ambiguities
 from specforge.pipeline.analysis_assumptions import dedupe_assumptions, infer_assumptions
-from specforge.pipeline.analysis_decisions import infer_contradictions, infer_missing_decisions
+from specforge.pipeline.analysis_contradictions import infer_contradictions
+from specforge.pipeline.analysis_decisions import infer_missing_decisions
 from specforge.pipeline.analysis_outcomes import (
     build_traceability_links,
     infer_mvp_cut,
