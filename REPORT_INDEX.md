@@ -15,6 +15,7 @@ SpecForge now uses per-stage reports as the primary history mechanism. New repor
 - Stage 5.7: final narrow fix pass for audit blockers in contradiction detection and language-following. Primary report: [codex_reports/stage_05_7_final_fix_pass.md](/Users/vladgurov/Desktop/work/specforge/codex_reports/stage_05_7_final_fix_pass.md)
 - Stage 5.9: freeze-focused remediation for realistic contradiction wording, Russian display consistency, and a small artifact usefulness pass. Primary report: [codex_reports/stage_05_9_freeze_focused_remediation.md](/Users/vladgurov/Desktop/work/specforge/codex_reports/stage_05_9_freeze_focused_remediation.md)
 - Stage 6.3: public-path cleanup for Russian export wording, public demo copy, and calmer artifact previews. Primary report: [codex_reports/stage_06_3_public_path_cleanup.md](/Users/vladgurov/Desktop/work/specforge/codex_reports/stage_06_3_public_path_cleanup.md)
+- Stage 6.4: final demo curation for the default showcase brief, compact `/demo` metadata, and Russian public wording cleanup. Primary report: [codex_reports/final_demo_curation_pass.md](/Users/vladgurov/Desktop/work/specforge/codex_reports/final_demo_curation_pass.md)
 
 ## Notes
 

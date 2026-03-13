@@ -1,0 +1,47 @@
+{
+  "project_name": "SpecForge",
+  "verdict": "MVP BUT NEEDS FIXES",
+  "portfolio_readiness_score_10": 8.3,
+  "verified_capabilities": [
+    "Local deterministic brief analysis via CLI",
+    "Local deterministic bundle generation via CLI",
+    "FastAPI health, analyze, generate, and demo endpoints",
+    "Server-rendered UI flow on / and /ui",
+    "Repo-local artifact export under outputs/",
+    "Evaluation harness with 26 passing cases",
+    "English overloaded-brief contradiction detection",
+    "Russian overloaded-brief contradiction detection",
+    "Near-miss contradiction restraint",
+    "RU-facing exported markdown artifacts",
+    "EN-facing exported markdown artifacts",
+    "Reset/new-brief UI path with explicit empty state"
+  ],
+  "inferred_capabilities": [
+    "Credible local demo for product-ops or portfolio walkthroughs after one more calibration pass",
+    "Safe default output handling for local-only generation",
+    "Sustainable maintenance profile due to modular project structure and test coverage"
+  ],
+  "not_verified_capabilities": [
+    "Human visual polish in a real browser session",
+    "Cross-platform runtime behavior outside the audited local environment",
+    "Performance under large or repeated workloads",
+    "Any hosted or production deployment path"
+  ],
+  "top_findings": [
+    "High: the default founder demo brief produces 3 contradiction findings that read as false positives on the repo's public showcase path.",
+    "Medium: near-miss briefs avoid contradiction spam, but MVP guidance still overreacts to explicitly deferred future-platform scope.",
+    "Medium: RU-facing public artifacts are improved but still contain visible English jargon such as workflow and enterprise in human-readable recommendations.",
+    "Low: the /demo endpoint exposes an absolute local demo_input_path."
+  ],
+  "blockers": [
+    "Recalibrate or replace the default founder demo brief so the normal public demo path does not over-trigger contradictions.",
+    "Clean remaining English jargon from RU human-readable artifact text."
+  ],
+  "recommendations": [
+    "Make the default demo a clean success-path sample with low or zero contradiction noise.",
+    "Add one regression test asserting low contradiction count for the default founder demo bundle and /demo response.",
+    "Tighten scope guidance so explicitly post-MVP future platform notes do not trigger first-class platform narrowing advice.",
+    "Remove or relativize absolute local paths from the /demo response.",
+    "Do one final RU copy pass over human-readable recommendation strings."
+  ]
+}

@@ -136,7 +136,8 @@ def infer_contradictions(
                     ],
                 ),
                 recommendation=(
-                    "Сведите первый этап к одному workflow и отложите вторичные зоны функционала."
+                    "Сведите первый этап к одному основному сценарию "
+                    "и отложите вторичные зоны функционала."
                     if locale == "ru"
                     else "Cut the first milestone to one workflow and defer "
                     "secondary feature areas."
@@ -189,7 +190,7 @@ def infer_contradictions(
                 category="minimal-mvp-vs-enterprise-scope",
                 severity="high",
                 description=(
-                    "Формулировка про простой MVP конфликтует с enterprise-объемом, "
+                    "Формулировка про простой MVP конфликтует с корпоративным объемом, "
                     "множеством интеграций или мультиплатформенностью."
                     if locale == "ru"
                     else "The brief calls this a simple MVP while also asking "

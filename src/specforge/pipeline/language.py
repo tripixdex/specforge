@@ -22,7 +22,7 @@ CATEGORY_LABELS: dict[str, dict[Locale, str]] = {
     "goals": {"en": "Goals", "ru": "Цели"},
     "minimal-mvp-vs-enterprise-scope": {
         "en": "Minimal MVP vs enterprise scope",
-        "ru": "Минимальный MVP против enterprise-объема",
+        "ru": "Минимальный MVP против корпоративного объема",
     },
     "monetization": {"en": "Monetization", "ru": "Монетизация"},
     "ownership_operations": {"en": "Ownership and operations", "ru": "Владелец и эксплуатация"},

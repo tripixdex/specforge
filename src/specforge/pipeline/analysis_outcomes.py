@@ -51,19 +51,19 @@ def infer_mvp_cut(
     cut = []
     if brief.goals:
         cut.append(
-            f"Зафиксируйте первую версию вокруг этой главной цели: {brief.goals[0]}"
+            f"Сфокусируйте первую версию на этой главной цели: {brief.goals[0]}"
             if locale == "ru"
             else f"Anchor the first release on this primary goal: {brief.goals[0]}"
         )
     if not brief.audience:
         cut.append(
-            "Сначала выберите одного основного пользователя и один главный workflow."
+            "Сначала выберите одного основного пользователя и один главный сценарий."
             if locale == "ru"
             else "Decide on one primary user and one core workflow before expanding scope."
         )
     if len(brief.goals) > 1:
         cut.append(
-            "Отложите вторичные цели, пока не подтвержден первый workflow."
+            "Отложите вторичные цели, пока не подтвержден первый основной сценарий."
             if locale == "ru"
             else "Defer secondary goals until the first workflow is validated."
         )
@@ -77,14 +77,14 @@ def infer_mvp_cut(
     if any(item.category == "pricing" for item in missing_decisions):
         cut.append(
             "Оставьте цену отдельным следующим решением, "
-            "если монетизация не является ядром первого workflow."
+            "если монетизация не является ядром первого сценария."
             if locale == "ru"
             else "Treat pricing as a follow-up decision unless monetization is core "
             "to the first workflow."
         )
     if any(item.category == "minimal-mvp-vs-enterprise-scope" for item in contradictions):
         cut.append(
-            "Уберите из MVP enterprise-требования вроде SSO, аудита и тяжелого комплаенса."
+            "Уберите из MVP корпоративные требования вроде SSO, аудита и тяжелого комплаенса."
             if locale == "ru"
             else "Remove enterprise-only requirements such as SSO, audit trails, or "
             "compliance-heavy scope from MVP."
@@ -100,7 +100,7 @@ def infer_mvp_cut(
         item.category == "small-team-aggressive-deadline-broad-scope" for item in contradictions
     ):
         cut.append(
-            "Сведите релиз к одной роли и одному ключевому workflow "
+            "Сведите релиз к одной роли и одному ключевому сценарию "
             "до сохранения заявленного срока."
             if locale == "ru"
             else "Cut the release to one role and one core workflow before keeping "
@@ -109,7 +109,7 @@ def infer_mvp_cut(
     if not cut:
         cut.append(
             "Сфокусируйте первую версию на одном пользователе, "
-            "одном workflow и одном локальном цикле проверки."
+            "одном основном сценарии и одном локальном цикле проверки."
             if locale == "ru"
             else "Keep the first release focused on one user, one workflow, and one "
             "local review loop."

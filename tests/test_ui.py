@@ -62,7 +62,7 @@ def test_ui_invalid_demo_selection_is_visible() -> None:
 
     assert response.status_code == 200
     assert "Unknown demo" in response.text
-    assert "Founder app idea" in response.text
+    assert "Founder scope tool" in response.text
 
 
 def test_ui_short_brief_shows_humane_clarification_state() -> None:

@@ -115,3 +115,5 @@ def test_demo_returns_sample_analysis() -> None:
     assert body["demo_name"] == "founder-app-idea"
     assert body["sample_analysis"]["analysis_mode"] == "deterministic"
     assert "founder-app-idea" in body["available_demos"]
+    assert "demo_input_path" not in body
+    assert body["sample_analysis"]["counts"]["contradictions"] == 0

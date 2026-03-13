@@ -38,8 +38,10 @@ Input:
 
 Implemented behavior:
 - returns a typed JSON response with deterministic analysis data
+- uses a calm default founder brief that behaves like a success-path showcase instead of an overload example
 - exposes counts, open questions, and recommended MVP cuts
 - keeps all processing local
+- does not expose the bundled demo file path in the public response
 
 Verified command:
 - `python3 -m pytest tests/test_api.py -q`
@@ -70,6 +72,7 @@ Input:
 Implemented behavior:
 - Russian input produces Russian deterministic findings and recommendations
 - Russian exported markdown uses Russian-facing section headers, phrasing, and core display values for product, audience, and platform labels
+- Russian public export wording avoids leftover English `workflow` phrasing in the normal preview path
 - English input produces English deterministic findings and recommendations
 - Cyrillic titles export to readable transliterated folder names under `outputs/`
 

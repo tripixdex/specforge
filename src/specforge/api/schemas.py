@@ -138,7 +138,6 @@ class DemoResponse(BaseModel):
     """Demo metadata and sample analysis response."""
 
     demo_name: str
-    demo_input_path: str
     available_demos: list[str] = Field(default_factory=list)
     sample_analysis: AnalyzeResponse
 

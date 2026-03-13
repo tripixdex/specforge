@@ -15,7 +15,7 @@ DEMO_BRIEFS = {
     "internal-operations-tool": Path("examples/internal_operations_tool_brief.txt"),
 }
 DEMO_LABELS = {
-    "founder-app-idea": "Founder app idea",
+    "founder-app-idea": "Founder scope tool",
     "contradictory-founder-brief": "Contradictory founder brief",
     "agency-client-brief": "Agency client brief",
     "internal-operations-tool": "Internal operations tool",
@@ -53,5 +53,5 @@ def load_demo_brief(demo_name: str) -> tuple[str, str, Path]:
     relative_path = DEMO_BRIEFS[resolved_name]
     absolute_path = REPO_ROOT / relative_path
     text = absolute_path.read_text(encoding="utf-8")
-    title = relative_path.stem.replace("_", " ").title()
+    title = DEMO_LABELS[resolved_name].title()
     return title, text, absolute_path

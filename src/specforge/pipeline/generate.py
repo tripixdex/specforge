@@ -108,7 +108,7 @@ def build_scope_draft(brief: NormalizedBrief) -> list[str]:
         )
     if brief.goals:
         if locale == "ru":
-            items.extend(f"Поддержать цель: {goal}." for goal in brief.goals[:3])
+            items.extend(f"Держать в фокусе цель: {goal}." for goal in brief.goals[:3])
         else:
             items.extend(f"Support goal: {goal}." for goal in brief.goals[:3])
     if brief.non_goals:

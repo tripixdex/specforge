@@ -1,6 +1,6 @@
 # SpecForge
 
-SpecForge is a local-first demo application that turns messy product briefs into a deterministic analysis and a repo-local delivery bundle. The current repository state keeps the CLI, API, browser UI, and evaluation harness intact while focusing the public demo path on clear bilingual outputs, stronger overloaded-brief contradiction detection, and human-readable local export artifacts.
+SpecForge is a local-first demo application that turns messy product briefs into a deterministic analysis and a repo-local delivery bundle. The current repository state keeps the CLI, API, browser UI, and evaluation harness intact while focusing the public demo path on a calmer default showcase demo, clear bilingual outputs, stronger overloaded-brief contradiction detection, and human-readable local export artifacts.
 
 This is still local demo software. It is not a hosted service, not a SaaS product, and not a fake autonomous product manager.
 
@@ -25,6 +25,7 @@ Implemented now:
 - a clear `New brief` reset flow in the browser UI
 - readable transliterated folder names for Cyrillic titles
 - explicit empty states and calmer output-path presentation in the browser UI
+- a default bundled founder demo that behaves like a clean success-path showcase instead of an overload sample
 - human-facing Russian output that localizes core product, audience, platform, and tradeoff display values more consistently in exported artifacts
 - a modest artifact usefulness pass so generated MVP guidance more clearly separates what stays in, what gets deferred, and what must be decided first
 
@@ -94,6 +95,7 @@ curl -s \
 ```
 
 The UI and API both keep generated bundles under [outputs/](/Users/vladgurov/Desktop/work/specforge/outputs). The browser UI does not upload files and does not accept arbitrary output paths.
+The public `/demo` response keeps the default showcase path compact and does not expose the bundled input file path.
 The CLI intentionally still allows `--output-root` for local developer flexibility. That divergence remains documented and intentional.
 
 ## UI Workflow

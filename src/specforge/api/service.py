@@ -114,7 +114,7 @@ def build_demo_response() -> DemoResponse:
     """Return a stable sample analysis based on a bundled brief."""
 
     demo_name = default_demo_name()
-    title, brief_text, input_path = load_demo_brief(demo_name)
+    title, brief_text, _ = load_demo_brief(demo_name)
     request = AnalyzeRequest(
         brief_text=brief_text,
         title=title,
@@ -123,7 +123,6 @@ def build_demo_response() -> DemoResponse:
     brief, report = analyze_request(request)
     return DemoResponse(
         demo_name=demo_name,
-        demo_input_path=str(input_path),
         available_demos=available_demo_names(),
         sample_analysis=build_analyze_response(brief, report),
     )

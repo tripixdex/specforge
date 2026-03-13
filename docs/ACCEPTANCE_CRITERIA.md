@@ -7,7 +7,9 @@
 - the deterministic pipeline remains intact and truthful
 - the browser UI allows a user to paste a brief, load a bundled demo, run analysis, and run generation
 - the UI visibly presents the brief summary, ambiguity findings, contradiction findings, missing decisions, assumptions, recommended MVP cut, human-readable artifact previews, and output location
+- the default bundled founder demo behaves like a calm public showcase path rather than a contradiction-heavy overload sample
 - deterministic human-facing output follows Russian input with Russian text and English input with English text across CLI summaries, UI labels, and exported artifact copy where the system generates text, including localized product, audience, platform, and tradeoff display values where reasonable
+- the public `/demo` response avoids raw local-path metadata and other debug-looking demo details
 - obvious overloaded briefs trigger stronger contradiction detection in both Russian and English, including realistic phrasing variants rather than only curated happy-path wording
 - contradiction output for overloaded briefs stays curated rather than duplicating the same family excessively
 - the browser UI includes a visible `New brief` action that clears stale results and returns the user to Intake
