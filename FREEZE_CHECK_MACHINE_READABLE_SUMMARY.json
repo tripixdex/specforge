@@ -1,0 +1,42 @@
+{
+  "project_name": "SpecForge",
+  "verdict": "MVP BUT NEEDS FIXES",
+  "portfolio_readiness_score_10": 7.9,
+  "verified_capabilities": [
+    "Deterministic intake-analysis-generation-export pipeline runs locally",
+    "CLI analyze path works on realistic overloaded briefs",
+    "FastAPI endpoints /health, /demo, and /generate work against a live local server",
+    "Server-rendered UI intake, generation, empty-state, and reset flows work",
+    "Eval harness runs locally and passed 26/26 cases",
+    "Contradiction detection is strong on realistic EN and RU overloaded briefs",
+    "Contradiction detection is restrained on the tested near-miss brief",
+    "Repo-local output safety is enforced for API generation labels"
+  ],
+  "inferred_capabilities": [
+    "A strong hiring manager would likely find the engineering discipline credible after a short walkthrough",
+    "The project can serve as a solid local demo during interviews once the remaining polish blockers are removed"
+  ],
+  "not_verified_capabilities": [
+    "Zero wrong-language leakage across all export artifacts and scenarios",
+    "Flagship-level first impression from the repo root without curator context",
+    "Production-like robustness beyond local demo scope"
+  ],
+  "top_findings": [
+    "Russian export artifacts still leak English/internal values in normal user-facing reports",
+    "Public demo surfaces still expose stage/remediation wording",
+    "UI artifact previews expose raw internal JSON metadata such as stage_label",
+    "Near-miss MVP guidance is slightly over-eager even when contradiction restraint is correct",
+    "Repo root presentation is cluttered by audit artifacts"
+  ],
+  "blockers": [
+    "Fully localize RU export reports, including count keys and source-type values",
+    "Remove internal stage/remediation wording from public UI/API/demo-facing copy",
+    "Hide or de-emphasize raw summary.json preview in the main UI flow"
+  ],
+  "recommendations": [
+    "Do one focused polish pass on exported report rendering and enum localization",
+    "Replace stage-based public copy with stable product-facing wording",
+    "Keep summary.json in the bundle if useful, but do not foreground it in the demo UI",
+    "Prune repo-root audit clutter before freeze so the first impression matches the product quality"
+  ]
+}
