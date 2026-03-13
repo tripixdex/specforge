@@ -127,6 +127,7 @@ def to_artifact_preview(item: DeliveryArtifact) -> ArtifactPreviewView:
         relative_path=item.relative_path,
         kind=item.kind,
         preview=preview,
+        is_human_readable=item.kind != "json",
     )
 
 

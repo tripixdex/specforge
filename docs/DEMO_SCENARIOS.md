@@ -1,6 +1,6 @@
 # Demo Scenarios
 
-Stage 5.9 demos keep the deterministic CLI flow, the local FastAPI layer, the guided browser UI, and a local evaluation run, with a narrow freeze-focused pass on realistic overloaded-brief contradiction detection, bilingual output consistency, and small artifact usefulness improvements before final re-audit.
+The current demo scenarios verify the deterministic CLI flow, the local FastAPI layer, the guided browser UI, and a local evaluation run, with emphasis on realistic overloaded-brief contradiction detection, bilingual public-facing output, and human-readable local artifact previews.
 
 ## Scenario 1: Contradictory Founder Brief
 

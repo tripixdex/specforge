@@ -10,7 +10,7 @@ def ui_strings(locale: Locale) -> dict[str, str]:
 
     if locale == "ru":
         return {
-            "eyebrow": "SpecForge Stage 5.9",
+            "eyebrow": "SpecForge",
             "page_title": "SpecForge: локальный анализ брифов",
             "hero_title": "Локальный анализ брифов в спокойном пошаговом интерфейсе",
             "hero_copy": (
@@ -57,7 +57,11 @@ def ui_strings(locale: Locale) -> dict[str, str]:
             "show_full_path": "Показать полный путь",
             "artifacts": "Артефакты",
             "artifact_kind_markdown": "markdown",
-            "artifact_kind_json": "json",
+            "artifact_kind_json": "технические данные",
+            "artifact_preview_note": "По умолчанию показаны только человекочитаемые артефакты.",
+            "artifact_technical_details": "Технические данные пакета",
+            "artifact_technical_count_singular": "Скрыт 1 технический файл пакета.",
+            "artifact_technical_count_plural": "Скрыто технических файлов пакета: {count}.",
             "evidence_label": "Основания",
             "start_with_analysis": "Начните с анализа",
             "start_with_analysis_copy": (
@@ -86,7 +90,7 @@ def ui_strings(locale: Locale) -> dict[str, str]:
             ),
         }
     return {
-        "eyebrow": "SpecForge Stage 5.9",
+        "eyebrow": "SpecForge",
         "page_title": "SpecForge: local brief analysis",
         "hero_title": "Local brief analysis in a calm guided workflow",
         "hero_copy": (
@@ -133,7 +137,15 @@ def ui_strings(locale: Locale) -> dict[str, str]:
         "show_full_path": "Show full path",
         "artifacts": "Artifacts",
         "artifact_kind_markdown": "markdown",
-        "artifact_kind_json": "json",
+        "artifact_kind_json": "technical data",
+        "artifact_preview_note": "The default preview shows only human-readable artifacts.",
+        "artifact_technical_details": "Bundle technical details",
+        "artifact_technical_count_singular": (
+            "1 technical bundle file is hidden from the default preview."
+        ),
+        "artifact_technical_count_plural": (
+            "{count} technical bundle files are hidden from the default preview."
+        ),
         "evidence_label": "Evidence",
         "start_with_analysis": "Start with analysis",
         "start_with_analysis_copy": (

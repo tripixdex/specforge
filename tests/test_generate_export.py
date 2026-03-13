@@ -81,6 +81,11 @@ def test_russian_export_uses_localized_headers(tmp_path: Path) -> None:
     assert "## Противоречия" in analysis_report
     assert "Тип продукта: мобильное приложение" in brief_markdown
     assert "Платформенные сигналы: веб, мобильное приложение" in constraints_markdown
+    assert "- Неясности:" in analysis_report
+    assert "- Открытые вопросы:" in analysis_report
+    assert "source_type" not in analysis_report
+    assert "unresolved" not in analysis_report
+    assert "explicit" not in analysis_report
 
 
 def test_russian_export_localizes_team_size_and_budget_phrase(tmp_path: Path) -> None:
@@ -124,3 +129,19 @@ def test_english_export_keeps_display_values_in_english(tmp_path: Path) -> None:
     assert "Product Type: internal tool" in brief_markdown
     assert "Audience: operations team" in brief_markdown
     assert "Platform Hints: local-first, internal tool" in constraints_markdown
+
+
+def test_assumption_ledger_omits_public_source_type_labels(tmp_path: Path) -> None:
+    text = """
+    Нужен локальный внутренний инструмент для операционной команды.
+    Бюджет маленький, запуск нужен быстро.
+    """
+
+    analyzed, _ = analyze_brief(normalize_brief(create_raw_brief(text)))
+    pack = generate_delivery_pack(analyzed)
+    output_dir = export_delivery_pack(pack, output_root=tmp_path, run_label="ru-assumptions")
+
+    ledger = (output_dir / "assumption_ledger.md").read_text(encoding="utf-8")
+
+    assert "Тип источника" not in ledger
+    assert "Source Type" not in ledger

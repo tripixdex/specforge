@@ -23,6 +23,7 @@ class ArtifactPreviewView(BaseModel):
     relative_path: str
     kind: str
     preview: str
+    is_human_readable: bool = True
 
 
 class UiResultView(BaseModel):

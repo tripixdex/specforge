@@ -271,15 +271,31 @@
               <h3>{{ strings["artifacts"] }}</h3>
             </div>
             {% if result.artifact_previews %}
+            <p class="form-note">{{ strings["artifact_preview_note"] }}</p>
             <div class="artifact-grid">
               {% for item in result.artifact_previews %}
+              {% if item.is_human_readable %}
               <details class="artifact-card">
                 <summary>{{ item.name }}</summary>
                 <p class="artifact-meta">{{ strings["artifact_kind_" + item.kind] }} · {{ item.relative_path }}</p>
                 <pre>{{ item.preview }}</pre>
               </details>
+              {% endif %}
               {% endfor %}
             </div>
+            {% set technical_artifacts = result.artifact_previews | rejectattr("is_human_readable") | list %}
+            {% if technical_artifacts %}
+            <details class="path-details">
+              <summary>{{ strings["artifact_technical_details"] }}</summary>
+              <p class="form-note">
+                {% if technical_artifacts | length == 1 %}
+                {{ strings["artifact_technical_count_singular"] }}
+                {% else %}
+                {{ strings["artifact_technical_count_plural"].format(count=technical_artifacts | length) }}
+                {% endif %}
+              </p>
+            </details>
+            {% endif %}
             {% else %}
             <p class="empty-copy">{{ strings["no_artifacts"] }}</p>
             {% endif %}

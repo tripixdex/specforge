@@ -234,12 +234,16 @@ def render_analysis_report_markdown(pack: DeliveryPack) -> str:
 
     report = pack.analysis
     locale = detect_language(pack.brief.normalized_text)
+    count_labels = localized_count_labels(locale)
     return "\n".join(
         [
             "# SpecForge: Аналитический отчет" if locale == "ru" else "# SpecForge Analysis Report",
             "",
             "## Счетчики" if locale == "ru" else "## Counts",
-            *(f"- {key}: {value}" for key, value in pack.analysis_counts.items()),
+            *(
+                f"- {count_labels.get(key, key)}: {value}"
+                for key, value in pack.analysis_counts.items()
+            ),
             "",
             "## Неясности" if locale == "ru" else "## Ambiguities",
             render_analysis_lines(
@@ -341,8 +345,7 @@ def render_analysis_lines(items: list[object], *, locale: str, fallback: str) ->
     for item in items:
         lines.append(
             f"- [{item.severity}] {category_label(item.category, locale)}: {item.description} "
-            f"({'источник' if locale == 'ru' else 'source_type'}: {item.source_type}; "
-            f"{'рекомендация' if locale == 'ru' else 'recommendation'}: {item.recommendation})"
+            f"({'рекомендация' if locale == 'ru' else 'recommendation'}: {item.recommendation})"
         )
         if getattr(item, "evidence", None):
             evidence = "; ".join(getattr(item, "evidence")[:3])
@@ -370,7 +373,6 @@ def render_assumption_block(item: AssumptionItem) -> list[str]:
         f"  {'Описание' if locale == 'ru' else 'Description'}: {item.description}",
         f"  {'Обоснование' if locale == 'ru' else 'Rationale'}: {item.rationale}",
         f"  {'Рекомендация' if locale == 'ru' else 'Recommendation'}: {item.recommendation}",
-        f"  {'Тип источника' if locale == 'ru' else 'Source Type'}: {item.source_type}",
     ]
     if item.evidence:
         lines.append(
@@ -386,3 +388,23 @@ def render_bullets(values: list[str], *, fallback: str) -> str:
     if not values:
         return fallback
     return "\n".join(f"- {value}" for value in values)
+
+
+def localized_count_labels(locale: str) -> dict[str, str]:
+    """Return localized labels for public analysis counts."""
+
+    if locale == "ru":
+        return {
+            "ambiguities": "Неясности",
+            "contradictions": "Противоречия",
+            "missing_decisions": "Недостающие решения",
+            "assumptions": "Допущения",
+            "open_questions": "Открытые вопросы",
+        }
+    return {
+        "ambiguities": "Ambiguities",
+        "contradictions": "Contradictions",
+        "missing_decisions": "Missing decisions",
+        "assumptions": "Assumptions",
+        "open_questions": "Open questions",
+    }

@@ -1,12 +1,12 @@
 # SpecForge
 
-SpecForge is a local-first demo application that turns messy product briefs into a deterministic analysis and a repo-local delivery bundle. Stage 5.9 keeps the existing CLI, API, browser UI, and evaluation harness intact while applying a narrow freeze-focused remediation pass for realistic overloaded-brief contradiction detection, bilingual output consistency, and a small artifact usefulness improvement.
+SpecForge is a local-first demo application that turns messy product briefs into a deterministic analysis and a repo-local delivery bundle. The current repository state keeps the CLI, API, browser UI, and evaluation harness intact while focusing the public demo path on clear bilingual outputs, stronger overloaded-brief contradiction detection, and human-readable local export artifacts.
 
 This is still local demo software. It is not a hosted service, not a SaaS product, and not a fake autonomous product manager.
 
 The repository follows stage-based development and prefers small, responsibility-focused modules over oversized files where practical.
 
-## Stage 5.9 Capabilities
+## Current Capabilities
 
 Implemented now:
 

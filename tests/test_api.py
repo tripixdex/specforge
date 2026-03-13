@@ -14,11 +14,7 @@ def test_health_happy_path() -> None:
     response = client.get("/health")
 
     assert response.status_code == 200
-    assert response.json() == {
-        "status": "ok",
-        "app": "specforge",
-        "stage": "stage-5-9-freeze-focused-remediation",
-    }
+    assert response.json() == {"status": "ok", "app": "specforge"}
 
 
 def test_analyze_happy_path() -> None:
