@@ -5,31 +5,27 @@ Product Type: web app
 Audience: founders
 
 ## Summary
-Founder App Idea is a web app aimed at founders. Primary goal: Help founders clean up rough product ideas.
+Founder App Idea is a web app aimed at founders. Primary goal: Help founders turn rough product ideas into a reviewable scope.
 
 ## Explicit Brief Input
-- Help founders clean up rough product ideas
+- Help founders turn rough product ideas into a reviewable scope
 - Highlight missing constraints before they hire engineers
-- Produce a minimal delivery pack they can review locally
+- Produce a compact delivery pack they can review locally
 - No cloud sync
 - Don't build team collaboration yet
-- Budget under $15k
-- Need something usable in 4 weeks
+- Budget around $20k
+- Need something usable in 6 to 8 weeks
 - Just me plus one contract engineer
-- Maybe start as a web app, but keep the first version local-first and simple
 
 ## Deterministic Interpretation
 - Inferred product type: web app.
-- Inferred platform hints: local-first, web.
-- Detected requirement overload across 3 planning area(s).
+- Inferred platform hints: web.
 
 ## Priority Open Questions
-- Resolve contradiction: Low budget, short timeline, and an overloaded first release create an obvious delivery conflict.
-- Resolve contradiction: A small team, aggressive deadline, and overloaded scope are in tension.
-- Resolve contradiction: The brief calls this a simple MVP while also asking for enterprise breadth, many integrations, or multi-platform support.
+- No unresolved questions were generated
 
 ## Notes
-- I care more about speed than polish for the first release
+- I care more about clarity than breadth for the first release
 - Reference example: https://example.com/founder-notes
 
 ## References
@@ -39,24 +35,24 @@ Founder App Idea is a web app aimed at founders. Primary goal: Help founders cle
 ```text
 Founder App Idea
 
-I want a tool that helps solo founders turn scattered notes into a cleaner execution plan.
-Maybe start as a web app, but keep the first version local-first and simple.
+I want a simple web app that helps solo founders turn scattered notes into a cleaner execution plan before they hire engineers.
+Keep the first release focused on one core flow: paste notes, review planning gaps, and export a compact package for review.
 
 Goals:
-- Help founders clean up rough product ideas
+- Help founders turn rough product ideas into a reviewable scope
 - Highlight missing constraints before they hire engineers
-- Produce a minimal delivery pack they can review locally
+- Produce a compact delivery pack they can review locally
 
 Non-Goals:
 - No cloud sync
 - Don't build team collaboration yet
 
 Constraints:
-- Budget under $15k
-- Need something usable in 4 weeks
+- Budget around $20k
+- Need something usable in 6 to 8 weeks
 - Just me plus one contract engineer
 
 Notes:
-- I care more about speed than polish for the first release
+- I care more about clarity than breadth for the first release
 - Reference example: https://example.com/founder-notes
 ```

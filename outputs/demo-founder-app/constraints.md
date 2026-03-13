@@ -1,15 +1,14 @@
 # SpecForge Constraints
 
-- Budget: under $15k
-- Timeline: 4 weeks
+- Budget: $20k
+- Timeline: 8 weeks
 - Team Size: 1 person
 - Audience Hint: Unspecified
-- Platform Hints: local-first, web
-- Tradeoffs: budget prioritized
+- Platform Hints: web
+- Tradeoffs: None extracted
 
 ## Explicit Constraints
-- Budget under $15k
-- Need something usable in 4 weeks
+- Budget around $20k
+- Need something usable in 6 to 8 weeks
 - Just me plus one contract engineer
-- Maybe start as a web app, but keep the first version local-first and simple
 - Don't build team collaboration yet
